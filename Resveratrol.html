@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resveratrol 500mg - Oferta Exclusiva</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800;900&display=swap');
+        
+        :root {
+            --primary: #4C2C74;
+            --secondary: #FF6B6B;
+            --accent: #4ECDC4;
+            --light: #FFFFFF;
+            --dark: #2C3E50;
+            --whatsapp: #25D366;
+            --product-bg: #FFFFFF;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f9f9f9;
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+        
+        /* Hero section con efecto 3D */
+        .hero {
+            height: 100vh;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            padding: 0 20px;
+            perspective: 1000px;
+        }
+        
+        .hero-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255,255,255,0.1) 0%, transparent 25%),
+                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.1) 0%, transparent 25%);
+            animation: bgPulse 15s infinite alternate;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            max-width: 1200px;
+            transform-style: preserve-3d;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: fadeInDown 1s ease-out;
+            line-height: 1.2;
+        }
+        
+        .tagline {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 0.5s forwards;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        /* Contenedor de imagen con fondo blanco y efecto 3D */
+        .product-container {
+            background: var(--product-bg);
+            width: 320px;
+            height: 320px;
+            margin: 2rem auto;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 
+                0 15px 35px rgba(0,0,0,0.3),
+                inset 0 -5px 15px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
+        }
+        
+        .product-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, transparent 100%);
+            z-index: 2;
+        }
+        
+        /* Imagen del producto con efecto flotante */
+        .product-image {
+            max-width: 180px;
+            margin: 2rem auto;
+            
+            transform: translateY(0);
+            animation: float 3s ease-in-out infinite;
+            cursor: pointer;
+            transition: all 0.5s;
+            position: relative;
+            z-index: 3;
+        }
+        
+        .product-image:hover {
+            transform: scale(1.05) rotate(5deg);
+            
+        }
+        
+        /* Efecto de rotación 3D al mover el mouse */
+        .product-container:hover {
+            transform: rotateX(5deg) rotateY(5deg);
+        }
+        
+        .product-container:hover {
+            transform: translateZ(50px) scale(1.05);
+        }
+        
+        /* Sección de beneficios con efecto cascada */
+        .benefits {
+            padding: 6rem 2rem 4rem;
+            background-color: white;
+            position: relative;
+            clip-path: polygon(0 5%, 100% 0, 100% 95%, 0 100%);
+            margin-top: -5%;
+            z-index: 2;
+        }
+        
+        .benefits-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .benefit-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 2rem;
+            width: 300px;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: translateY(50px) rotateY(20deg);
+            opacity: 0;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .benefit-card:nth-child(2) {
+            transition-delay: 0.1s;
+        }
+        
+        .benefit-card:nth-child(3) {
+            transition-delay: 0.2s;
+        }
+        
+        .benefit-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+        
+        .benefit-card.visible {
+            transform: translateY(0) rotateY(0);
+            opacity: 1;
+        }
+        
+        .benefit-card:hover {
+            transform: translateY(-10px) scale(1.03) !important;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .benefit-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            transition: transform 0.3s;
+        }
+        
+        .benefit-card:hover .benefit-icon {
+            transform: rotate(15deg) scale(1.2);
+        }
+        
+        /* Sección de precio con efecto neón */
+        .pricing {
+            padding: 6rem 2rem 4rem;
+            background: linear-gradient(135deg, var(--primary), #3A1C5E);
+            color: white;
+            text-align: center;
+            position: relative;
+            clip-path: polygon(0 5%, 100% 0, 100% 100%, 0 100%);
+            margin-top: -5%;
+        }
+        
+        .pricing::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255,255,255,0.1) 0%, transparent 25%),
+                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.1) 0%, transparent 25%);
+            animation: bgPulse 10s infinite alternate;
+            z-index: 1;
+        }
+        
+        .pricing-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .price-container {
+            display: inline-block;
+            position: relative;
+            margin: 2rem 0;
+            perspective: 500px;
+        }
+        
+        .old-price {
+            font-size: 1.5rem;
+            text-decoration: line-through;
+            opacity: 0.7;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .old-price::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--secondary);
+            transform: rotate(-5deg);
+        }
+        
+        .current-price {
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin: 0.5rem 0;
+            text-shadow: 0 0 10px rgba(78, 205, 196, 0.7);
+            position: relative;
+            display: inline-block;
+            animation: neonGlow 2s infinite alternate;
+        }
+        
+        .current-price::after {
+            content: 'OFERTA';
+            position: absolute;
+            top: -15px;
+            right: -40px;
+            background: var(--secondary);
+            color: white;
+            font-size: 0.8rem;
+            font-weight: bold;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            transform: rotate(15deg);
+            animation: pulse 2s infinite;
+        }
+        
+        /* Botón de WhatsApp con efecto 3D */
+        .whatsapp-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--whatsapp);
+            color: white;
+            border: none;
+            padding: 1.2rem 2.5rem;
+            font-size: 1.3rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 1.5rem 0;
+            font-weight: 700;
+            box-shadow: 
+                0 5px 15px rgba(37, 211, 102, 0.4),
+                0 10px 30px rgba(37, 211, 102, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            transform-style: preserve-3d;
+            transform: translateZ(0);
+        }
+        
+        .whatsapp-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.4), transparent);
+            transform: translateX(-100%) skewX(-15deg);
+            transition: transform 0.6s;
+            z-index: -1;
+        }
+        
+        .whatsapp-btn:hover {
+            transform: translateY(-5px) translateZ(10px);
+            box-shadow: 
+                0 8px 25px rgba(37, 211, 102, 0.6),
+                0 15px 40px rgba(37, 211, 102, 0.4);
+        }
+        
+        .whatsapp-btn:hover::before {
+            transform: translateX(100%) skewX(-15deg);
+        }
+        
+        .whatsapp-btn:active {
+            transform: translateY(0) translateZ(5px);
+        }
+        
+        .whatsapp-icon {
+            margin-right: 12px;
+            font-size: 1.8rem;
+            transition: transform 0.3s;
+        }
+        
+        .whatsapp-btn:hover .whatsapp-icon {
+            transform: scale(1.2);
+        }
+        
+        /* Contador regresivo con efecto digital */
+        .countdown {
+            background: rgba(0,0,0,0.2);
+            padding: 1.2rem;
+            border-radius: 10px;
+            display: inline-flex;
+            flex-direction: column;
+            margin: 1.5rem 0;
+            font-weight: 600;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .countdown-title {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.9;
+        }
+        
+        .countdown-timer {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .countdown-segment {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .countdown-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            background: rgba(0,0,0,0.3);
+            padding: 0.2rem 0.5rem;
+            border-radius: 5px;
+            min-width: 2.5rem;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .countdown-number::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .countdown-label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            opacity: 0.7;
+            margin-top: 0.2rem;
+        }
+        
+        /* Garantía con efecto de levitación */
+        .guarantee {
+            background: white;
+            color: var(--dark);
+            padding: 2.5rem;
+            text-align: center;
+            border-radius: 15px;
+            max-width: 800px;
+            margin: 3rem auto;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            transform: translateY(0);
+            transition: transform 0.5s, box-shadow 0.5s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .guarantee::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+        
+        .guarantee:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+        
+        .guarantee-icon {
+            font-size: 3.5rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .guarantee h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        /* Testimonios con efecto de tarjeta giratoria */
+        .testimonials {
+            padding: 4rem 2rem;
+            background: #f5f5f5;
+            text-align: center;
+        }
+        
+        .testimonials-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .testimonial-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 2rem;
+            width: 300px;
+            transition: all 0.5s;
+            transform-style: preserve-3d;
+            position: relative;
+            min-height: 300px;
+        }
+        
+        .testimonial-front, .testimonial-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            transition: transform 0.8s;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .testimonial-front {
+            transform: rotateY(0deg);
+        }
+        
+        .testimonial-back {
+            transform: rotateY(180deg);
+            background: var(--primary);
+            color: white;
+            border-radius: 15px;
+        }
+        
+        .testimonial-card:hover .testimonial-front {
+            transform: rotateY(180deg);
+        }
+        
+        .testimonial-card:hover .testimonial-back {
+            transform: rotateY(360deg);
+        }
+        
+        .testimonial-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1rem;
+            border: 3px solid var(--accent);
+        }
+        
+        .testimonial-quote {
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+        
+        .testimonial-name {
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .testimonial-back .testimonial-name {
+            color: var(--accent);
+        }
+        
+        /* Animaciones */
+        @keyframes bgPulse {
+            0% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+            100% { opacity: 0.3; }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInDown {
+            from { 
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0% { transform: rotate(15deg) scale(1); }
+            50% { transform: rotate(15deg) scale(1.1); }
+            100% { transform: rotate(15deg) scale(1); }
+        }
+        
+        @keyframes neonGlow {
+            from { text-shadow: 0 0 5px rgba(78, 205, 196, 0.7); }
+            to { text-shadow: 0 0 15px rgba(78, 205, 196, 0.9), 0 0 20px rgba(78, 205, 196, 0.5); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .tagline {
+                font-size: 1.2rem;
+            }
+            
+            .product-container {
+                width: 280px;
+                height: 280px;
+            }
+            
+            .current-price {
+                font-size: 2.8rem;
+            }
+            
+            .current-price::after {
+                top: -10px;
+                right: -30px;
+                font-size: 0.7rem;
+                padding: 0.2rem 0.6rem;
+            }
+            
+            .benefit-card, .testimonial-card {
+                width: 100%;
+                max-width: 350px;
+            }
+            
+            .whatsapp-btn {
+                padding: 1rem 2rem;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <h1>Resveratrol Transresveratrol 500mg</h1>
+            <p class="tagline">El antioxidante premium de máxima potencia | 60 cápsulas | Envío gratis</p>
+            
+            <div class="product-container">
+                <img src="https://http2.mlstatic.com/D_NQ_NP_926069-MLA81993026970_022025-O.webp" alt="Resveratrol 500mg" class="product-image">
+            </div>
+            
+            <div class="countdown">
+                <div class="countdown-title">¡OFERTA POR TIEMPO LIMITADO!</div>
+                <div class="countdown-timer">
+                    <div class="countdown-segment">
+                        <div class="countdown-number" id="minutes">10</div>
+                        <div class="countdown-label">min</div>
+                    </div>
+                    <div class="countdown-segment">
+                        <div class="countdown-number" id="seconds">00</div>
+                        <div class="countdown-label">seg</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Benefits Section -->
+    <section class="benefits">
+        <div class="benefits-container">
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fas fa-heartbeat"></i></div>
+                <h3>Salud Cardiovascular</h3>
+                <p>Mejora la circulación sanguínea y protege tu corazón con este potente antioxidante natural que fortalece tus vasos sanguíneos.</p>
+            </div>
+            
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fas fa-clock"></i></div>
+                <h3>Antienvejecimiento</h3>
+                <p>Combate los radicales libres y retrasa los signos del envejecimiento celular para mantener tu vitalidad por más tiempo.</p>
+            </div>
+            
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fas fa-battery-full"></i></div>
+                <h3>Energía Natural</h3>
+                <p>Aumenta tus niveles de energía y vitalidad de forma completamente natural sin efectos secundarios.</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Pricing Section -->
+    <section class="pricing">
+        <div class="pricing-content">
+            <h2>¡Oferta Exclusiva por Tiempo Limitado!</h2>
+            
+            <div class="price-container">
+                <div class="old-price">Bs.230</div>
+                <div class="current-price">Bs.170</div>
+            </div>
+            
+            <p>Precio especial + Envío GRATIS a todo el país</p>
+            
+            <!-- REEMPLAZA EL NÚMERO DE WHATSAPP AQUÍ -->
+            <a href="https://wa.me/59178824868?text=¡Hola!%20Estoy%20interesado%20en%20el%20Resveratrol%20500mg" class="whatsapp-btn">
+                <i class="fab fa-whatsapp whatsapp-icon"></i> COMPRAR POR WHATSAPP
+            </a>
+            
+            <div class="guarantee">
+                <div class="guarantee-icon"><i class="fas fa-shield-alt"></i></div>
+                <h3>Garantía de Satisfacción 100%</h3>
+                <p>Si no experimentas resultados visibles en 30 días, te devolvemos tu dinero. ¡Sin preguntas ni complicaciones!</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <h2>Lo que dicen nuestros clientes</h2>
+        <p>Experiencias reales con nuestro Resveratrol Premium</p>
+        
+        <div class="testimonials-container">
+            <div class="testimonial-card">
+                <div class="testimonial-front">
+                    <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Cliente satisfecha" class="testimonial-avatar">
+                    <p class="testimonial-quote">"Después de un mes de uso, mi energía aumentó notablemente. ¡Increíble producto!"</p>
+                    <p class="testimonial-name">- María G.</p>
+                </div>
+                <div class="testimonial-back">
+                    <p>"Mi presión arterial se normalizó y me siento 10 años más joven. ¡Lo recomiendo totalmente!"</p>
+                    <p class="testimonial-name">- María G.</p>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="testimonial-front">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Cliente satisfecho" class="testimonial-avatar">
+                    <p class="testimonial-quote">"Los resultados se notaron desde la primera semana. Mi piel luce más joven."</p>
+                    <p class="testimonial-name">- Carlos R.</p>
+                </div>
+                <div class="testimonial-back">
+                    <p>"Como deportista, noté mejor recuperación y mayor resistencia. Excelente suplemento."</p>
+                    <p class="testimonial-name">- Carlos R.</p>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="testimonial-front">
+                    <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Cliente satisfecha" class="testimonial-avatar">
+                    <p class="testimonial-quote">"Mis análisis médicos mejoraron significativamente. El mejor antioxidante que he probado."</p>
+                    <p class="testimonial-name">- Laura M.</p>
+                </div>
+                <div class="testimonial-back">
+                    <p>"Combinado con una dieta saludable, ha transformado mi salud. ¡Vale cada centavo!"</p>
+                    <p class="testimonial-name">- Laura M.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <script>
+        // Animación de aparición de tarjetas al hacer scroll
+        const benefitCards = document.querySelectorAll('.benefit-card');
+        const testimonialCards = document.querySelectorAll('.testimonial-card');
+        
+        const animateOnScroll = () => {
+            // Beneficios
+            benefitCards.forEach((card, index) => {
+                const cardPosition = card.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.3;
+                
+                if (cardPosition < screenPosition) {
+                    setTimeout(() => {
+                        card.classList.add('visible');
+                    }, index * 200);
+                }
+            });
+            
+            // Testimonios
+            testimonialCards.forEach((card, index) => {
+                const cardPosition = card.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.3;
+                
+                if (cardPosition < screenPosition) {
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0) rotateY(0)';
+                    }, index * 200);
+                }
+            });
+        };
+        
+        window.addEventListener('scroll', animateOnScroll);
+        window.addEventListener('load', animateOnScroll);
+        
+        // Contador regresivo
+        let minutes = 10;
+        let seconds = 0;
+        
+        const countdown = setInterval(() => {
+            if (seconds === 0) {
+                if (minutes === 0) {
+                    clearInterval(countdown);
+                    document.querySelector('.countdown-title').textContent = '¡LA OFERTA HA TERMINADO!';
+                    document.querySelector('.countdown-timer').style.display = 'none';
+                    return;
+                }
+                minutes--;
+                seconds = 59;
+            } else {
+                seconds--;
+            }
+            
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+        }, 1000);
+        
+        // Efecto de movimiento 3D para el contenedor del producto
+        const productContainer = document.querySelector('.product-container');
+        
+        productContainer.addEventListener('mousemove', (e) => {
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+            productContainer.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+        });
+        
+        productContainer.addEventListener('mouseenter', () => {
+            productContainer.style.transition = 'all 0.1s ease';
+        });
+        
+        productContainer.addEventListener('mouseleave', () => {
+            productContainer.style.transition = 'all 0.5s ease';
+            productContainer.style.transform = 'rotateY(0deg) rotateX(0deg)';
+        });
+        
+        // Efecto de confeti al hacer clic en WhatsApp (simulado)
+        const whatsappBtn = document.querySelector('.whatsapp-btn');
+        
+        whatsappBtn.addEventListener('click', (e) => {
+            // Efecto visual al hacer clic
+            whatsappBtn.style.transform = 'translateY(2px) translateZ(5px)';
+            setTimeout(() => {
+                whatsappBtn.style.transform = 'translateY(-5px) translateZ(10px)';
+            }, 200);
+            
+            // Aquí podrías agregar una librería de confeti real si lo deseas
+        });
+    </script>
+</body>
+</html>
