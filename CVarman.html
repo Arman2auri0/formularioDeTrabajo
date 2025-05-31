@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>José Armando López Chávez - Currículum</title>
+    <meta name="description" content="Currículum vitae de José Armando López Chávez, estudiante de Informática Industrial especializado en desarrollo de software y liderazgo." />
+    <meta property="og:title" content="José Armando López Chávez - Currículum" />
+    <meta property="og:description" content="Profesional responsable con experiencia en seguridad, ventas y liderazgo." />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        :root {
+            --primary: #FFD700;  /* Amarillo dorado */
+            --secondary: #B8860B;  /* Amarillo oscuro */
+            --accent: #FFA500;  /* Naranja para contraste */
+            --success: #32CD32;  /* Verde lima */
+            --warning: #FF8C00;  /* Naranja oscuro */
+            --danger: #B22222;  /* Rojo oscuro */
+            --dark: #121212;  /* Negro suavizado */
+            --light: #F8F8FF;  /* Blanco fantasma */
+            --glass-bg: rgba(25, 25, 25, 0.7);  /* Fondo de vidrio oscuro */
+            --glass-border: rgba(255, 215, 0, 0.3);  /* Borde amarillo */
+            --shadow-glow: 0 0 40px rgba(184, 134, 11, 0.4);  /* Brillo amarillo oscuro */
+            --gradient-main: linear-gradient(135deg, #121212 0%, #B8860B 100%);  /* Degradado negro a amarillo oscuro */
+            --gradient-card: linear-gradient(145deg, rgba(184, 134, 11, 0.1), rgba(25, 25, 25, 0.3));
+        }
+
+        /* Estilos para el tema claro */
+        body.light-theme {
+            --primary: #B8860B;
+            --secondary: #8B4513;
+            --accent: #CD853F;
+            --success: #2E8B57;
+            --warning: #D2691E;
+            --danger: #A52A2A;
+            --dark: #F8F8FF;
+            --light: #121212;
+            --glass-bg: rgba(248, 248, 255, 0.8);
+            --glass-border: rgba(184, 134, 11, 0.5);
+            --gradient-main: linear-gradient(135deg, #F8F8FF 0%, #FFD700 100%);
+            --gradient-card: linear-gradient(145deg, rgba(255, 215, 0, 0.1), rgba(248, 248, 255, 0.3));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--gradient-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            color: var(--light);
+            transition: all 0.5s ease;
+        }
+
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(184, 134, 11, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 215, 0, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(25, 25, 25, 0.3) 0%, transparent 50%);
+            z-index: -2;
+            animation: backgroundShift 20s ease-in-out infinite;
+        }
+
+        body.light-theme::before {
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255, 215, 0, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(184, 134, 11, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(248, 248, 255, 0.3) 0%, transparent 50%);
+        }
+
+        @keyframes backgroundShift {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Glassmorphism Container */
+        .cv-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 2rem;
+            box-shadow: var(--shadow-glow);
+            overflow: hidden;
+            animation: containerFloat 6s ease-in-out infinite;
+            transition: all 0.5s ease;
+        }
+
+        @keyframes containerFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Header with 3D effect */
+        .header-section {
+            background: var(--gradient-card);
+            backdrop-filter: blur(10px);
+            padding: 3rem 2rem;
+            position: relative;
+            border-bottom: 1px solid var(--glass-border);
+            transition: all 0.5s ease;
+        }
+
+        .header-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 0%, rgba(255, 215, 0, 0.1) 50%, transparent 100%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* 3D Profile Image */
+        .profile-container {
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 4px solid rgba(255, 215, 0, 0.5);
+            object-fit: cover;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            box-shadow: 
+                0 15px 35px rgba(0,0,0,0.3),
+                0 5px 15px rgba(0,0,0,0.1),
+                inset 0 1px 0 rgba(255,215,0,0.2);
+        }
+
+        .profile-img:hover {
+            transform: rotateY(15deg) rotateX(5deg) scale(1.05);
+            box-shadow: 
+                0 25px 50px rgba(184, 134, 11, 0.4),
+                0 10px 25px rgba(0,0,0,0.2),
+                inset 0 1px 0 rgba(255,215,0,0.3);
+        }
+
+        /* Interactive Change Photo Button */
+        .change-photo-btn {
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient-main);
+            color: var(--primary);
+            border: 1px solid var(--secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .change-photo-btn:hover {
+            transform: translateX(-50%) translateY(-3px);
+            box-shadow: 0 8px 25px rgba(184, 134, 11, 0.5);
+            background: rgba(25, 25, 25, 0.8);
+            color: var(--primary);
+        }
+
+        /* Modern Typography */
+        .name-title {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+            font-size: 3rem;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            color: rgba(255, 215, 0, 0.8);
+            font-weight: 300;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .description {
+            color: var(--light);
+            line-height: 1.6;
+        }
+
+        /* Contact Links with Micro-interactions */
+        .contact-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background: rgba(25, 25, 25, 0.5);
+            border: 1px solid var(--secondary);
+            border-radius: 1rem;
+            color: var(--primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .contact-link:hover {
+            background: rgba(184, 134, 11, 0.2);
+            transform: translateX(5px);
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .contact-link i {
+            width: 20px;
+            margin-right: 0.75rem;
+            color: var(--primary);
+        }
+
+        /* Enhanced Section Cards */
+        .section-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            margin: 1.5rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 0%, rgba(255, 215, 0, 0.1) 50%, transparent 100%);
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+            opacity: 0;
+        }
+
+        .section-card:hover::before {
+            opacity: 1;
+            animation: cardShine 1.5s ease-in-out;
+        }
+
+        @keyframes cardShine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .section-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 
+                0 25px 50px rgba(0,0,0,0.3),
+                0 0 0 1px rgba(255, 215, 0, 0.2);
+            border-color: rgba(255, 215, 0, 0.4);
+        }
+
+        /* Section Titles with Icons */
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .section-icon {
+            width: 32px;
+            height: 32px;
+            padding: 6px;
+            background: var(--gradient-main);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(184, 134, 11, 0.4);
+            color: var(--primary);
+        }
+
+        /* Animated Skill Bars */
+        .skill-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .skill-name {
+            color: var(--light);
+            font-weight: 600;
+        }
+
+        .skill-percentage {
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .skill-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .skill-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
+            border-radius: 10px;
+            position: relative;
+            transform-origin: left;
+            animation: skillFill 2s ease-out forwards;
+            width: 0;
+        }
+
+        .skill-progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.3), transparent);
+            animation: skillShine 2s ease-in-out infinite;
+        }
+
+        @keyframes skillFill {
+            from { width: 0; }
+            to { width: var(--skill-width); }
+        }
+
+        @keyframes skillShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Experience Timeline */
+        .experience-item {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 2rem;
+            border-left: 2px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .experience-item::before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 0;
+            width: 14px;
+            height: 14px;
+            background: var(--primary);
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.2);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 215, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+        }
+
+        .experience-title {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .experience-company {
+            color: rgba(255, 215, 0, 0.7);
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+
+        .experience-item ul {
+            color: rgba(255, 255, 255, 0.8);
+            padding-left: 1rem;
+        }
+
+        .experience-item li {
+            margin-bottom: 0.25rem;
+            position: relative;
+        }
+
+        /* Language Badges */
+        .language-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+        }
+
+        .language-item:last-child {
+            border-bottom: none;
+        }
+
+        .language-name {
+            color: var(--light);
+            font-weight: 600;
+        }
+
+        .language-level {
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .level-native {
+            background: var(--success);
+            color: var(--dark);
+        }
+
+        .level-technical {
+            background: var(--secondary);
+            color: var(--light);
+        }
+
+        /* Quality Cards with Hover Effects */
+        .quality-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .quality-card {
+            background: rgba(25, 25, 25, 0.5);
+            border: 1px solid var(--secondary);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .quality-card:hover {
+            transform: translateY(-5px) scale(1.05);
+            background: rgba(184, 134, 11, 0.2);
+            border-color: var(--primary);
+        }
+
+        .quality-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        .quality-text {
+            color: var(--light);
+            font-weight: 600;
+            margin: 0;
+        }
+
+        /* Footer with Animated Buttons */
+        .footer {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border-top: 1px solid var(--glass-border);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .footer-text {
+            color: rgba(255, 215, 0, 0.8);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-btn {
+            background: var(--gradient-main);
+            color: var(--primary);
+            border: 1px solid var(--secondary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(184, 134, 11, 0.5);
+            color: var(--primary);
+            background: rgba(25, 25, 25, 0.8);
+        }
+
+        /* Dark Mode Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--primary);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            background: rgba(184, 134, 11, 0.2);
+            color: var(--primary);
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+            }
+            .cv-container {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+            .theme-toggle {
+                display: none;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .cv-container {
+                margin: 1rem;
+                border-radius: 1rem;
+            }
+            
+            .header-section {
+                padding: 2rem 1rem;
+                text-align: center;
+            }
+            
+            .name-title {
+                font-size: 2rem;
+            }
+            
+            .section-card {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+            
+            .contact-links {
+                margin-top: 2rem;
+            }
+            
+            .quality-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Micro-animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        /* Loading Animation */
+        .loading {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.2s forwards;
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle" title="Cambiar a modo claro">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <div class="cv-container loading">
+        <!-- Header Section -->
+        <header class="header-section">
+            <div class="row align-items-center">
+                <div class="col-lg-3 text-center text-lg-start">
+                    <div class="profile-container">
+                        <img 
+                            src="https://i.imgur.com/2FcK4XN.png" 
+                            alt="José Armando López Chávez" 
+                            class="profile-img" 
+                            id="profileImg"
+                        />
+                        <button class="change-photo-btn" id="changePhotoBtn">
+                            <i class="fas fa-camera me-1"></i>Cambiar
+                        </button>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <h1 class="name-title">José Armando López Chávez</h1>
+                    <p class="subtitle">Estudiante de Informática Industrial</p>
+                    <p class="description">
+                        Profesional responsable con experiencia en seguridad, ventas y liderazgo. 
+                        Especializado en desarrollo de software y gestión de personal con enfoque 
+                        en soluciones tecnológicas innovadoras.
+                    </p>
+                </div>
+                <div class="col-lg-3">
+                    <div class="contact-links">
+                        <a href="https://wa.me/59175873687" class="contact-link" target="_blank">
+                            <i class="fab fa-whatsapp"></i>
+                            <span>+591 75873687</span>
+                        </a>
+                        <a href="mailto:armanxrn11proplus@gmail.com" class="contact-link">
+                            <i class="fas fa-envelope"></i>
+                            <span>Email</span>
+                        </a>
+                        <a href="#" class="contact-link">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>La Paz, Bolivia</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="container-fluid p-0">
+            <div class="row g-0">
+                <!-- Left Column -->
+                <div class="col-lg-8">
+                    <!-- Experience Section -->
+                    <section class="section-card animate-in">
+                        <h3 class="section-title">
+                            <div class="section-icon">
+                                <i class="fas fa-briefcase"></i>
+                            </div>
+                            Experiencia Profesional
+                        </h3>
+                        
+                        <div class="experience-item">
+                            <h5 class="experience-title">Agente de Seguridad Privada</h5>
+                            <h6 class="experience-company">ESEFIP - Empresa de Seguridad Física y Privada</h6>
+                            <ul>
+                                <li>Supervisión de seguridad en instalaciones críticas</li>
+                                <li>Implementación de protocolos de seguridad</li>
+                                <li>Control de accesos y elaboración de informes</li>
+                                <li>Coordinación con equipos de respuesta rápida</li>
+                            </ul>
+                        </div>
+
+                        <div class="experience-item">
+                            <h5 class="experience-title">Vendedor de Muebles</h5>
+                            <h6 class="experience-company">Muebles3000</h6>
+                            <ul>
+                                <li>Atención especializada al cliente y asesoramiento</li>
+                                <li>Cumplimiento consistente de objetivos de ventas</li>
+                                <li>Gestión de inventario y exhibición estratégica</li>
+                                <li>Desarrollo de relaciones comerciales duraderas</li>
+                            </ul>
+                        </div>
+
+                        <div class="experience-item">
+                            <h5 class="experience-title">Encargado de Personal</h5>
+                            <h6 class="experience-company">Gestión de Equipos</h6>
+                            <ul>
+                                <li>Supervisión y coordinación de equipos multidisciplinarios</li>
+                                <li>Optimización de horarios y asignación eficiente de tareas</li>
+                                <li>Mejora continua del ambiente laboral</li>
+                                <li>Implementación de procesos de mejora organizacional</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <!-- Education Section -->
+                    <section class="section-card animate-in">
+                        <h3 class="section-title">
+                            <div class="section-icon">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            Educación
+                        </h3>
+                        
+                        <div class="experience-item">
+                            <h5 class="experience-title">Informática Industrial</h5>
+                            <h6 class="experience-company">Escuela Industrial Superior Pedro Domingo Murillo</h6>
+                            <p style="color: rgba(255,255,255,0.8);">
+                                <strong>Estado:</strong> En curso | 
+                                <strong>Enfoque:</strong> Desarrollo de software, sistemas industriales y automatización
+                            </p>
+                        </div>
+
+                        <div class="experience-item">
+                            <h5 class="experience-title">Bachillerato</h5>
+                            <p style="color: rgba(255,255,255,0.8);">
+                                <strong>Graduado:</strong> 2017 |
+                                <strong>Reconocimientos:</strong> Estudiante destacado
+                            </p>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Right Column -->
+                <div class="col-lg-4">
+                    <!-- Skills Section -->
+                    <section class="section-card animate-in">
+                        <h3 class="section-title">
+                            <div class="section-icon">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            Habilidades Técnicas
+                        </h3>
+                        
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">PHP</span>
+                                <span class="skill-percentage">85%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="--skill-width: 85%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">JavaScript</span>
+                                <span class="skill-percentage">80%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="--skill-width: 80%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">CSS & Bootstrap</span>
+                                <span class="skill-percentage">90%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="--skill-width: 90%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">MySQL</span>
+                                <span class="skill-percentage">75%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="--skill-width: 75%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">C++ & Java</span>
+                                <span class="skill-percentage">70%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="--skill-width: 70%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Microsoft Office</span>
+                                <span class="skill-percentage">95%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="--skill-width: 95%;"></div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Languages Section -->
+                    <section class="section-card animate-in">
+                        <h3 class="section-title">
+                            <div class="section-icon">
+                                <i class="fas fa-globe"></i>
+                            </div>
+                            Idiomas
+                        </h3>
+                        
+                        <div class="language-item">
+                            <span class="language-name">Español</span>
+                            <span class="language-level level-native">Nativo</span>
+                        </div>
+                        
+                        <div class="language-item">
+                            <span class="language-name">Inglés</span>
+                            <span class="language-level level-technical">Técnico</span>
+                        </div>
+                    </section>
+
+                    <!-- Personal Qualities -->
+                    <section class="section-card animate-in">
+                        <h3 class="section-title">
+                            <div class="section-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            Cualidades Personales
+                        </h3>
+                        
+                        <div class="quality-grid">
+                            <div class="quality-card">
+                                <i class="fas fa-clock quality-icon"></i>
+                                <p class="quality-text">Puntual</p>
+                            </div>
+                            <div class="quality-card">
+                                <i class="fas fa-handshake quality-icon"></i>
+                                <p class="quality-text">Responsable</p>
+                            </div>
+                            <div class="quality-card">
+                                <i class="fas fa-users quality-icon"></i>
+                                <p class="quality-text">Liderazgo</p>
+                            </div>
+                            <div class="quality-card">
+                                <i class="fas fa-cogs quality-icon"></i>
+                                <p class="quality-text">Adaptable</p>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p class="footer-text">¿Interesado en trabajar juntos? No dudes en contactarme</p>
+            <div class="cta-buttons">
+                <a href="https://wa.me/59175873687" class="cta-btn" target="_blank">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                </a>
+                <a href="mailto:armanxrn11proplus@gmail.com" class="cta-btn">
+                    <i class="fas fa-envelope"></i> Email
+                </a>
+                <a href="#" class="cta-btn" id="downloadCV">
+                    <i class="fas fa-file-download"></i> Descargar CV
+                </a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Cambiar foto de perfil
+        document.getElementById('changePhotoBtn').addEventListener('click', function() {
+            const newPhotoUrl = prompt('Ingresa la URL de tu nueva foto de perfil:');
+            if (newPhotoUrl) {
+                document.getElementById('profileImg').src = newPhotoUrl;
+            }
+        });
+
+        // Toggle de tema oscuro/claro
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            document.body.classList.toggle('light-theme');
+            const icon = this.querySelector('i');
+            if (document.body.classList.contains('light-theme')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                this.setAttribute('title', 'Cambiar a modo oscuro');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+                this.setAttribute('title', 'Cambiar a modo claro');
+            }
+        });
+
+        // Botón de descarga CV
+        document.getElementById('downloadCV').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Crear un enlace temporal para descargar el CV
+            const link = document.createElement('a');
+            link.href = '#'; // Aquí deberías poner la URL real de tu archivo PDF
+            link.download = 'CV_Jose_Armando_Lopez_Chavez.pdf';
+            
+            // Simular click en el enlace
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Mensaje de confirmación (puedes eliminarlo si quieres)
+            alert('Descarga iniciada. Si no funciona, por favor ponte en contacto directamente.');
+        });
+
+        // Animaciones al cargar
+        document.addEventListener('DOMContentLoaded', function() {
+            const animateElements = document.querySelectorAll('.animate-in');
+            animateElements.forEach((el, index) => {
+                el.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+    </script>
+</body>
+</html>
