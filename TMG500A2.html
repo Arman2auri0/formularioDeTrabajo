@@ -1,0 +1,1643 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Híbrido de Control de Asistencia Estudiantil: Combinando GPS, Huella Digital Móvil y Biometría Hardware para la Unidad Educativa Oscar Unzaga de la Vega</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --dark-color: #1a252f;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .slide {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            margin: 20px 0;
+            padding: 40px;
+            transition: all 0.4s ease;
+            display: none;
+            min-height: 80vh;
+        }
+        
+        .slide.active {
+            display: block;
+            animation: slideIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .slide h1 {
+            color: var(--primary-color);
+            font-weight: 800;
+            margin-bottom: 30px;
+            text-align: center;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .slide h1:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--secondary-color), var(--success-color));
+            border-radius: 2px;
+        }
+        
+        .slide h2 {
+            color: var(--secondary-color);
+            font-weight: 700;
+            margin-bottom: 25px;
+            border-bottom: 3px solid var(--secondary-color);
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+        
+        .objectives-card {
+            background: linear-gradient(135deg, rgba(248, 249, 250, 0.9), rgba(233, 236, 239, 0.9));
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 5px solid var(--secondary-color);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            backdrop-filter: blur(5px);
+        }
+        
+        .phase-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--success-color);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .phase-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+        }
+        
+        .phase-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--secondary-color), var(--success-color));
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            gap: 15px;
+        }
+        
+        .nav-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .nav-btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        
+        .nav-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .progress-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 800px;
+            background: rgba(255,255,255,0.2);
+            height: 8px;
+            border-radius: 4px;
+            z-index: 1000;
+        }
+        
+        .progress-bar-custom {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, var(--secondary-color), var(--success-color));
+            transition: width 0.4s ease;
+            box-shadow: 0 2px 10px rgba(52, 152, 219, 0.5);
+        }
+        
+        .svg-icon {
+            width: 120px;
+            height: 120px;
+            margin: 20px auto 30px;
+            display: block;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));
+        }
+        
+        .tech-stack {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 30px 0;
+            gap: 20px;
+        }
+        
+        .tech-item {
+            text-align: center;
+            padding: 25px 20px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.9), rgba(118, 75, 162, 0.9));
+            color: white;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            width: 160px;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .tech-item:hover {
+            transform: scale(1.08) translateY(-5px);
+            box-shadow: 0 12px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .tech-item i {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+        
+        .benefit-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.9), rgba(118, 75, 162, 0.9));
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .benefit-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        .benefit-card:after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(30deg);
+        }
+        
+        .benefit-card h4 {
+            font-weight: 700;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .benefit-card p {
+            position: relative;
+            z-index: 1;
+            opacity: 0.9;
+        }
+        
+        .list-icon {
+            color: var(--success-color);
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .lead {
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+        
+        .alert-custom {
+            background: rgba(52, 152, 219, 0.1);
+            border-left: 4px solid var(--secondary-color);
+            border-radius: 8px;
+        }
+        
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 15s infinite linear;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+            100% { transform: translateY(0) rotate(360deg); }
+        }
+        
+        .slide-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 50px;
+            margin: 30px 0;
+        }
+        
+        .timeline:before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, var(--secondary-color), var(--success-color));
+            border-radius: 2px;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+        }
+        
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .timeline-dot {
+            position: absolute;
+            left: 12px;
+            top: 5px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--secondary-color);
+            border: 4px solid white;
+            box-shadow: 0 0 0 2px var(--secondary-color);
+        }
+        
+        .timeline-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .timeline-date {
+            display: block;
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-container">
+        <div class="progress-bar-custom" id="progressBar" style="width: 16.66%"></div>
+    </div>
+    
+    <div class="container py-5">
+        <!-- Slide 1: Título y Objetivo General -->
+        <div class="slide active" id="slide1">
+            <div class="floating-shapes">
+                <div class="shape" style="top: 10%; left: 5%; width: 50px; height: 50px;">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="40" fill="var(--secondary-color)"/>
+                    </svg>
+                </div>
+                <div class="shape" style="top: 70%; left: 80%; width: 80px; height: 80px; animation-delay: 2s;">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="10" y="10" width="80" height="80" rx="10" fill="var(--success-color)"/>
+                    </svg>
+                </div>
+                <div class="shape" style="top: 30%; left: 70%; width: 60px; height: 60px; animation-delay: 4s;">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <polygon points="50,5 90,90 10,90" fill="var(--warning-color)"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="row justify-content-center slide-content">
+                <div class="col-lg-10">
+                    <h1><i class="fas fa-graduation-cap me-3"></i>Sistema Híbrido de Control de Asistencia Estudiantil: Combinando GPS, Huella Digital Móvil y Biometría Hardware para la Unidad Educativa Oscar Unzaga de la Vega</h1>
+                    
+                    <!-- SVG Título Mejorado -->
+                    <svg class="svg-icon" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="schoolGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#3498db"/>
+                                <stop offset="100%" style="stop-color:#2c3e50"/>
+                            </linearGradient>
+                            <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                                <feDropShadow dx="5" dy="5" stdDeviation="3" flood-color="rgba(0,0,0,0.3)"/>
+                            </filter>
+                        </defs>
+                        
+                        <!-- Edificio -->
+                        <rect x="30" y="80" width="140" height="100" rx="10" fill="url(#schoolGrad)" filter="url(#shadow)"/>
+                        
+                        <!-- Ventanas -->
+                        <rect x="50" y="100" width="25" height="25" rx="3" fill="white" opacity="0.8"/>
+                        <rect x="85" y="100" width="25" height="25" rx="3" fill="white" opacity="0.8"/>
+                        <rect x="120" y="100" width="25" height="25" rx="3" fill="white" opacity="0.8"/>
+                        
+                        <rect x="50" y="135" width="25" height="25" rx="3" fill="white" opacity="0.8"/>
+                        <rect x="85" y="135" width="25" height="25" rx="3" fill="white" opacity="0.8"/>
+                        <rect x="120" y="135" width="25" height="25" rx="3" fill="white" opacity="0.8"/>
+                        
+                        <!-- Techo -->
+                        <polygon points="30,80 100,40 170,80" fill="#e74c3c" filter="url(#shadow)"/>
+                        
+                        <!-- Detalles -->
+                        <rect x="80" y="60" width="40" height="20" rx="5" fill="#2c3e50"/>
+                        <rect x="90" y="60" width="20" height="10" fill="#f39c12"/>
+                        
+                        <!-- Sol -->
+                        <circle cx="160" cy="30" r="20" fill="#f39c12" filter="url(#shadow)"/>
+                        <path d="M160,10 L160,50 M140,30 L180,30 M150,15 L170,45 M150,45 L170,15" 
+                              stroke="#f39c12" stroke-width="3" stroke-linecap="round"/>
+                    </svg>
+                    
+                    <div class="objectives-card">
+                        <h2><i class="fas fa-bullseye me-2"></i>Objetivo General</h2>
+                        <p class="lead">Crear una <strong>solución tecnológica innovadora</strong> para mejorar el control de asistencia de los estudiantes en la <strong>Unidad Educativa Oscar Unzaga de la Vega</strong>, combinando <strong>posicionamiento geográfico (GPS)</strong> con <strong>identificación biométrica</strong> mediante el sensor R307 y autenticación por huella digital desde dispositivos móviles.</p>
+                        
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fas fa-map-marker-alt text-primary me-3 fs-4"></i>
+                                    <div>
+                                        <h5 class="mb-1">Geolocalización</h5>
+                                        <p class="mb-0">Posicionamiento GPS preciso para verificar ubicación</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fas fa-mobile-alt text-info me-3 fs-4"></i>
+                                    <div>
+                                        <h5 class="mb-1">Aplicación Móvil</h5>
+                                        <p class="mb-0">Interfaz accesible para estudiantes</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fas fa-fingerprint text-success me-3 fs-4"></i>
+                                    <div>
+                                        <h5 class="mb-1">Biometría</h5>
+                                        <p class="mb-0">Sensor R307 + autenticación por huella</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fas fa-database text-warning me-3 fs-4"></i>
+                                    <div>
+                                        <h5 class="mb-1">Base de Datos</h5>
+                                        <p class="mb-0">Registros seguros y accesibles</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <h3 class="text-primary">Unidad Educativa Oscar Unzaga de la Vega</h3>
+                        <p class="text-muted">Innovación educativa a través de la tecnología</p>
+                        
+                        <!-- SVG Mini Logo -->
+                        <svg width="100" height="40" viewBox="0 0 100 40" xmlns="http://www.w3.org/2000/svg" class="mt-3">
+                            <path d="M10,20 Q25,5 40,20 T70,20" stroke="#3498db" stroke-width="3" fill="none"/>
+                            <circle cx="20" cy="20" r="5" fill="#e74c3c"/>
+                            <circle cx="40" cy="20" r="5" fill="#27ae60"/>
+                            <circle cx="60" cy="20" r="5" fill="#f39c12"/>
+                            <circle cx="80" cy="20" r="5" fill="#9b59b6"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: Objetivo Secundario -->
+        <div class="slide" id="slide2">
+            <div class="floating-shapes">
+                <div class="shape" style="top: 20%; left: 10%; width: 60px; height: 60px;">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="20" y="20" width="60" height="60" rx="15" fill="var(--success-color)"/>
+                    </svg>
+                </div>
+                <div class="shape" style="top: 60%; left: 85%; width: 70px; height: 70px; animation-delay: 3s;">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M50,5 L90,90 L10,90 Z" fill="var(--accent-color)"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="row justify-content-center slide-content">
+                <div class="col-lg-10">
+                    <h1><i class="fas fa-microchip me-3"></i>Objetivo Específico</h1>
+                    
+                    <!-- SVG Biométrico Mejorado -->
+                    <svg class="svg-icon" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <radialGradient id="bioGrad" cx="50%" cy="50%" r="50%" fx="30%" fy="30%">
+                                <stop offset="0%" style="stop-color:#27ae60; stop-opacity:0.9"/>
+                                <stop offset="100%" style="stop-color:#2c3e50; stop-opacity:0.9"/>
+                            </radialGradient>
+                            <filter id="deviceShadow" x="-20%" y="-20%" width="140%" height="140%">
+                                <feDropShadow dx="5" dy="5" stdDeviation="3" flood-color="rgba(0,0,0,0.3)"/>
+                            </filter>
+                        </defs>
+                        
+                        <!-- Dispositivo -->
+                        <rect x="40" y="30" width="120" height="140" rx="15" fill="#34495e" filter="url(#deviceShadow)"/>
+                        <rect x="50" y="40" width="100" height="100" rx="10" fill="url(#bioGrad)"/>
+                        
+                        <!-- Huella digital -->
+                        <path d="M70,70 Q80,60 90,70 Q85,80 75,80 Q70,85 65,80 Q60,75 65,70 Q70,65 75,70" 
+                              fill="none" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                        <circle cx="80" cy="60" r="3" fill="white"/>
+                        <circle cx="90" cy="55" r="2" fill="white"/>
+                        
+                        <!-- Botones -->
+                        <rect x="85" y="150" width="30" height="10" rx="5" fill="#7f8c8d"/>
+                        
+                        <!-- Señal WiFi -->
+                        <path d="M140,40 Q130,50 120,40 M135,45 Q130,50 125,45" 
+                              stroke="#3498db" stroke-width="2" fill="none" stroke-linecap="round"/>
+                        
+                        <!-- Chip ESP32 -->
+                        <rect x="30" y="100" width="20" height="20" rx="2" fill="#f39c12"/>
+                        <rect x="32" y="102" width="16" height="16" rx="1" fill="#2c3e50"/>
+                        <rect x="35" y="105" width="10" height="10" fill="#3498db" opacity="0.7"/>
+                    </svg>
+                    
+                    <div class="objectives-card">
+                        <h2><i class="fas fa-cogs me-2"></i>Dispositivo Biométrico R307</h2>
+                        <p class="lead">Incorporar el <strong>dispositivo biométrico R307</strong> como opción alternativa de registro para estudiantes sin teléfonos inteligentes, empleando el microcontrolador <strong>ESP32</strong> configurado en <strong>lenguaje C++</strong> para garantizar la transmisión de información inalámbrica y remota, sin depender de un hosting o dominio.</p>
+                    </div>
+                    
+                    <div class="tech-stack">
+                        <div class="tech-item">
+                            <svg width="60" height="60" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M30,50 Q50,30 70,50 Q50,70 30,50" fill="none" stroke="white" stroke-width="8" stroke-linecap="round"/>
+                                <circle cx="50" cy="50" r="15" fill="none" stroke="white" stroke-width="8"/>
+                                <circle cx="50" cy="50" r="5" fill="white"/>
+                            </svg>
+                            <h5>Sensor R307</h5>
+                            <p>Identificación biométrica</p>
+                        </div>
+                        <div class="tech-item">
+                            <svg width="60" height="60" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="20" y="20" width="60" height="60" rx="5" fill="white"/>
+                                <rect x="30" y="30" width="40" height="40" fill="#2c3e50"/>
+                                <rect x="35" y="35" width="10" height="10" fill="#f39c12"/>
+                                <rect x="55" y="35" width="10" height="10" fill="#3498db"/>
+                                <rect x="35" y="55" width="10" height="10" fill="#27ae60"/>
+                                <rect x="55" y="55" width="10" height="10" fill="#e74c3c"/>
+                            </svg>
+                            <h5>ESP32</h5>
+                            <p>Microcontrolador</p>
+                        </div>
+                        <div class="tech-item">
+                            <svg width="60" height="60" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                <text x="50" y="60" font-family="Arial" font-size="60" font-weight="bold" fill="white" text-anchor="middle">C+</text>
+                                <text x="70" y="70" font-family="Arial" font-size="30" font-weight="bold" fill="white" text-anchor="middle">+</text>
+                            </svg>
+                            <h5>C++</h5>
+                            <p>Lenguaje de programación</p>
+                        </div>
+                        <div class="tech-item">
+                            <svg width="60" height="60" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20,50 Q50,10 80,50 Q50,90 20,50" fill="none" stroke="white" stroke-width="8" stroke-linecap="round"/>
+                                <path d="M30,50 Q50,25 70,50 Q50,75 30,50" fill="none" stroke="white" stroke-width="8" stroke-linecap="round"/>
+                                <path d="M40,50 Q50,40 60,50 Q50,60 40,50" fill="none" stroke="white" stroke-width="8" stroke-linecap="round"/>
+                            </svg>
+                            <h5>Inalámbrico</h5>
+                            <p>Transmisión remota</p>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info alert-custom mt-4">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-info-circle me-3 fs-3"></i>
+                            <div>
+                                <h5 class="mb-1">Ventaja Clave</h5>
+                                <p class="mb-0">Sistema autónomo que funciona sin depender de hosting o dominio externo, reduciendo costos operativos y aumentando la disponibilidad.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Investigación y Recopilación -->
+        <div class="slide" id="slide3">
+            <div class="floating-shapes">
+                <div class="shape" style="top: 15%; left: 85%; width: 70px; height: 70px;">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M50,10 L90,90 L10,90 Z" fill="var(--warning-color)"/>
+                    </svg>
+                </div>
+                <div class="shape" style="top: 75%; left: 10%; width: 80px; height: 80px; animation-delay: 2s;">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="40" fill="var(--secondary-color)"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="row justify-content-center slide-content">
+                <div class="col-lg-10">
+                    <h1><i class="fas fa-search me-3"></i>Fase 1: Investigación y Recopilación</h1>
+                    
+                    <!-- SVG Investigación Mejorado -->
+                    <svg class="svg-icon" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="researchGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#f39c12"/>
+                                <stop offset="100%" style="stop-color:#e74c3c"/>
+                            </linearGradient>
+                            <filter id="glassEffect">
+                                <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur"/>
+                                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.2 0" result="glass"/>
+                            </filter>
+                        </defs>
+                        
+                        <!-- Lupa -->
+                        <circle cx="100" cy="100" r="60" fill="none" stroke="url(#researchGrad)" stroke-width="10" stroke-dasharray="5,5"/>
+                        <circle cx="100" cy="100" r="40" fill="rgba(255,255,255,0.1)" filter="url(#glassEffect)"/>
+                        
+                        <!-- Datos -->
+                        <rect x="40" y="40" width="30" height="20" rx="3" fill="#3498db" opacity="0.8"/>
+                        <rect x="80" y="60" width="40" height="15" rx="2" fill="#27ae60" opacity="0.8"/>
+                        <rect x="60" y="90" width="25" height="25" rx="5" fill="#9b59b6" opacity="0.8"/>
+                        <rect x="110" y="40" width="20" height="40" rx="3" fill="#f39c12" opacity="0.8"/>
+                        
+                        <!-- Personas -->
+                        <circle cx="50" cy="150" r="10" fill="#2c3e50"/>
+                        <path d="M50,160 L50,180 M40,170 L60,170" stroke="#2c3e50" stroke-width="3" stroke-linecap="round"/>
+                        
+                        <circle cx="100" cy="150" r="10" fill="#e74c3c"/>
+                        <path d="M100,160 L100,180 M90,170 L110,170" stroke="#e74c3c" stroke-width="3" stroke-linecap="round"/>
+                        
+                        <circle cx="150" cy="150" r="10" fill="#3498db"/>
+                        <path d="M150,160 L150,180 M140,170 L160,170" stroke="#3498db" stroke-width="3" stroke-linecap="round"/>
+                    </svg>
+                    
+                    <div class="phase-card">
+                        <h3><i class="fas fa-database text-primary me-2"></i>Datos que necesito obtener:</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul class="list-unstyled">
+                                    <li class="mb-3">
+                                        <i class="fas fa-check-circle list-icon"></i>
+                                        <strong>Registros actuales de asistencia</strong> de los últimos 2 años académicos
+                                        <div class="progress mt-2" style="height: 8px;">
+                                            <div class="progress-bar bg-primary" style="width: 85%"></div>
+                                        </div>
+                                    </li>
+                                    <li class="mb-3">
+                                        <i class="fas fa-check-circle list-icon"></i>
+                                        <strong>Tiempo promedio</strong> que toma el proceso manual de control
+                                        <div class="progress mt-2" style="height: 8px;">
+                                            <div class="progress-bar bg-info" style="width: 75%"></div>
+                                        </div>
+                                    </li>
+                                    <li class="mb-3">
+                                        <i class="fas fa-check-circle list-icon"></i>
+                                        <strong>Errores frecuentes</strong> en el sistema actual (falsificaciones, olvidos)
+                                        <div class="progress mt-2" style="height: 8px;">
+                                            <div class="progress-bar bg-warning" style="width: 65%"></div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul class="list-unstyled">
+                                    <li class="mb-3">
+                                        <i class="fas fa-check-circle list-icon"></i>
+                                        <strong>Número de estudiantes</strong> con y sin dispositivos móviles
+                                        <div class="progress mt-2" style="height: 8px;">
+                                            <div class="progress-bar bg-success" style="width: 90%"></div>
+                                        </div>
+                                    </li>
+                                    <li class="mb-3">
+                                        <i class="fas fa-check-circle list-icon"></i>
+                                        <strong>Horarios y ubicaciones</strong> específicas de control de asistencia
+                                        <div class="progress mt-2" style="height: 8px;">
+                                            <div class="progress-bar bg-danger" style="width: 80%"></div>
+                                        </div>
+                                    </li>
+                                    <li class="mb-3">
+                                        <i class="fas fa-check-circle list-icon"></i>
+                                        <strong>Requisitos técnicos</strong> de la infraestructura actual
+                                        <div class="progress mt-2" style="height: 8px;">
+                                            <div class="progress-bar bg-secondary" style="width: 70%"></div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-card">
+                        <h3><i class="fas fa-tools text-warning me-2"></i>Métodos de obtención de datos:</h3>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card mb-4 border-0 shadow-sm h-100">
+                                    <div class="card-body text-center">
+                                        <div class="mb-3">
+                                            <svg width="60" height="60" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                                <circle cx="50" cy="40" r="15" fill="#3498db"/>
+                                                <path d="M50,55 Q40,70 30,80 L20,95 M50,55 Q60,70 70,80 L80,95" stroke="#2c3e50" stroke-width="3" fill="none"/>
+                                                <circle cx="35" cy="30" r="3" fill="white"/>
+                                                <circle cx="45" cy="30" r="3" fill="white"/>
+                                                <path d="M40,40 Q45,45 50,40" stroke="white" stroke-width="2" fill="none"/>
+                                            </svg>
+                                        </div>
+                                        <h5 class="text-info">Entrevistas estructuradas</h5>
+                                        <ul class="text-start">
+                                            <li>5 docentes responsables</li>
+                                            <li>2 administrativos</li>
+                                            <li>Director de la institución</li>
+                                            <li>Guion predefinido</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card mb-4 border-0 shadow-sm h-100">
+                                    <div class="card-body text-center">
+                                        <div class="mb-3">
+                                            <svg width="60" height="60" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                                <rect x="20" y="20" width="60" height="60" rx="5" fill="#27ae60"/>
+                                                <rect x="30" y="30" width="40" height="40" fill="white"/>
+                                                <line x1="35" y1="40" x2="65" y2="40" stroke="#27ae60" stroke-width="3"/>
+                                                <line x1="35" y1="50" x2="55" y2="50" stroke="#27ae60" stroke-width="3"/>
+                                                <line x1="35" y1="60" x2="60" y2="60" stroke="#27ae60" stroke-width="3"/>
+                                            </svg>
+                                        </div>
+                                        <h5 class="text-success">Encuestas digitales</h5>
+                                        <ul class="text-start">
+                                            <li>150 estudiantes</li>
+                                            <li>20 padres de familia</li>
+                                            <li>Google Forms</li>
+                                            <li>Análisis estadístico</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card mb-4 border-0 shadow-sm h-100">
+                                    <div class="card-body text-center">
+                                        <div class="mb-3">
+                                            <svg width="60" height="60" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                                <rect x="15" y="25" width="70" height="50" rx="5" fill="#f39c12"/>
+                                                <circle cx="30" cy="40" r="3" fill="white"/>
+                                                <circle cx="50" cy="40" r="3" fill="white"/>
+                                                <circle cx="70" cy="40" r="3" fill="white"/>
+                                                <path d="M25,60 L75,60 M35,70 L65,70 M45,80 L55,80" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                                                <path d="M20,20 L30,30 M80,20 L70,30" stroke="#e74c3c" stroke-width="3" stroke-linecap="round"/>
+                                            </svg>
+                                        </div>
+                                        <h5 class="text-warning">Observación directa</h5>
+                                        <ul class="text-start">
+                                            <li>10 sesiones de control</li>
+                                            <li>Cronometraje de procesos</li>
+                                            <li>Identificación de problemas</li>
+                                            <li>Registro fotográfico</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Diseño y Desarrollo -->
+        <div class="slide" id="slide4">
+            <div class="floating-shapes">
+                <div class="shape" style="top: 10%; left: 80%; width: 80px; height: 80px;">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <polygon points="50,5 90,50 50,95 10,50" fill="var(--success-color)"/>
+                    </svg>
+                </div>
+                <div class="shape" style="top: 70%; left: 15%; width: 60px; height: 60px; animation-delay: 3s;">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="10" y="10" width="80" height="80" rx="40" fill="var(--accent-color)"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="row justify-content-center slide-content">
+                <div class="col-lg-10">
+                    <h1><i class="fas fa-drafting-compass me-3"></i>Fase 2: Diseño y Desarrollo</h1>
+                    
+                    <!-- SVG Desarrollo Mejorado -->
+                    <svg class="svg-icon" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="devGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#9b59b6"/>
+                                <stop offset="100%" style="stop-color:#3498db"/>
+                            </linearGradient>
+                            <pattern id="codePattern" patternUnits="userSpaceOnUse" width="20" height="20">
+                                <rect width="20" height="20" fill="#f8f9fa"/>
+                                <path d="M0,0 L20,20 M-5,5 L5,15 M15,25 L25,15" stroke="#e9ecef" stroke-width="1"/>
+                            </pattern>
+                        </defs>
+                        
+                        <!-- Computadora -->
+                        <rect x="30" y="40" width="140" height="100" rx="10" fill="#2c3e50"/>
+                        <rect x="40" y="50" width="120" height="80" fill="url(#codePattern)"/>
+                        
+                        <!-- Código -->
+                        <rect x="50" y="60" width="80" height="5" fill="#3498db"/>
+                        <rect x="50" y="70" width="60" height="5" fill="#27ae60"/>
+                        <rect x="50" y="80" width="70" height="5" fill="#e74c3c"/>
+                        <rect x="50" y="90" width="50" height="5" fill="#f39c12"/>
+                        <rect x="50" y="100" width="80" height="5" fill="#9b59b6"/>
+                        
+                        <!-- Dispositivos -->
+                        <rect x="50" y="150" width="30" height="50" rx="3" fill="#34495e"/>
+                        <circle cx="65" cy="170" r="10" fill="#7f8c8d"/>
+                        
+                        <rect x="120" y="150" width="30" height="30" rx="15" fill="#34495e"/>
+                        <circle cx="135" cy="165" r="8" fill="#3498db"/>
+                        
+                        <!-- Herramientas -->
+                        <path d="M20,100 L40,80 M25,105 L45,85" stroke="#e74c3c" stroke-width="3" stroke-linecap="round"/>
+                        <rect x="15" y="120" width="10" height="20" rx="2" fill="#f39c12"/>
+                    </svg>
+                    
+                    <div class="phase-card">
+                        <h3><i class="fas fa-mobile-alt text-primary me-2"></i>Aplicación Móvil (Android)</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card mb-4 border-0 shadow-sm">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5 class="mb-0">Tecnologías</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-unstyled">
+                                            <li class="mb-2">
+                                                <div class="d-flex align-items-center">
+                                                    <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="me-2">
+                                                        <rect x="2" y="2" width="16" height="16" rx="3" fill="#3ddc84"/>
+                                                    </svg>
+                                                    <strong>Android Studio</strong> - Entorno de desarrollo
+                                                </div>
+                                            </li>
+                                            <li class="mb-2">
+                                                <div class="d-flex align-items-center">
+                                                    <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="me-2">
+                                                        <path d="M10,2 L15,17 L12,17 L10,11 L8,17 L5,17 Z" fill="#5382a1"/>
+                                                    </svg>
+                                                    <strong>Java/Kotlin</strong> - Lenguajes de programación
+                                                </div>
+                                            </li>
+                                            <li class="mb-2">
+                                                <div class="d-flex align-items-center">
+                                                    <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="me-2">
+                                                        <path d="M10,2 L2,18 L18,18 Z" fill="#4285f4"/>
+                                                    </svg>
+                                                    <strong>GPS API</strong> - Geolocalización precisa
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="d-flex align-items-center">
+                                                    <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="me-2">
+                                                        <path d="M10,2 Q15,5 10,15 Q5,5 10,2" fill="#34a853"/>
+                                                    </svg>
+                                                    <strong>Biometric API</strong> - Autenticación por huella
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card mb-4 border-0 shadow-sm">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5 class="mb-0">Funcionalidades</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-unstyled">
+                                            <li class="mb-2">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-map-marker-alt text-danger me-2"></i>
+                                                    Registro por geolocalización
+                                                </div>
+                                            </li>
+                                            <li class="mb-2">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-fingerprint text-success me-2"></i>
+                                                    Autenticación biométrica
+                                                </div>
+                                            </li>
+                                            <li class="mb-2">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-sync-alt text-info me-2"></i>
+                                                    Sincronización en tiempo real
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-user-circle text-warning me-2"></i>
+                                                    Interfaz intuitiva para estudiantes
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-card">
+                        <h3><i class="fas fa-microchip text-success me-2"></i>Sistema Biométrico Físico</h3>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card h-100 border-0 shadow-sm">
+                                    <div class="card-header bg-success text-white">
+                                        <h5 class="mb-0">Componentes Hardware</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul>
+                                            <li class="mb-2">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-microchip me-2"></i>
+                                                    <strong>ESP32</strong> - Microcontrolador
+                                                </div>
+                                            </li>
+                                            <li class="mb-2">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-fingerprint me-2"></i>
+                                                    <strong>Sensor R307</strong> - Lector de huellas
+                                                </div>
+                                            </li>
+                                            <li class="mb-2">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-tv me-2"></i>
+                                                    <strong>Pantalla LCD</strong> - Interfaz visual
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-wifi me-2"></i>
+                                                    <strong>Módulo WiFi</strong> - Conectividad
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card h-100 border-0 shadow-sm">
+                                    <div class="card-header bg-success text-white">
+                                        <h5 class="mb-0">Programación</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul>
+                                            <li class="mb-2"><strong>C++</strong> para ESP32</li>
+                                            <li class="mb-2">Comunicación serial</li>
+                                            <li class="mb-2">Protocolos de seguridad</li>
+                                            <li>Gestión de memoria optimizada</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card h-100 border-0 shadow-sm">
+                                    <div class="card-header bg-success text-white">
+                                        <h5 class="mb-0">Diagrama de Conexión</h5>
+                                    </div>
+                                    <div class="card-body text-center">
+                                        <svg width="100%" height="120" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+                                            <rect x="20" y="50" width="40" height="40" rx="5" fill="#f8f9fa" stroke="#2c3e50" stroke-width="2"/>
+                                            <text x="40" y="75" font-family="Arial" font-size="10" text-anchor="middle">ESP32</text>
+                                            
+                                            <rect x="80" y="40" width="40" height="60" rx="5" fill="#f8f9fa" stroke="#2c3e50" stroke-width="2"/>
+                                            <text x="100" y="75" font-family="Arial" font-size="10" text-anchor="middle">R307</text>
+                                            
+                                            <rect x="140" y="50" width="40" height="40" rx="5" fill="#f8f9fa" stroke="#2c3e50" stroke-width="2"/>
+                                            <text x="160" y="75" font-family="Arial" font-size="10" text-anchor="middle">LCD</text>
+                                            
+                                            <line x1="60" y1="70" x2="80" y2="70" stroke="#2c3e50" stroke-width="2" stroke-dasharray="5,3"/>
+                                            <line x1="120" y1="70" x2="140" y2="70" stroke="#2c3e50" stroke-width="2"/>
+                                            
+                                            <circle cx="70" cy="70" r="3" fill="#27ae60"/>
+                                            <circle cx="130" cy="70" r="3" fill="#e74c3c"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-card">
+                        <h3><i class="fas fa-server text-warning me-2"></i>Sistema Backend</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card h-100 border-0 shadow-sm">
+                                    <div class="card-header bg-warning text-white">
+                                        <h5 class="mb-0">Base de Datos</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center mb-3">
+                                            <i class="fas fa-database text-warning me-3 fs-4"></i>
+                                            <div>
+                                                <h6 class="mb-1">MySQL</h6>
+                                                <p class="mb-0">Almacenamiento principal con encriptación</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="card mb-3 border-0 bg-light">
+                                                    <div class="card-body p-2 text-center">
+                                                        <i class="fas fa-users text-primary"></i>
+                                                        <p class="mb-0 small">Estudiantes</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="card mb-3 border-0 bg-light">
+                                                    <div class="card-body p-2 text-center">
+                                                        <i class="fas fa-calendar-check text-success"></i>
+                                                        <p class="mb-0 small">Asistencias</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="card mb-3 border-0 bg-light">
+                                                    <div class="card-body p-2 text-center">
+                                                        <i class="fas fa-clock text-info"></i>
+                                                        <p class="mb-0 small">Horarios</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="card mb-3 border-0 bg-light">
+                                                    <div class="card-body p-2 text-center">
+                                                        <i class="fas fa-map-marker-alt text-danger"></i>
+                                                        <p class="mb-0 small">Ubicaciones</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card h-100 border-0 shadow-sm">
+                                    <div class="card-header bg-warning text-white">
+                                        <h5 class="mb-0">API REST</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center mb-3">
+                                            <i class="fab fa-node-js text-success me-3 fs-4"></i>
+                                            <div>
+                                                <h6 class="mb-1">Node.js</h6>
+                                                <p class="mb-0">Servidor backend eficiente</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <h6>Endpoints principales:</h6>
+                                            <div class="p-2 bg-light rounded mb-2">
+                                                <code class="text-primary">POST /api/register</code>
+                                                <p class="mb-0 small">Registro de asistencia</p>
+                                            </div>
+                                            <div class="p-2 bg-light rounded mb-2">
+                                                <code class="text-success">GET /api/attendance</code>
+                                                <p class="mb-0 small">Consulta de registros</p>
+                                            </div>
+                                            <div class="p-2 bg-light rounded">
+                                                <code class="text-info">POST /api/verify-location</code>
+                                                <p class="mb-0 small">Validación geográfica</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Implementación y Evaluación -->
+        <div class="slide" id="slide5">
+            <div class="floating-shapes">
+                <div class="shape" style="top: 15%; left: 10%; width: 70px; height: 70px;">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M50,5 L90,90 L10,90 Z" fill="var(--success-color)"/>
+                    </svg>
+                </div>
+                <div class="shape" style="top: 75%; left: 80%; width: 80px; height: 80px; animation-delay: 2s;">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="40" fill="var(--accent-color)"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="row justify-content-center slide-content">
+                <div class="col-lg-10">
+                    <h1><i class="fas fa-rocket me-3"></i>Fases 3-4: Implementación y Evaluación</h1>
+                    
+                    <!-- SVG Implementación Mejorado -->
+                    <svg class="svg-icon" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="implGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#27ae60"/>
+                                <stop offset="100%" style="stop-color:#2980b9"/>
+                            </linearGradient>
+                            <filter id="starGlow">
+                                <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur"/>
+                                <feMerge>
+                                    <feMergeNode in="blur"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                </feMerge>
+                            </filter>
+                        </defs>
+                        
+                        <!-- Cohete -->
+                        <path d="M100,180 L90,160 L110,160 Z" fill="#7f8c8d"/>
+                        <rect x="95" y="120" width="10" height="40" fill="#bdc3c7"/>
+                        <path d="M100,120 Q90,80 100,40 Q110,80 100,120" fill="#e74c3c"/>
+                        <circle cx="100" cy="60" r="20" fill="#3498db"/>
+                        <circle cx="100" cy="60" r="12" fill="#f1c40f"/>
+                        
+                        <!-- Estrellas -->
+                        <polygon points="30,40 35,50 45,50 37,57 40,67 30,62 20,67 23,57 15,50 25,50" 
+                                fill="url(#implGrad)" filter="url(#starGlow)"/>
+                        <polygon points="160,30 165,40 175,40 167,47 170,57 160,52 150,57 153,47 145,40 155,40" 
+                                fill="url(#implGrad)" filter="url(#starGlow)"/>
+                        <polygon points="50,100 55,110 65,110 57,117 60,127 50,122 40,127 43,117 35,110 45,110" 
+                                fill="url(#implGrad)" filter="url(#starGlow)"/>
+                        
+                        <!-- Humo -->
+                        <path d="M100,40 Q95,20 90,10 Q100,15 105,5 Q110,15 115,10 Q110,20 105,30" 
+                              fill="none" stroke="#95a5a6" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    
+                    <div class="phase-card">
+                        <h3><i class="fas fa-play-circle text-success me-2"></i>Plan de Implementación</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card mb-4 border-0 shadow-sm">
+                                    <div class="card-header bg-success text-white">
+                                        <h5 class="mb-0">Fase Piloto (4 semanas)</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="timeline">
+                                            <div class="timeline-item">
+                                                <div class="timeline-dot"></div>
+                                                <div class="timeline-content">
+                                                    <span class="timeline-date">Semana 1-2</span>
+                                                    <p>Instalación de hardware en 2 aulas seleccionadas</p>
+                                                </div>
+                                            </div>
+                                            <div class="timeline-item">
+                                                <div class="timeline-dot"></div>
+                                                <div class="timeline-content">
+                                                    <span class="timeline-date">Semana 3</span>
+                                                    <p>Capacitación a 5 docentes piloto y personal administrativo</p>
+                                                </div>
+                                            </div>
+                                            <div class="timeline-item">
+                                                <div class="timeline-dot"></div>
+                                                <div class="timeline-content">
+                                                    <span class="timeline-date">Semana 4</span>
+                                                    <p>Pruebas con 60 estudiantes voluntarios y ajustes iniciales</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card mb-4 border-0 shadow-sm">
+                                    <div class="card-header bg-success text-white">
+                                        <h5 class="mb-0">Implementación Completa (8 semanas)</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="timeline">
+                                            <div class="timeline-item">
+                                                <div class="timeline-dot"></div>
+                                                <div class="timeline-content">
+                                                    <span class="timeline-date">Semanas 1-2</span>
+                                                    <p>Instalación en todas las aulas y áreas comunes</p>
+                                                </div>
+                                            </div>
+                                            <div class="timeline-item">
+                                                <div class="timeline-dot"></div>
+                                                <div class="timeline-content">
+                                                    <span class="timeline-date">Semanas 3-4</span>
+                                                    <p>Capacitación masiva a todo el personal docente</p>
+                                                </div>
+                                            </div>
+                                            <div class="timeline-item">
+                                                <div class="timeline-dot"></div>
+                                                <div class="timeline-content">
+                                                    <span class="timeline-date">Semanas 5-8</span>
+                                                    <p>Migración gradual del sistema y soporte continuo</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <div class="card border-0 shadow-sm h-100">
+                                    <div class="card-header bg-info text-white">
+                                        <h5 class="mb-0">Recursos Necesarios</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul>
+                                            <li class="mb-2">10 dispositivos ESP32 + R307</li>
+                                            <li class="mb-2">Servidor local dedicado</li>
+                                            <li class="mb-2">Router WiFi de alta capacidad</li>
+                                            <li class="mb-2">2 técnicos de soporte full-time</li>
+                                            <li>Materiales de instalación y soporte</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card border-0 shadow-sm h-100">
+                                    <div class="card-header bg-info text-white">
+                                        <h5 class="mb-0">Cronograma de Actividades</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="chart-container">
+                                            <svg width="100%" height="100%" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+                                                <!-- Ejes -->
+                                                <line x1="50" y1="180" x2="350" y2="180" stroke="#2c3e50" stroke-width="2"/>
+                                                <line x1="50" y1="180" x2="50" y2="30" stroke="#2c3e50" stroke-width="2"/>
+                                                
+                                                <!-- Marcas del eje X -->
+                                                <text x="80" y="195" font-family="Arial" font-size="12" text-anchor="middle">Registro</text>
+                                                <text x="160" y="195" font-family="Arial" font-size="12" text-anchor="middle">Config</text>
+                                                <text x="240" y="195" font-family="Arial" font-size="12" text-anchor="middle">Pruebas</text>
+                                                <text x="320" y="195" font-family="Arial" font-size="12" text-anchor="middle">Ajustes</text>
+                                                
+                                                <!-- Barras -->
+                                                <rect x="70" y="130" width="20" height="50" fill="#3498db" rx="2"/>
+                                                <rect x="150" y="150" width="20" height="30" fill="#27ae60" rx="2"/>
+                                                <rect x="230" y="100" width="20" height="80" fill="#f39c12" rx="2"/>
+                                                <rect x="310" y="80" width="20" height="100" fill="#e74c3c" rx="2"/>
+                                                
+                                                <!-- Títulos -->
+                                                <text x="80" y="125" font-family="Arial" font-size="10" text-anchor="middle">2 sem</text>
+                                                <text x="160" y="145" font-family="Arial" font-size="10" text-anchor="middle">1 sem</text>
+                                                <text x="240" y="95" font-family="Arial" font-size="10" text-anchor="middle">1 sem</text>
+                                                <text x="320" y="75" font-family="Arial" font-size="10" text-anchor="middle">2 sem</text>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-card">
+                        <h3><i class="fas fa-clipboard-check text-primary me-2"></i>Métodos de Evaluación</h3>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card h-100 border-0 shadow-sm">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5 class="mb-0"><i class="fas fa-tachometer-alt me-2"></i>Rendimiento</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="fa-ul">
+                                            <li class="mb-3">
+                                                <span class="fa-li"><i class="fas fa-stopwatch"></i></span>
+                                                <strong>Tiempo de registro:</strong> < 5 segundos
+                                                <div class="progress mt-1" style="height: 6px;">
+                                                    <div class="progress-bar bg-primary" style="width: 90%"></div>
+                                                </div>
+                                            </li>
+                                            <li class="mb-3">
+                                                <span class="fa-li"><i class="fas fa-bullseye"></i></span>
+                                                <strong>Precisión GPS:</strong> ±10 metros
+                                                <div class="progress mt-1" style="height: 6px;">
+                                                    <div class="progress-bar bg-primary" style="width: 85%"></div>
+                                                </div>
+                                            </li>
+                                            <li class="mb-3">
+                                                <span class="fa-li"><i class="fas fa-check-circle"></i></span>
+                                                <strong>Disponibilidad:</strong> > 99%
+                                                <div class="progress mt-1" style="height: 6px;">
+                                                    <div class="progress-bar bg-primary" style="width: 95%"></div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <span class="fa-li"><i class="fas fa-times-circle"></i></span>
+                                                <strong>Falsas lecturas:</strong> < 1%
+                                                <div class="progress mt-1" style="height: 6px;">
+                                                    <div class="progress-bar bg-primary" style="width: 98%"></div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card h-100 border-0 shadow-sm">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5 class="mb-0"><i class="fas fa-users me-2"></i>Usabilidad</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="fa-ul">
+                                            <li class="mb-3">
+                                                <span class="fa-li"><i class="fas fa-poll"></i></span>
+                                                Encuestas de satisfacción (1-5)
+                                                <div class="progress mt-1" style="height: 6px;">
+                                                    <div class="progress-bar bg-info" style="width: 80%"></div>
+                                                </div>
+                                            </li>
+                                            <li class="mb-3">
+                                                <span class="fa-li"><i class="fas fa-clock"></i></span>
+                                                Tiempo de adaptación (días)
+                                                <div class="progress mt-1" style="height: 6px;">
+                                                    <div class="progress-bar bg-info" style="width: 70%"></div>
+                                                </div>
+                                            </li>
+                                            <li class="mb-3">
+                                                <span class="fa-li"><i class="fas fa-star"></i></span>
+                                                Facilidad de uso (1-10)
+                                                <div class="progress mt-1" style="height: 6px;">
+                                                    <div class="progress-bar bg-info" style="width: 85%"></div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <span class="fa-li"><i class="fas fa-bug"></i></span>
+                                                Reportes de errores/semana
+                                                <div class="progress mt-1" style="height: 6px;">
+                                                    <div class="progress-bar bg-info" style="width: 60%"></div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card h-100 border-0 shadow-sm">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5 class="mb-0"><i class="fas fa-shield-alt me-2"></i>Seguridad</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="fa-ul">
+                                            <li class="mb-3">
+                                                <span class="fa-li"><i class="fas fa-user-secret"></i></span>
+                                                Intentos de falsificación
+                                                <div class="progress mt-1" style="height: 6px;">
+                                                    <div class="progress-bar bg-warning" style="width: 10%"></div>
+                                                </div>
+                                            </li>
+                                            <li class="mb-3">
+                                                <span class="fa-li"><i class="fas fa-lock"></i></span>
+                                                Protección de datos
+                                                <div class="progress mt-1" style="height: 6px;">
+                                                    <div class="progress-bar bg-warning" style="width: 95%"></div>
+                                                </div>
+                                            </li>
+                                            <li class="mb-3">
+                                                <span class="fa-li"><i class="fas fa-history"></i></span>
+                                                Auditorías de acceso
+                                                <div class="progress mt-1" style="height: 6px;">
+                                                    <div class="progress-bar bg-warning" style="width: 100%"></div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <span class="fa-li"><i class="fas fa-save"></i></span>
+                                                Respaldo de información
+                                                <div class="progress mt-1" style="height: 6px;">
+                                                    <div class="progress-bar bg-warning" style="width: 100%"></div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Análisis y Resultados Esperados -->
+        <div class="slide" id="slide6">
+            <div class="floating-shapes">
+                <div class="shape" style="top: 20%; left: 15%; width: 60px; height: 60px;">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M50,10 L90,90 L10,90 Z" fill="var(--success-color)"/>
+                    </svg>
+                </div>
+                <div class="shape" style="top: 70%; left: 80%; width: 70px; height: 70px; animation-delay: 3s;">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="40" fill="var(--accent-color)"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="row justify-content-center slide-content">
+                <div class="col-lg-10">
+                    <h1><i class="fas fa-chart-line me-3"></i>Fase 5: Análisis y Resultados Esperados</h1>
+                    
+                    <!-- SVG Resultados Mejorado -->
+                    <svg class="svg-icon" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="resultGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#e74c3c"/>
+                                <stop offset="50%" style="stop-color:#f39c12"/>
+                                <stop offset="100%" style="stop-color:#27ae60"/>
+                            </linearGradient>
+                            <filter id="chartShadow">
+                                <feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/>
+                            </filter>
+                        </defs>
+                        
+                        <!-- Gráfico de barras -->
+                        <rect x="40" y="140" width="20" height="50" fill="url(#resultGrad)" filter="url(#chartShadow)"/>
+                        <rect x="80" y="100" width="20" height="90" fill="url(#resultGrad)" filter="url(#chartShadow)"/>
+                        <rect x="120" y="60" width="20" height="130" fill="url(#resultGrad)" filter="url(#chartShadow)"/>
+                        <rect x="160" y="30" width="20" height="160" fill="url(#resultGrad)" filter="url(#chartShadow)"/>
+                        
+                        <!-- Ejes -->
+                        <line x1="30" y1="180" x2="190" y2="180" stroke="#2c3e50" stroke-width="3" stroke-linecap="round"/>
+                        <line x1="30" y1="180" x2="30" y2="20" stroke="#2c3e50" stroke-width="3" stroke-linecap="round"/>
+                        
+                        <!-- Marcas -->
+                        <text x="50" y="195" font-family="Arial" font-size="12" text-anchor="middle">2022</text>
+                        <text x="90" y="195" font-family="Arial" font-size="12" text-anchor="middle">2023</text>
+                        <text x="130" y="195" font-family="Arial" font-size="12" text-anchor="middle">2024</text>
+                        <text x="170" y="195" font-family="Arial" font-size="12" text-anchor="middle">2025</text>
+                        
+                        <!-- Flecha de crecimiento -->
+                        <path d="M170,10 L190,30 L170,50 M190,30 L130,30" stroke="#27ae60" stroke-width="3" fill="none" stroke-linecap="round"/>
+                        <text x="150" y="25" font-family="Arial" font-size="14" font-weight="bold" fill="#27ae60" text-anchor="middle">+85%</text>
+                    </svg>
+                    
+                    <div class="phase-card">
+                        <h3><i class="fas fa-bullseye text-primary me-2"></i>Resultados Esperados</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card mb-4 border-0 shadow-sm h-100">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5 class="mb-0"><i class="fas fa-clock me-2"></i>Eficiencia Operativa</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="fa-ul">
+                                            <li class="mb-3">
+                                                <span class="fa-li"><i class="fas fa-chart-line text-success"></i></span>
+                                                <strong>85% reducción</strong> en tiempo de control diario
+                                                <div class="progress mt-2" style="height: 10px;">
+                                                    <div class="progress-bar bg-success" style="width: 85%"></div>
+                                                </div>
+                                            </li>
+                                            <li class="mb-3">
+                                                <span class="fa-li"><i class="fas fa-money-bill-wave text-info"></i></span>
+                                                <strong>60% reducción</strong> en costos operativos anuales
+                                                <div class="progress mt-2" style="height: 10px;">
+                                                    <div class="progress-bar bg-info" style="width: 60%"></div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <span class="fa-li"><i class="fas fa-user-clock text-warning"></i></span>
+                                                <strong>40 horas/mes</strong> ahorradas en procesos administrativos
+                                                <div class="progress mt-2" style="height: 10px;">
+                                                    <div class="progress-bar bg-warning" style="width: 100%"></div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card mb-4 border-0 shadow-sm h-100">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5 class="mb-0"><i class="fas fa-shield-alt me-2"></i>Seguridad y Precisión</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="fa-ul">
+                                            <li class="mb-3">
+                                                <span class="fa-li"><i class="fas fa-fingerprint text-danger"></i></span>
+                                                <strong>99.9% precisión</strong> en identificación biométrica
+                                                <div class="progress mt-2" style="height: 10px;">
+                                                    <div class="progress-bar bg-danger" style="width: 99%"></div>
+                                                </div>
+                                            </li>
+                                            <li class="mb-3">
+                                                <span class="fa-li"><i class="fas fa-map-marked-alt text-success"></i></span>
+                                                <strong>100% verificable</strong> ubicación geográfica
+                                                <div class="progress mt-2" style="height: 10px;">
+                                                    <div class="progress-bar bg-success" style="width: 100%"></div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <span class="fa-li"><i class="fas fa-ban text-secondary"></i></span>
+                                                <strong>0% falsificaciones</strong> en registros de asistencia
+                                                <div class="progress mt-2" style="height: 10px;">
+                                                    <div class="progress-bar bg-secondary" style="width: 100%"></div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-card">
+                        <h3><i class="fas fa-lightbulb text-warning me-2"></i>Beneficios del Proyecto</h3>
+                        <div class="benefits-grid">
+                            <div class="benefit-card">
+                                <h4><i class="fas fa-clock me-2"></i>Ahorro de Tiempo</h4>
+                                <p>Reducción significativa en el tiempo dedicado al control manual de asistencia, permitiendo a docentes enfocarse en actividades pedagógicas.</p>
+                            </div>
+                            <div class="benefit-card">
+                                <h4><i class="fas fa-lock me-2"></i>Seguridad</h4>
+                                <p>Datos protegidos mediante autenticación biométrica y encriptación, cumpliendo con normativas de protección de datos personales.</p>
+                            </div>
+                            <div class="benefit-card">
+                                <h4><i class="fas fa-chart-pie me-2"></i>Reportes Automáticos</h4>
+                                <p>Generación instantánea de reportes estadísticos para análisis de asistencia, tendencias y toma de decisiones.</p>
+                            </div>
+                            <div class="benefit-card">
+                                <h4><i class="fas fa-users me-2"></i>Inclusión</h4>
+                                <p>Solución accesible para todos los estudiantes, independientemente de si poseen o no dispositivos móviles.</p>
+                            </div>
+                            <div class="benefit-card">
+                                <h4><i class="fas fa-money-bill-wave me-2"></i>Reducción de Costos</h4>
+                                <p>Eliminación de gastos en materiales físicos y reducción de horas administrativas dedicadas al proceso.</p>
+                            </div>
+                            <div class="benefit-card">
+                                <h4><i class="fas fa-graduation-cap me-2"></i>Mejora Educativa</h4>
+                                <p>Datos precisos para identificar patrones de ausentismo y desarrollar estrategias de mejora continua.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <div class="alert alert-success">
+                            <h4 class="alert-heading"><i class="fas fa-check-circle me-2"></i>Impacto Esperado</h4>
+                            <p class="mb-0">Transformación digital del proceso de control de asistencia en la Unidad Educativa Oscar Unzaga de la Vega, estableciendo un precedente para la implementación de soluciones tecnológicas innovadoras en el ámbito educativo.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="navigation">
+        <button class="nav-btn" id="prevBtn"><i class="fas fa-arrow-left me-2"></i>Anterior</button>
+        <button class="nav-btn" id="nextBtn">Siguiente<i class="fas fa-arrow-right ms-2"></i></button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const progressBar = document.getElementById('progressBar');
+            
+            let currentSlide = 0;
+            
+            function showSlide(index) {
+                slides.forEach(slide => slide.classList.remove('active'));
+                slides[index].classList.add('active');
+                
+                // Actualizar barra de progreso
+                const progress = ((index + 1) / slides.length) * 100;
+                progressBar.style.width = `${progress}%`;
+                
+                // Manejar visibilidad de botones
+                prevBtn.style.display = index === 0 ? 'none' : 'flex';
+                nextBtn.style.display = index === slides.length - 1 ? 'none' : 'flex';
+            }
+            
+            function nextSlide() {
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    showSlide(currentSlide);
+                }
+            }
+            
+            function prevSlide() {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                }
+            }
+            
+            // Event listeners
+            nextBtn.addEventListener('click', nextSlide);
+            prevBtn.addEventListener('click', prevSlide);
+            
+            // Teclado
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowRight') {
+                    nextSlide();
+                } else if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                }
+            });
+            
+            // Inicializar
+            showSlide(0);
+            
+            // Animaciones adicionales
+            const shapes = document.querySelectorAll('.shape');
+            shapes.forEach((shape, index) => {
+                shape.style.animationDelay = `${index * 2}s`;
+            });
+            
+            // Efecto parallax para las formas flotantes
+            document.addEventListener('mousemove', function(e) {
+                const x = e.clientX / window.innerWidth;
+                const y = e.clientY / window.innerHeight;
+                
+                shapes.forEach(shape => {
+                    const speed = parseFloat(shape.getAttribute('data-speed')) || 10;
+                    const xMove = x * speed;
+                    const yMove = y * speed;
+                    
+                    shape.style.transform = `translate(${xMove}px, ${yMove}px)`;
+                });
+            });
+        });
+    </script>
+</body>
+</html>
