@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invitación de Graduación - ITE</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .book-container {
+            width: 100%;
+            max-width: 900px;
+            perspective: 1500px;
+            margin: 20px auto;
+        }
+        
+        .book {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
+        }
+        
+        .book-pages {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2px;
+            perspective: 2000px;
+        }
+        
+        .page {
+            background: white;
+            width: 100%;
+            max-width: 450px;
+            min-height: 600px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s;
+            break-inside: avoid;
+        }
+        
+        /* PORTADA */
+        .cover {
+            background: linear-gradient(135deg, #1a4b8c 0%, #0d2b5a 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .cover-logo {
+            width: 180px;
+            height: 180px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .cover-logo img {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+        }
+        
+        .cover-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(24px, 3vw, 32px);
+            margin: 15px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: white;
+        }
+        
+        .cover-subtitle {
+            color: rgba(255,255,255,0.9);
+            font-size: clamp(16px, 2vw, 18px);
+            font-weight: 300;
+            margin-bottom: 20px;
+        }
+        
+        .cover-motto {
+            color: rgba(255,255,255,0.9);
+            font-style: italic;
+            margin-top: 30px;
+            padding: 10px 20px;
+            border-top: 1px solid rgba(255,255,255,0.3);
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            font-size: clamp(14px, 2vw, 16px);
+        }
+        
+        .promotion-year {
+            position: absolute;
+            bottom: 20px;
+            font-size: clamp(14px, 2vw, 16px);
+            opacity: 0.8;
+            color: rgba(255,255,255,0.9);
+        }
+        
+        /* INVITACIÓN */
+        .invitation {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .institute-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .small-logo {
+            width: 50px;
+            height: 50px;
+            background: #1a4b8c;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-right: 15px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        
+        .small-logo img {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+        }
+        
+        .institute-name {
+            font-family: 'Playfair Display', serif;
+            color: #1a4b8c;
+            font-size: clamp(16px, 2vw, 18px);
+            font-weight: 700;
+        }
+        
+        .invitation-title {
+            font-family: 'Playfair Display', serif;
+            color: #1a4b8c;
+            font-size: clamp(20px, 3vw, 24px);
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .invitation-text {
+            font-size: clamp(13px, 2vw, 14px);
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+        
+        .student-name {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(18px, 3vw, 20px);
+            color: #1a4b8c;
+            font-weight: 700;
+            margin: 15px 0;
+            text-align: center;
+            padding: 12px;
+            border: 2px dashed #1a4b8c;
+            border-radius: 8px;
+            background-color: rgba(26, 75, 140, 0.1);
+        }
+        
+        .event-details {
+            background: #f0f7ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: clamp(13px, 2vw, 14px);
+        }
+        
+        .event-date, .event-location {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+        }
+        
+        .event-date::before {
+            content: "📅";
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+        
+        .event-location::before {
+            content: "📍";
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+        
+        /* PROGRAMA */
+        .program-title {
+            font-family: 'Playfair Display', serif;
+            color: #1a4b8c;
+            font-size: clamp(20px, 3vw, 22px);
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #1a4b8c;
+        }
+        
+        .program-list {
+            list-style-type: none;
+        }
+        
+        .program-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            font-size: clamp(13px, 2vw, 14px);
+            display: flex;
+            align-items: flex-start;
+            line-height: 1.5;
+        }
+        
+        .program-list li::before {
+            content: "•";
+            color: #1a4b8c;
+            font-weight: bold;
+            display: inline-block;
+            width: 20px;
+            margin-right: 5px;
+            font-size: 1.5em;
+            line-height: 0.8;
+        }
+        
+        /* AGRADECIMIENTO */
+        .acknowledgment {
+            background: linear-gradient(135deg, #1a4b8c 0%, #0d2b5a 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .acknowledgment-title {
+            font-family: 'Playfair Display', serif;
+            color: white;
+            font-size: clamp(20px, 3vw, 24px);
+            margin-bottom: 30px;
+        }
+        
+        .acknowledgment-text {
+            color: rgba(255,255,255,0.9);
+            font-size: clamp(14px, 2vw, 16px);
+            line-height: 1.6;
+            margin-bottom: 20px;
+            max-width: 80%;
+        }
+        
+        .signature {
+            color: rgba(255,255,255,0.9);
+            margin-top: 40px;
+            font-style: italic;
+            font-size: clamp(14px, 2vw, 16px);
+        }
+        
+        /* ELEMENTOS DECORATIVOS */
+        .decorative-corner {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .corner-1 {
+            top: -50px;
+            right: -50px;
+        }
+        
+        .corner-2 {
+            bottom: -50px;
+            left: -50px;
+        }
+        
+        /* BOTÓN DE IMPRESIÓN */
+        .print-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1a4b8c;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        
+        .print-button:hover {
+            background: #0d2b5a;
+            transform: translateY(-2px);
+        }
+        
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .book-pages {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .page {
+                max-width: 100%;
+                min-height: auto;
+                margin-bottom: 20px;
+            }
+            
+            .cover-logo {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .student-name {
+                font-size: 16px;
+                padding: 10px;
+            }
+            
+            .event-details {
+                padding: 10px;
+            }
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .book-pages {
+                display: block;
+            }
+            
+            .page {
+                width: 50%;
+                height: 297mm;
+                float: left;
+                page-break-after: always;
+                box-shadow: none;
+                margin: 0;
+                padding: 20px;
+            }
+            
+            .print-button {
+                display: none;
+            }
+            
+            .student-name {
+                color: #1a4b8c !important;
+                background-color: transparent !important;
+            }
+            
+            @page {
+                size: A4 portrait;
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="book-container">
+        <div class="book">
+            <div class="book-pages">
+                <!-- PORTADA -->
+                <div class="page cover">
+                    <div class="decorative-corner corner-1"></div>
+                    <div class="decorative-corner corner-2"></div>
+                    
+                    <div class="cover-logo"><img src="https://i.imgur.com/vvO7SBL.png" alt="Logo ITE"></div>
+                    
+                    <h1 class="cover-title">Graduación</h1>
+                    <p class="cover-subtitle">Técnico Medio en Enfermería</p>
+                    <p class="cover-motto">"Vivir para servir"</p>
+                    <div class="promotion-year">Promoción 2023-2025</div>
+                </div>
+                
+                <!-- INVITACIÓN -->
+                <div class="page invitation">
+                    <div class="institute-header">
+                        <div class="small-logo"><img src="https://i.imgur.com/vvO7SBL.png" alt="Logo ITE"></div>
+                        <div class="institute-name">Instituto Técnico de Excelencia</div>
+                    </div>
+                    
+                    <h2 class="invitation-title">Invitación Especial</h2>
+                    
+                    <div class="invitation-text">
+                        La Gerencia General, Dirección General, personal docente, administrativo 
+                        y estudiantes de la Promoción 2023-2025 del INSTITUTO TÉCNICO 
+                        DE EXCELENCIA "ITE S.R.L." tienen el honor de invitar(le)(s) a 
+                        presenciar el Solemne Acto de Graduación de las y los nuevos profesionales 
+                        en: <strong>Enfermería - Nivel Técnico Medio.</strong>
+                    </div>
+                    
+                    <div class="student-name">MILTON DILAN FERNANDEZ QUISOKALA</div>
+                    
+                    <div class="event-details">
+                        <div class="event-date">1 de agosto del presente año - 8:30 a.m.</div>
+                        <div class="event-location">
+                            Auditorio de La Casa del Pueblo<br>
+                            Calle Ayacucho Esq. Potosí (ingreso calle Ayacucho)
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- PROGRAMA -->
+                <div class="page program">
+                    <h2 class="program-title">Programa del Evento</h2>
+                    <ul class="program-list">
+                        <li>Ingreso de los estandartes</li>
+                        <li>Ingreso de estudiantes de la Promoción 2023-2025</li>
+                        <li>Himno Nacional (Coro General)</li>
+                        <li>Entrega de ofrendas florales a cargo de estudiantes de primer y segundo año</li>
+                        <li>Palabras a cargo del Dr. Simeón Zeballos Garrón - Director General ITE</li>
+                        <li>Informe académico a cargo de Dra. Ivón Crespo Terán - Coordinadora Académica ITE</li>
+                        <li>Número Musical</li>
+                        <li>Entrega de diplomas a estudiantes con mejor rendimiento académico</li>
+                        <li>Entrega de certificados a egresados de la Promoción 2023-2025</li>
+                        <li>Palabras a cargo del representante de la Promoción 2023-2025</li>
+                        <li>Entrega del mosaico de fotografías de la Promoción 2023-2025</li>
+                        <li>Clausura del acto de egreso a cargo de la Lic. Elba Zeballos Salas - Gerente General ITE</li>
+                    </ul>
+                </div>
+                
+                <!-- AGRADECIMIENTO -->
+                <div class="page acknowledgment">
+                    <div class="decorative-corner corner-1"></div>
+                    <div class="decorative-corner corner-2"></div>
+                    
+                    <h2 class="acknowledgment-title">Agradecimiento</h2>
+                    <p class="acknowledgment-text">
+                        A nuestros padres, maestros y seres queridos que nos han apoyado 
+                        incondicionalmente durante esta etapa de formación profesional.
+                    </p>
+                    <p class="acknowledgment-text">
+                        Su guía y apoyo han sido fundamentales para alcanzar este logro.
+                    </p>
+                    <p class="signature">Con profundo agradecimiento,<br>Promoción 2023-2025</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <button class="print-button" onclick="window.print()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M5 1a2 2 0 0 0-2 2v1h10V3a2 2 0 0 0-2-2H5zm6 8H5a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1z"/>
+            <path d="M0 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-1v-2a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2H2a2 2 0 0 1-2-2V7zm2.5 1a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/>
+        </svg>
+        Imprimir Invitación
+    </button>
+</body>
+</html>
