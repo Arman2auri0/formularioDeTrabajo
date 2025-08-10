@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CV - José Armando López Chávez</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+  <style>
+    /* [Todos tus estilos existentes...] */
+    
+    /* Estilos para el QR */
+    #qr-container {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 20px auto;
+      max-width: 200px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      text-align: center;
+      display: none; /* Oculto inicialmente */
+    }
+    
+    #qr-container h3 {
+      color: #2d5a3d;
+      margin-bottom: 10px;
+      font-size: 0.9em;
+    }
+    
+    #qr-container img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+    
+    @media print {
+      #qr-container {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+      
+      #qr-container img {
+        width: 130px !important;
+        height: 130px !important;
+      }
+    }
+  </style>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      /* Evitar el resaltado azul al hacer clic en dispositivos táctiles */
+* {
+  -webkit-tap-highlight-color: transparent; /* Para navegadores WebKit (Chrome, Safari) */
+}
+
+/* Evitar outline al hacer clic o focus */
+:focus {
+  outline: none;
+}
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: black;
+      height: 100vh;
+      overflow: hidden;
+    }
+    
+    .cv-container {
+      display: flex;
+      height: 100vh;
+      max-width: 100%;
+      background: white;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      border-radius: 15px;
+      margin: 20px;
+      overflow: hidden;
+      animation: slideIn 0.8s ease-out;
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .left-sidebar {
+      background: linear-gradient(180deg, #d4ddd4 0%, #c8d3c8 100%);
+      width: 35%;
+      padding: 25px 20px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .left-sidebar::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(45,90,61,0.05)"/><circle cx="75" cy="75" r="1" fill="rgba(45,90,61,0.03)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+      opacity: 0.3;
+      pointer-events: none;
+    }
+    
+    .right-content {
+      background: white;
+      width: 65%;
+      position: relative;
+    }
+    
+    .header-section {
+      background: linear-gradient(135deg, #2d5a3d 0%, #1a3d26 100%);
+      color: white;
+      padding: 25px;
+      position: relative;
+      height: 25%;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+    
+    .header-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 100%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+      animation: shine 3s infinite;
+    }
+    
+    @keyframes shine {
+      0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+      100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+    }
+    
+    .profile-photo {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      margin-bottom: 15px;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border-radius: 50%;
+      border: 4px solid rgba(255,255,255,0.3);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+      position: relative;
+      z-index: 2;
+    }
+    
+    .profile-photo:hover {
+      transform: scale(1.1) rotate(5deg);
+      border-color: rgba(255,255,255,0.8);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    }
+    
+    .header-content {
+      margin-left: 25px;
+      flex: 1;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .header-content h1 {
+      font-size: 2.4em;
+      font-weight: 300;
+      margin-bottom: 15px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      animation: fadeInRight 1s ease-out 0.3s both;
+    }
+    
+    @keyframes fadeInRight {
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    .header-content .divider {
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, white 0%, rgba(255,255,255,0.3) 100%);
+      margin: 15px 0;
+      border-radius: 2px;
+      animation: expandWidth 1s ease-out 0.6s both;
+    }
+    
+    @keyframes expandWidth {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+    
+    .header-content p {
+      font-size: 0.95em;
+      line-height: 1.5;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+      animation: fadeInRight 1s ease-out 0.9s both;
+    }
+    
+    .main-content {
+      padding: 5px;
+      height: 75%;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+    }
+    
+    .main-content::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .main-content::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 3px;
+    }
+    
+    .main-content::-webkit-scrollbar-thumb {
+      background: #2d5a3d;
+      border-radius: 3px;
+    }
+    
+    .main-content::-webkit-scrollbar-thumb:hover {
+      background: #1a3d26;
+    }
+    
+    .section-title {
+      font-size: 1.2em;
+      color: #2d5a3d;
+      margin-bottom: 15px;
+      font-weight: 600;
+      text-transform: uppercase;
+      border-bottom: 3px solid #2d5a3d;
+      padding-bottom: 8px;
+      position: relative;
+      letter-spacing: 1px;
+    }
+    
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      width: 30px;
+      height: 3px;
+      background: linear-gradient(90deg, #4CAF50, #2d5a3d);
+      border-radius: 2px;
+    }
+    
+    .left-section {
+      margin-bottom: 30px;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 12px;
+      padding: 4px;
+      border-radius: 8px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-size: 0.9em;
+      color: #333;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .contact-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(45, 90, 61, 0.1), transparent);
+      transition: left 0.5s;
+    }
+    
+    .contact-item:hover {
+      background: rgba(45, 90, 61, 0.1);
+      transform: translateX(8px);
+      box-shadow: 0 4px 12px rgba(45, 90, 61, 0.2);
+    }
+    
+    .contact-item:hover::before {
+      left: 100%;
+    }
+    
+    .contact-icon {
+      width: 18px;
+      height: 18px;
+      margin-right: 12px;
+      margin-top: 2px;
+      color: #2d5a3d;
+      flex-shrink: 0;
+      transition: transform 0.3s ease;
+    }
+    
+    .contact-item:hover .contact-icon {
+      transform: scale(1.2);
+    }
+    
+    .contact-item a {
+      color: #2d5a3d;
+      text-decoration: none;
+      transition: color 0.3s ease;
+      font-weight: 500;
+    }
+    
+    .contact-item a:hover {
+      color: #1a3d26;
+      text-decoration: underline;
+    }
+    
+    .skills-list, .courses-list, .additional-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .skills-list li, .courses-list li, .additional-list li {
+      font-size: 0.9em;
+      line-height: 1.5;
+      color: #333;
+      margin-bottom: 10px;
+      padding-left: 20px;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    
+    .skills-list li:hover, .additional-list li:hover, .courses-list li:hover {
+      color: #2d5a3d;
+      transform: translateX(5px);
+    }
+    
+    .skills-list li::before, .additional-list li::before {
+      content: '●';
+      color: #4CAF50;
+      position: absolute;
+      left: 0;
+      font-weight: bold;
+      animation: pulse 2s infinite;
+    }
+    
+    .courses-list li::before {
+      content: '📚';
+      position: absolute;
+      left: 0;
+      font-size: 0.8em;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    .experience-item {
+      margin-bottom: 25px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 20px;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    
+    .experience-item:hover {
+      background: rgba(45, 90, 61, 0.02);
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    
+    .experience-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+    
+    .experience-title {
+      font-weight: 600;
+      color: #2d5a3d;
+      font-size: 1.1em;
+    }
+    
+    .experience-date {
+      color: #666;
+      font-size: 0.85em;
+      white-space: nowrap;
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-weight: 500;
+    }
+    
+    .experience-company {
+      color: #2d5a3d;
+      font-size: 0.95em;
+      margin-bottom: 10px;
+      font-weight: 500;
+      font-style: italic;
+    }
+    
+    .experience-description {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .experience-description li {
+      font-size: 0.9em;
+      color: #333;
+      line-height: 1.5;
+      margin-bottom: 6px;
+      padding-left: 20px;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    
+    .experience-description li:hover {
+      color: #2d5a3d;
+      transform: translateX(5px);
+    }
+    
+    .experience-description li::before {
+      content: '▶';
+      color: #4CAF50;
+      position: absolute;
+      left: 0;
+      font-weight: bold;
+      font-size: 0.8em;
+    }
+    
+    .education-item {
+      margin-bottom: 20px;
+      padding: 15px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+    
+    .education-item:hover {
+      background: rgba(45, 90, 61, 0.05);
+      box-shadow: 0 4px 12px rgba(45, 90, 61, 0.1);
+    }
+    
+    .education-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    
+    .education-title {
+      font-weight: 600;
+      color: #2d5a3d;
+      font-size: 1.05em;
+    }
+    
+    .education-date {
+      color: #666;
+      font-size: 0.85em;
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-weight: 500;
+    }
+    
+    .education-institution {
+      color: #555;
+      font-size: 0.9em;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+    
+    .education-institution a {
+      color: #2d5a3d;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .education-institution a:hover {
+      color: #4CAF50;
+      text-decoration: underline;
+    }
+    
+    /* Botón de impresión flotante */
+    .print-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, #2d5a3d, #4CAF50);
+      color: white;
+      border: none;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(45, 90, 61, 0.3);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .print-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 30px rgba(45, 90, 61, 0.5);
+    }
+    
+    /* Optimizaciones móviles */
+    @media (max-width: 768px) {
+      .cv-container {
+        margin: 10px;
+        border-radius: 10px;
+        flex-direction: row;
+        overflow-x: auto;
+        height: calc(100vh - 20px);
+      }
+      
+      .left-sidebar {
+        width: 45%;
+        height: 100%;
+        padding: 20px 0px;
+        overflow-y: auto;
+      }
+      
+      .right-content {
+        width: 60%;
+        height: 100%;
+        overflow-y: auto;
+      }
+      
+      .header-section {
+        height: 35%;
+        padding: 2px;
+        flex-direction: row;
+        text-align: left;
+        align-items: center;
+      }
+      
+      .profile-photo {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+      
+      .header-content {
+        position: relative;
+        top: 1px;
+        margin-left: 15px;
+      }
+      
+      .header-content h1 {
+        font-size: 1.6em;
+      }
+      
+      .header-content p {
+        font-size: 0.75em;
+      }
+      
+      .main-content {
+        height: 57%;
+        padding: 10px;
+      }
+      
+      .print-btn {
+        bottom: 15px;
+        right: 15px;
+        width: 50px;
+        height: 50px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .header-content h1 {
+        font-size: 1.3em;
+      }
+      
+      .profile-photo {
+        width: 120px;
+        height: 120px;
+      }
+      
+      .main-content {
+        padding: 15px;
+      }
+    }
+    
+    @media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  
+  body {
+    background: white !important;
+    height: auto !important;
+    overflow: visible !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  .cv-container {
+    height: auto !important;
+    flex-direction: row !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    overflow: visible !important;
+    display: flex !important;
+  }
+  
+  .left-sidebar {
+    width: 35% !important;
+    height: auto !important;
+    background: #f5f5f5 !important;
+    overflow: visible !important;
+    flex-shrink: 0;
+  }
+  
+  .right-content {
+    width: 65% !important;
+    height: auto !important;
+    overflow: visible !important;
+    flex: 1;
+  }
+  
+  .header-section {
+    background: #2d5a3d !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  
+  .main-content {
+    overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+  
+  .print-btn {
+    display: none !important;
+  }
+  
+  /* FORZAR VISIBILIDAD DE SECCIONES ESPECÍFICAS */
+  .left-section,
+  .main-section {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  
+  /* CURSOS - Forzar visibilidad completa */
+  .courses-list {
+    display: block !important;
+    visibility: visible !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  
+  .courses-list li {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  
+  /* EXPERIENCIA LABORAL - Forzar visibilidad completa */
+  .experience-item {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    overflow: visible !important;
+    page-break-inside: avoid;
+  }
+  
+  .experience-description {
+    display: block !important;
+    visibility: visible !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  
+  .experience-description li {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  
+  /* ESTUDIOS - Forzar visibilidad completa */
+  .education-item {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  
+  /* HABILIDADES - Asegurar visibilidad */
+  .skills-list {
+    display: block !important;
+    visibility: visible !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  
+  .skills-list li {
+    display: list-item !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  /* INFORMACIÓN ADICIONAL */
+  .additional-list {
+    display: block !important;
+    visibility: visible !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  
+  .additional-list li {
+    display: list-item !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  /* Asegurar que todos los títulos de sección sean visibles */
+  .section-title {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+  }
+  
+  /* Remover restricciones de altura que puedan estar cortando contenido */
+  * {
+    max-height: none !important;
+  }
+}
+    }
+  </style>
+</head>
+<body>
+  <div class="cv-container">
+    <div class="left-sidebar">
+      <img id="profilePhoto" src="https://i.imgur.com/d9iJvDk.png" alt="Foto de perfil" class="profile-photo">
+      
+      <div class="left-section">
+        <h3 class="section-title">Contacto</h3>
+
+        <div class="contact-item">
+          <svg class="contact-icon" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 2L3 9v9h4v-6h6v6h4V9l-7-7z"/>
+          </svg>
+          <a href="https://maps.app.goo.gl/GErgjVBbVeWjknNj7" target="_blank" rel="noopener noreferrer">
+            C. Pasoskanky, Z. Miraflores, La Paz, Bolivia
+          </a>
+        </div>
+
+        <div class="contact-item">
+          <svg class="contact-icon" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+          </svg>
+          <a href="https://wa.me/59175873687?text=Hola%20José%20Armando%2C%20estoy%20interesado%20en%20tu%20perfil%20profesional" target="_blank" rel="noopener noreferrer">
+            758-73-687
+          </a>
+        </div>
+
+        <div class="contact-item">
+          <svg class="contact-icon" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+          </svg>
+          <a href="mailto:armanxrn11proplus@gmail.com?subject=Oportunidad%20Laboral&body=Hola%20José%20Armando,%20estoy%20interesado%20en%20tu%20perfil%20profesional." target="_blank" rel="noopener noreferrer">
+            armanxrn11proplus<br>@gmail.com
+          </a>
+        </div>
+      </div>
+      
+      <div class="left-section">
+        <h3 class="section-title">Habilidades</h3>
+        <ul class="skills-list">
+          <li>Diseño web profesional</li>
+          <li>Contabilidad básica</li>
+          <li>Programación en múltiples lenguajes</li>
+          <li>Electricidad doméstica e industrial</li>
+          <li>Soporte técnico informático</li>
+          <li>Manejo de software empresarial</li>
+          <li>Seguridad electrónica y vigilancia</li>
+          <li>Gestión de sistemas de cámaras</li>
+        </ul>
+      </div>
+      
+      <div class="left-section">
+        <h3 class="section-title">Cursos</h3>
+        <ul class="courses-list">
+          <li>Certificación en Seguridad Electrónica - Academia Boliviana de Seguridad, 2023</li>
+          <li>Curso Avanzado de Programación Python - Platzi, 2022</li>
+          <li>Diseño Web Responsive - Google Actívate, 2021</li>
+          <li>Electricidad Básica para No Electricistas - SENATI Virtual, 2020</li>
+          <li>Soporte Técnico TI - Cisco Networking Academy, 2019</li>
+          <li>Contabilidad para No Contadores - Universidad Salesiana, 2018</li>
+          <li>Manejo de Sistemas de CCTV - Instituto Técnico Industrial, 2024</li>
+        </ul>
+      </div>
+      
+      <div class="left-section">
+        
+        <div id="qr-container">
+    <h3>Escanea el QR para más información</h3>
+    <div id="qrcode"></div>
+  </div>
+      </div>
+    </div>
+    
+    <div class="right-content">
+      <div class="header-section">
+        <div class="header-content">
+          <h1>José Armando López Chávez</h1>
+          <div class="divider"></div>
+          <p>Soy estudiante en Informática Industrial, especializado en el desarrollo de soluciones tecnológicas para entornos empresariales y residenciales. Poseo experiencia en diseño y desarrollo de sistemas, manejando herramientas y programas requeridos para implementar soluciones eficientes.</p>
+        </div>
+      </div>
+      
+      <div class="main-content">
+        <div class="main-section">
+          <h3 class="section-title">Experiencia Laboral</h3>
+          
+          <div class="experience-item">
+            <div class="experience-header">
+              <div class="experience-title">Encargado de Seguridad</div>
+              <div class="experience-date">2019</div>
+            </div>
+            <div class="experience-company">Torre Ámbar</div>
+            <ul class="experience-description">
+              <li>Gestión integral del sistema de seguridad del edificio</li>
+              <li>Supervisión y mantenimiento del sistema de cámaras CCTV</li>
+              <li>Control de acceso de visitantes y residentes</li>
+              <li>Coordinación con el personal de vigilancia</li>
+              <li>Implementación de protocolos de seguridad</li>
+            </ul>
+          </div>
+          
+          <div class="experience-item">
+            <div class="experience-header">
+              <div class="experience-title">Responsable de Seguridad</div>
+              <div class="experience-date">2021-2022</div>
+            </div>
+            <div class="experience-company">Edificio Esperanza</div>
+            <ul class="experience-description">
+              <li>Administración del sistema de seguridad electrónica</li>
+              <li>Monitoreo permanente de las cámaras de vigilancia</li>
+              <li>Capacitación al personal en protocolos de emergencia</li>
+              <li>Actualización del software de seguridad</li>
+              <li>Generación de reportes de incidentes</li>
+            </ul>
+          </div>
+          
+          <div class="experience-item">
+            <div class="experience-header">
+              <div class="experience-title">Coordinador de Seguridad</div>
+              <div class="experience-date">2022-2024</div>
+            </div>
+            <div class="experience-company">Conferencia Episcopal Bolivariana</div>
+            <ul class="experience-description">
+              <li>Diseño del plan de seguridad para las instalaciones</li>
+              <li>Supervisión del sistema de alarmas y cámaras</li>
+              <li>Implementación de medidas de control de acceso</li>
+              <li>Coordinación con autoridades locales</li>
+              <li>Mantenimiento preventivo de equipos electrónicos</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="main-section">
+          <h3 class="section-title">Estudios</h3>
+          <div class="education-item">
+            <div class="education-header">
+              <div class="education-title">Informática Industrial (6to Semestre)</div>
+              <div class="education-date">2025</div>
+            </div>
+            <div class="education-institution">
+              Escuela Industrial Superior Pedro Domingo Murillo
+            </div>
+          </div>
+
+          <div class="education-item">
+            <div class="education-header">
+              <div class="education-title">Bachiller en Humanidades</div>
+              <div class="education-date">2017</div>
+            </div>
+            <div class="education-institution">
+              Unidad Educativa Oscar Unzaga de la Vega
+            </div>
+          </div>
+
+          <div class="education-item">
+            <div class="education-header">
+              <div class="education-title">Educación Primaria</div>
+              <div class="education-date">2011</div>
+            </div>
+            <div class="education-institution">
+              Unidad Educativa Eduardo Abaroa
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botón de impresión flotante -->
+  <button class="print-btn" onclick="window.print()" title="Imprimir CV">
+    <svg width="24" height="24" fill="currentColor" viewBox="0 0 20 20">
+      <path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a2 2 0 002 2h6a2 2 0 002-2v-2h1a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zM5 14H4v-2h1v2zm1 0v2h6v-2H6zm10-2h-1v2h1v-2z" clip-rule="evenodd"/>
+    </svg>
+  </button>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Generar código QR como imagen para impresión
+      const qrContainer = document.getElementById('qr-container');
+      if (qrContainer) {
+        const url = 'https://arman2auri0.github.io/formularioDeTrabajo/Jose_Armando_Lopez_Chavez.html';
+        
+        // Primero generamos el QR en un canvas oculto
+        const canvas = document.createElement('canvas');
+        QRCode.toCanvas(canvas, url, {
+          width: 150,
+          margin: 2,
+          color: {
+            dark: '#2d5a3d',
+            light: '#ffffff'
+          }
+        }, function(error) {
+          if (error) {
+            console.error(error);
+            return;
+          }
+          
+          // Convertimos el canvas a imagen
+          const img = document.createElement('img');
+          img.src = canvas.toDataURL('image/png');
+          img.alt = "Código QR";
+          img.style.width = '100%';
+          img.style.maxWidth = '150px';
+          img.style.height = 'auto';
+          
+          // Limpiamos el contenedor y agregamos la imagen
+          const qrCodeDiv = document.getElementById('qrcode');
+          if (qrCodeDiv) {
+            qrCodeDiv.remove();
+          }
+          qrContainer.appendChild(img);
+          
+          // Mostramos el contenedor
+          qrContainer.style.display = 'block';
+        });
+      }
+      
+      // [Resto de tu código JavaScript...]
+    });
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Animaciones de entrada para elementos
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+          }
+        });
+      }, observerOptions);
+
+      // Observar elementos para animaciones
+      document.querySelectorAll('.experience-item, .education-item, .left-section').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = 'all 0.6s ease-out';
+        observer.observe(el);
+      });
+
+      // Efectos hover mejorados para items de contacto
+      const contactItems = document.querySelectorAll('.contact-item');
+      contactItems.forEach(item => {
+        item.addEventListener('mouseenter', function () {
+          this.style.transform = 'translateX(8px) scale(1.02)';
+          this.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+        });
+        item.addEventListener('mouseleave', function () {
+          this.style.transform = 'translateX(0) scale(1)';
+        });
+      });
+      
+      // Efecto mejorado para foto de perfil
+      const profilePhoto = document.getElementById('profilePhoto');
+      profilePhoto.addEventListener('click', function () {
+        this.style.transform = 'scale(1.15) rotate(360deg)';
+        this.style.transition = 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        setTimeout(() => {
+          this.style.transform = 'scale(1) rotate(0deg)';
+        }, 400);
+      });
+      
+      // Scroll suave para secciones
+      document.querySelectorAll('.section-title').forEach(title => {
+        title.addEventListener('click', function() {
+          this.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+
+      // Efecto de escritura para el título
+      const title = document.querySelector('.header-content h1');
+      const originalText = title.textContent;
+      title.textContent = '';
+      
+      let i = 0;
+      const typeWriter = () => {
+        if (i < originalText.length) {
+          title.textContent += originalText.charAt(i);
+          i++;
+          setTimeout(typeWriter, 100);
+        }
+      };
+      
+      setTimeout(typeWriter, 1200);
+      
+      // Atajos de teclado
+      document.addEventListener('keydown', function (e) {
+        if (e.ctrlKey && e.key === 'p') {
+          e.preventDefault();
+          window.print();
+        }
+        
+        // Navegación con teclado
+        if (e.key === 'ArrowDown') {
+          window.scrollBy(0, 100);
+        }
+        if (e.key === 'ArrowUp') {
+          window.scrollBy(0, -100);
+        }
+      });
+
+      // Efecto parallax sutil en el header
+      window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        const header = document.querySelector('.header-section');
+        if (header) {
+          header.style.transform = `translateY(${scrolled * 0.5}px)`;
+        }
+      });
+
+      // Animación de carga de la página
+      setTimeout(() => {
+        document.body.style.opacity = '1';
+      }, 100);
+    });
+    
+    // Funciones auxiliares
+    function updateProfilePhoto(imageUrl) {
+      const profilePhoto = document.getElementById('profilePhoto');
+      profilePhoto.src = imageUrl;
+      
+      // Efecto de carga de imagen
+      profilePhoto.style.opacity = '0';
+      profilePhoto.onload = function() {
+        this.style.transition = 'opacity 0.5s ease';
+        this.style.opacity = '1';
+      };
+    }
+    
+    function exportCVData() {
+      const cvData = {
+        name: "José Armando López Chávez",
+        title: "Estudiante de Informática Industrial",
+        contact: {
+          address: "C. Pasoskanky, Z. Miraflores, La Paz, Bolivia",
+          phone: "75873687",
+          email: "armanxrn11proplus@gmail.com",
+        },
+        summary: "Estudiante avanzado de Informática Industrial con experiencia en seguridad electrónica...",
+        lastUpdated: new Date().toISOString()
+      };
+      
+      // Crear y descargar archivo JSON
+      const dataStr = JSON.stringify(cvData, null, 2);
+      const dataBlob = new Blob([dataStr], {type: 'application/json'});
+      const url = URL.createObjectURL(dataBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'cv-jose-armando-lopez.json';
+      link.click();
+      URL.revokeObjectURL(url);
+      
+      return cvData;
+    }
+
+    // Función para compartir CV
+    function shareCV() {
+      if (navigator.share) {
+        navigator.share({
+          title: 'CV - José Armando López Chávez',
+          text: 'Estudiante de Informática Industrial con experiencia en seguridad',
+          url: window.location.href
+        });
+      } else {
+        // Fallback: copiar URL al portapapeles
+        navigator.clipboard.writeText(window.location.href).then(() => {
+          alert('¡Enlace copiado al portapapeles!');
+        });
+      }
+    }
+
+    // Modo oscuro toggle (función adicional)
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    }
+
+    // Cargar preferencia de modo oscuro
+    if (localStorage.getItem('darkMode') === 'true') {
+      document.body.classList.add('dark-mode');
+    }
+  </script>
+</body>
+</html>
