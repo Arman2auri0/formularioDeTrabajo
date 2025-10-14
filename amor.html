@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para ti, mi razón de calma</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400;500&family=Dancing+Script:wght@700&family=VT323&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Montserrat:wght@400;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            font-family: 'Cormorant Garamond', serif;
+            background: linear-gradient(135deg, #ff6b9d 0%, #c44569 50%, #ff4d6d 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            color: #fff5f7;
+        }
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .star {
+            position: absolute;
+            background-color: #ffe0e9;
+            border-radius: 50%;
+            animation: twinkle 5s infinite;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+        .container {
+            perspective: 2000px;
+            position: relative;
+            width: 600px;
+            height: 800px;
+        }
+        .book { 
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 2s ease-in-out;
+            transform: rotateY(0deg);
+        }
+        .book.closed { transform: rotateY(0deg); }
+        .book.opened { transform: rotateY(-180deg); }
+        .cover, .back-cover {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(145deg, #ff6b9d 0%, #ff4d6d 100%);
+            border-radius: 10px 30px 30px 10px;
+            box-shadow: 20px 20px 40px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            backface-visibility: hidden; 
+            transform-style: preserve-3d;
+            border: 15px solid #ffe0e9;
+            box-sizing: border-box;
+        }
+        .cover {
+            z-index: 10;
+            transform-origin: left center;
+        }
+        .back-cover {
+            background: linear-gradient(145deg, #ff4d6d 0%, #ff6b9d 100%);
+            transform: rotateY(180deg); 
+            z-index: 0;
+        }
+        .cover-title {
+            font-family: 'Dancing Script', cursive; 
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-align: center;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            color: #ffffff;
+        }
+        .lock-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .lock-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .password-input {
+            padding: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+            width: 200px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 24px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #e0e0e0;
+            outline: none;
+            transition: all 0.3s;
+            font-family: 'Cormorant Garamond', serif;
+            letter-spacing: 2px;
+        }
+        .password-input::placeholder { color: rgba(255, 255, 255, 0.7); }
+        .password-input:focus {
+            background-color: rgba(255, 255, 255, 0.3);
+            border-color: white;
+        }
+        .submit-btn {
+            padding: 12px 30px;
+            background-color: white;
+            color: #ff4d6d;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 18px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            font-family: 'Cormorant Garamond', serif;
+        }
+        .submit-btn:hover {
+            background-color: #f5f5f5;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        .submit-btn:active { transform: translateY(1px); }
+        .pages {
+            position: absolute;
+            width: 98%;
+            height: 96%;
+            top: 2%;
+            left: 1%;
+            background: rgba(255, 107, 157, 0.3);
+            backdrop-filter: blur(8px);
+            border-radius: 5px 25px 25px 5px;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            box-sizing: border-box;
+            z-index: 5;
+            overflow: hidden;
+            box-shadow: 0 8px 32px 0 rgba(255, 77, 109, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            transform: rotateY(0deg); 
+            backface-visibility: visible;
+        }
+        .page {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            padding: 40px;
+            box-sizing: border-box;
+            transform: rotateY(180deg);
+            backface-visibility: visible;
+            color: #fff5f7;
+        }
+        .book.opened .page { transform: rotateY(180deg); }
+        .book.closed .page, .book .page { transform: rotateY(0deg); }
+        .page-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 42px;
+            color: #ffffff;
+            margin-bottom: 40px;
+            font-weight: bold;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+        .page-content {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 28px;
+            line-height: 1.6;
+            color: #fff5f7;
+            margin-bottom: 40px;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+        .moon {
+            position: absolute;
+            top: 50px;
+            right: 50px;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            box-shadow: 15px 8px 0 0 #f6f1d3;
+            opacity: 0.8;
+            filter: blur(1px);
+        }
+        .heart-gif {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            opacity: 0.9;
+            z-index: -1;
+        }
+        .heart1 {
+            top: 30px;
+            left: 30px;
+            animation: float 6s ease-in-out infinite;
+        }
+        .heart2 {
+            bottom: 30px;
+            right: 30px;
+            animation: float 7s ease-in-out infinite 1s;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        .page-nav {
+            position: absolute;
+            bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+        }
+        .nav-btn {
+            padding: 12px 25px;
+            background: linear-gradient(145deg, #ff6b9d 0%, #ff4d6d 100%);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            font-family: 'Cormorant Garamond', serif;
+        }
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(145deg, #ff4d6d 0%, #ff6b9d 100%);
+        }
+        .nav-btn:active { transform: translateY(1px); }
+        .error-message {
+            color: #ffeb3b;
+            margin-top: 15px;
+            font-size: 16px;
+            display: none;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            font-family: 'Cormorant Garamond', serif;
+            letter-spacing: 1px;
+        }
+        .bubu-gif {
+            width: 200px;
+            height: 200px;
+            margin-bottom: 30px;
+            filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.2));
+        }
+        .page-decoration {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.05;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path fill="%23ffffff" d="M50,30 C60,20 70,25 70,40 C70,55 50,65 50,80 C50,65 30,55 30,40 C30,25 40,20 50,30 Z"/></svg>');
+            background-size: 100px 100px;
+        }
+        .heart-container {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            top: 50px;
+            right: 5px;
+            animation: heartbeat 1.5s infinite;
+            z-index: 11;
+        }
+        
+        .heart {
+            position: relative;
+            width: 40px;
+            height: 36px;
+            background-color: #ff4d6d;
+            transform: rotate(-45deg);
+            margin: 0 auto;
+        }
+        
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 36px;
+            background-color: #ff4d6d;
+            border-radius: 50%;
+        }
+        
+        .heart::before {
+            top: -20px;
+            left: 0;
+        }
+        
+        .heart::after {
+            top: 0;
+            right: -20px;
+        }
+        
+        .heart-text {
+            position: absolute;
+            top: 25%;
+            left: 75%;
+            transform: translate(-50%, -50%) rotate(45deg);
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            text-align: center;
+            width: 50px;
+            text-shadow: 0 0 5px rgba(0,0,0,0.3);
+            z-index: 10;
+        }
+        
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .heart-message {
+            position: absolute;
+            top:20px;
+            right:230px;
+            width: 100%;
+            text-align: center;
+            color: #ff4d6d;
+            font-style: italic;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        .arrow-nav {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 10;
+        }
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 50px;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            pointer-events: auto;
+            transition: all 0.3s;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .arrow:hover {
+            color: #ffffff;
+            transform: translateY(-50%) scale(1.2);
+        }
+        .arrow-left { left: 10px; }
+        .arrow-right { right: 10px; }
+        .heart-emoji {
+            color: #ff6b9d;
+            font-size: 1.2em;
+            display: inline-block;
+            animation: pulse 1.5s infinite;
+        }
+        .dedication {
+            font-style: italic;
+            font-size: 24px;
+            color: #ffd4a3;
+            margin-top: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    <div class="container">
+        <div class="heart-container">
+            <div class="heart">
+                <div class="heart-text">Para<br>Esthepany</div>
+            </div>
+            <div class="heart-message">Te amo ❤️</div>
+        </div>
+        
+        <div class="book closed" id="book">
+            <div class="cover">
+                <img src="https://media.tenor.com/Qs9Foa5kBSYAAAAi/bubu-dudu-sseeyall.gif" class="bubu-gif" alt="amor">
+                <div class="cover-title">Para ti, mi razón de calma</div>
+                <div class="lock-container">
+                    <div class="lock-icon">🔒</div>
+                    <input type="password" class="password-input" id="password" placeholder="Nuestra clave" maxlength="8" inputmode="numeric">
+                    <button class="submit-btn" id="submit">Abrir Corazón</button>
+                    <div class="error-message" id="error">Clave incorrecta, prueba otra vez mi amor</div>
+                </div>
+            </div>
+            <div class="pages" id="pages">
+                <div class="page-decoration"></div>
+                <div class="page" id="page1">
+                    <div class="moon"></div>
+                    <div class="arrow-nav">
+                        <div class="arrow arrow-right" id="next1">❯</div>
+                    </div>
+                    <div class="page-title">🌙 "Para ti, mi razón de calma" 🌙</div>
+                    <div class="page-content">
+                        Esta noche el cielo guarda tu nombre,<br>
+                        entre las nubes susurra mi voz,<br>
+                        porque en cada estrella que asoma y se esconde,<br>
+                        solo reflejas tú, mi amor.
+                    </div>
+                </div>
+                <div class="page" id="page2" style="display: none;">
+                    <div class="arrow-nav">
+                        <div class="arrow arrow-left" id="prev2">❮</div>
+                        <div class="arrow arrow-right" id="next2">❯</div>
+                    </div>
+                    <div class="page-content">
+                        Que el sueño te envuelva en dulzura y sosiego,<br>
+                        que tus pensamientos descansen en paz,<br>
+                        y si el viento roza suave tu cabello,<br>
+                        que sea mi alma queriéndote abrazar.
+                    </div>
+                </div>
+                <div class="page" id="page3" style="display: none;">
+                    <div class="arrow-nav">
+                        <div class="arrow arrow-left" id="prev3">❮</div>
+                    </div>
+                    <div class="page-content">
+                        Eres mi descanso, mi paz y mi guía,<br>
+                        mi motivo constante, mi hermosa ilusión,<br>
+                        y aunque esta noche no esté a tu lado,<br>
+                        mi corazón late junto al tuyo, mi amor. <span class="heart-emoji">💖</span>
+                    </div>
+                    <div class="dedication">
+                        Con todo mi cariño,<br>
+                        para ti, Esthepany.
+                    </div>
+                </div>
+            </div>
+            <div class="back-cover"></div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                star.style.width = `${Math.random() * 3 + 1}px`;
+                star.style.height = star.style.width;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                starsContainer.appendChild(star);
+            }
+            
+            const book = document.getElementById('book');
+            const passwordInput = document.getElementById('password');
+            const submitBtn = document.getElementById('submit');
+            const errorMessage = document.getElementById('error');
+            const pages = document.getElementById('pages');
+            const page1 = document.getElementById('page1');
+            const page2 = document.getElementById('page2');
+            const page3 = document.getElementById('page3');
+            
+            const next1Btn = document.getElementById('next1');
+            const prev2Btn = document.getElementById('prev2');
+            const next2Btn = document.getElementById('next2');
+            const prev3Btn = document.getElementById('prev3');
+            
+            const correctPassword = "11082024";
+            
+            submitBtn.addEventListener('click', function() {
+                if (passwordInput.value === correctPassword) {
+                    errorMessage.style.display = 'none';
+                    book.classList.remove('closed');
+                    book.classList.add('opened');
+                    setTimeout(() => {
+                        pages.style.display = 'flex';
+                        for (let i = 0; i < 50; i++) {
+                            createConfetti();
+                        }
+                    }, 2000);
+                } else {
+                    errorMessage.style.display = 'block';
+                    passwordInput.value = '';
+                    book.style.animation = 'shake 0.5s';
+                    setTimeout(() => {
+                        book.style.animation = '';
+                    }, 500);
+                }
+            });
+            
+            passwordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    submitBtn.click();
+                }
+            });
+            
+            next1Btn.addEventListener('click', function() {
+                page1.style.display = 'none';
+                page2.style.display = 'flex';
+            });
+            
+            prev2Btn.addEventListener('click', function() {
+                page2.style.display = 'none';
+                page1.style.display = 'flex';
+            });
+            
+            next2Btn.addEventListener('click', function() {
+                page2.style.display = 'none';
+                page3.style.display = 'flex';
+            });
+            
+            prev3Btn.addEventListener('click', function() {
+                page3.style.display = 'none';
+                page2.style.display = 'flex';
+            });
+            
+            function createConfetti() {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'absolute';
+                confetti.style.width = `${Math.random() * 10 + 5}px`;
+                confetti.style.height = `${Math.random() * 10 + 5}px`;
+                confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 75%)`;
+                confetti.style.left = `${Math.random() * 100}%`;
+                confetti.style.top = '-10px';
+                confetti.style.borderRadius = '50%';
+                confetti.style.zIndex = '1000';
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                document.body.appendChild(confetti);
+                
+                const animation = confetti.animate([
+                    { top: '-10px', opacity: 1 },
+                    { top: `${Math.random() * 100 + 100}%`, opacity: 0 }
+                ], {
+                    duration: Math.random() * 3000 + 2000,
+                    easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)'
+                });
+                
+                animation.onfinish = () => confetti.remove();
+            }
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes shake {
+                    0%, 100% { transform: rotateY(0deg) translateX(0); }
+                    20%, 60% { transform: rotateY(0deg) translateX(-10px); }
+                    40%, 80% { transform: rotateY(0deg) translateX(10px); }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            document.addEventListener('keydown', function(e) {
+                if (pages.style.display === 'flex') {
+                    if (e.key === 'ArrowRight') {
+                        if (page1.style.display === 'flex') {
+                            page1.style.display = 'none';
+                            page2.style.display = 'flex';
+                        } else if (page2.style.display === 'flex') {
+                            page2.style.display = 'none';
+                            page3.style.display = 'flex';
+                        }
+                    } else if (e.key === 'ArrowLeft') {
+                        if (page2.style.display === 'flex') {
+                            page2.style.display = 'none';
+                            page1.style.display = 'flex';
+                        } else if (page3.style.display === 'flex') {
+                            page3.style.display = 'none';
+                            page2.style.display = 'flex';
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+    <div id="youtube-player" style="display: none;"></div>
+
+    <script>
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-player', {
+                videoId: 'QJQI7WqLRXU',
+                playerVars: {
+                    'autoplay': 1,
+                    'controls': 0,
+                    'loop': 1,
+                    'playlist': 'QJQI7WqLRXU',
+                    'showinfo': 0,
+                    'modestbranding': 1,
+                    'iv_load_policy': 3,
+                    'disablekb': 1
+                },
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+        }
+
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    </script>
+</body>
+</html>
