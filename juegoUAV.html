@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UAV Industrial - Misión de Conocimiento</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1e3a8a;
+            --secondary: #3b82f6;
+            --accent: #60a5fa;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .game-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .game-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .game-stats {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border-radius: 12px;
+            border: 2px solid var(--accent);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .stat-value {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .canvas-container {
+            position: relative;
+            border: 4px solid var(--primary);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            background: #87CEEB;
+        }
+
+        #gameCanvas {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .game-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.9rem 2.2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            color: white;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            max-width: 650px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideIn 0.3s ease;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid var(--accent);
+        }
+
+        .question-number {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .timer {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--danger);
+            animation: pulse 1s ease infinite;
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            color: var(--primary);
+            line-height: 1.6;
+        }
+
+        .answers {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .answer-btn {
+            padding: 1.2rem;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border: 3px solid #e2e8f0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            font-size: 1.05rem;
+            position: relative;
+        }
+
+        .answer-btn:hover:not(:disabled) {
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+            color: white;
+            transform: translateX(10px);
+            border-color: var(--secondary);
+        }
+
+        .answer-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .answer-btn.correct {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+            border-color: var(--success);
+        }
+
+        .answer-btn.incorrect {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            color: white;
+            border-color: var(--danger);
+        }
+
+        .answer-btn.loading {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .answer-btn.loading::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+
+        .countdown-indicator {
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--warning);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: white;
+            animation: pulse 1s infinite;
+        }
+
+        .control-buttons {
+            display: none;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .control-btn {
+            flex: 1;
+            padding: 1.2rem;
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .control-btn:active {
+            transform: scale(0.95);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translate(-50%, -60%);
+                opacity: 0;
+            }
+            to {
+                transform: translate(-50%, -50%);
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @media (max-width: 768px) {
+            .game-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .game-stats {
+                justify-content: center;
+            }
+            
+            .control-buttons {
+                display: flex;
+            }
+            
+            .modal-content {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <h2 class="game-title">🚁 Misión UAV Industrial</h2>
+            <div class="game-stats">
+                <div class="stat-item">
+                    <span>🏆</span>
+                    <div>
+                        <div class="stat-label">Puntuación</div>
+                        <div class="stat-value" id="score">0</div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <span>✅</span>
+                    <div>
+                        <div class="stat-label">Correctas</div>
+                        <div class="stat-value" id="correctAnswers">0/15</div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <span>⏱️</span>
+                    <div>
+                        <div class="stat-label">Tiempo</div>
+                        <div class="stat-value" id="gameTime">00:00</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="canvas-container">
+            <canvas id="gameCanvas" width="900" height="500"></canvas>
+        </div>
+        
+        <div class="control-buttons" id="controlButtons">
+            <button class="control-btn" ontouchstart="moveUp()" ontouchend="stopMovement()">⬆️ ARRIBA</button>
+            <button class="control-btn" ontouchstart="moveDown()" ontouchend="stopMovement()">⬇️ ABAJO</button>
+        </div>
+        
+        <div class="game-controls">
+            <button class="btn btn-primary" onclick="startGame()" id="startBtn">🚀 Iniciar Misión</button>
+        </div>
+    </div>
+
+    <div id="questionModal" class="modal">
+        <div class="modal-content">
+            <div class="question-header">
+                <span class="question-number">Pregunta <span id="modalQuestionNum">1</span></span>
+                <span class="timer" id="questionTimer">20</span>
+            </div>
+            <h3 class="question-text" id="questionText"></h3>
+            <div class="answers" id="answersContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        // ============ CONFIGURACIÓN DEL JUEGO ============
+        const CONFIG = {
+            obstacleSpeed: 6, // Aumentada la velocidad de obstáculos
+            obstacleFreq: 90, // Reducida la frecuencia para más obstáculos
+            questionTime: 20,
+            uavSpeed: 10, // Aumentada la velocidad del UAV
+            uavAcceleration: 1.2, // Aumentada la aceleración
+            uavMaxVelY: 15, // Aumentada la velocidad máxima
+            answerDelay: 1000 // 1 segundo de retardo para respuestas
+        };
+
+        // ============ VARIABLES GLOBALES ============
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        let gameState = {
+            running: false,
+            paused: false,
+            score: 0,
+            currentQuestion: 0,
+            questionsAnswered: 0,
+            correctAnswers: 0,
+            gameTime: 0,
+            frameCount: 0,
+            questionFrameCount: 0
+        };
+
+        let timers = {
+            game: null,
+            question: null,
+            animation: null,
+            answerDelay: null
+        };
+
+        // ============ UAV ============
+        const uav = {
+            x: 100,
+            y: canvas.height / 2,
+            width: 80,
+            height: 60,
+            speed: CONFIG.uavSpeed,
+            velY: 0,
+            maxVelY: CONFIG.uavMaxVelY,
+            acceleration: CONFIG.uavAcceleration,
+            friction: 0.85
+        };
+
+        let obstacles = [];
+        let questionsInAir = [];
+
+        // ============ BASE DE DATOS DE PREGUNTAS ============
+        const questions = [
+            {
+                question: "¿Qué significa UAV y en qué se diferencia de un dron recreativo?",
+                answers: [
+                    "UAV es 'Unmanned Aerial Vehicle'. Se diferencia en que los UAVs industriales tienen mayor autonomía, sensores especializados y capacidades de vuelo autónomo avanzadas",
+                    "UAV significa 'Ultra Advanced Vehicle' y no hay diferencia real",
+                    "Los UAVs son solo para uso militar, los drones para uso civil",
+                    "UAV es una marca comercial de drones profesionales"
+                ],
+                correct: 0
+            },
+            {
+                question: "¿Qué tipo de sensor LiDAR es más efectivo para topografía en áreas con vegetación densa?",
+                answers: [
+                    "LiDAR topográfico estándar",
+                    "LiDAR batimétrico para superficies acuáticas",
+                    "LiDAR aerotransportado con múltiples retornos que penetra la vegetación",
+                    "LiDAR terrestre de corto alcance"
+                ],
+                correct: 2
+            },
+            {
+                question: "¿Cuál es la principal limitación técnica de los UAVs en inspecciones industriales prolongadas?",
+                answers: [
+                    "La autonomía de batería y la capacidad de carga útil limitada",
+                    "La falta de cámaras de alta resolución",
+                    "La ausencia de sistemas GPS",
+                    "La imposibilidad de volar en interiores"
+                ],
+                correct: 0
+            },
+            {
+                question: "En fotogrametría aérea con UAVs, ¿qué porcentaje de solape entre imágenes se recomienda para modelos 3D precisos?",
+                answers: [
+                    "30% frontal y 20% lateral",
+                    "50% frontal y 40% lateral",
+                    "80% frontal y 60% lateral para máxima precisión",
+                    "95% en ambas direcciones"
+                ],
+                correct: 2
+            },
+            {
+                question: "¿Qué tecnología es esencial para vuelos BVLOS (Beyond Visual Line of Sight)?",
+                answers: [
+                    "Sistemas de detección y evitación de colisiones (DAA) con sensores redundantes",
+                    "Simplemente una cámara de alta definición",
+                    "Motores de mayor potencia",
+                    "Hélices de fibra de carbono"
+                ],
+                correct: 0
+            },
+            {
+                question: "¿Qué índice se calcula con sensores multiespectrales para evaluar la salud de cultivos?",
+                answers: [
+                    "NDVI (Normalized Difference Vegetation Index)",
+                    "Índice de humedad relativa",
+                    "Coeficiente de sustentación",
+                    "Factor de carga alar"
+                ],
+                correct: 0
+            },
+            {
+                question: "¿Qué regulación internacional exige identificación remota (Remote ID) para UAVs comerciales?",
+                answers: [
+                    "Part 107 de la FAA (EE.UU.) y Reglamento (UE) 2019/947 de EASA",
+                    "Convenio de Chicago de 1944",
+                    "Protocolo de Kioto",
+                    "Normas ISO 9001"
+                ],
+                correct: 0
+            },
+            {
+                question: "¿Qué tipo de UAV es más eficiente para inspeccionar líneas eléctricas de larga distancia?",
+                answers: [
+                    "Multirrotor por su estabilidad",
+                    "UAV de ala fija por su autonomía y eficiencia energética",
+                    "Helicóptero tripulado",
+                    "Globo aerostático"
+                ],
+                correct: 1
+            },
+            {
+                question: "¿Qué protocolo de comunicación es estándar en la industria de UAVs para telemetría y control?",
+                answers: [
+                    "MAVLink (Micro Air Vehicle Link)",
+                    "HTTP/HTTPS",
+                    "FTP",
+                    "SMTP"
+                ],
+                correct: 0
+            },
+            {
+                question: "¿Qué precisión de posicionamiento ofrece la tecnología RTK (Real-Time Kinematic) en UAVs?",
+                answers: [
+                    "Precisión métrica (1-5 metros)",
+                    "Precisión decimétrica (10-50 cm)",
+                    "Precisión centimétrica (1-3 cm) en tiempo real",
+                    "Precisión milimétrica siempre"
+                ],
+                correct: 2
+            },
+            {
+                question: "¿Por qué las baterías LiPo son las más usadas en UAVs comerciales?",
+                answers: [
+                    "Son las más baratas del mercado",
+                    "Alta densidad energética, bajo peso y alta tasa de descarga",
+                    "No requieren mantenimiento nunca",
+                    "Duran indefinidamente"
+                ],
+                correct: 1
+            },
+            {
+                question: "¿Qué sistemas de navegación combinan los UAVs autónomos para máxima fiabilidad?",
+                answers: [
+                    "Solo GPS",
+                    "GPS + INS (Sistema de Navegación Inercial) + VSLAM (Visual SLAM)",
+                    "Únicamente brújula magnética",
+                    "Navegación por estrellas"
+                ],
+                correct: 1
+            },
+            {
+                question: "¿Para qué se utilizan cámaras térmicas en inspección con UAVs?",
+                answers: [
+                    "Detectar puntos calientes en paneles solares, líneas eléctricas y aislamientos térmicos",
+                    "Tomar fotografías nocturnas artísticas",
+                    "Medir la velocidad del viento",
+                    "Detectar colores específicos"
+                ],
+                correct: 0
+            },
+            {
+                question: "¿Qué ventaja clave tienen los multirrotores sobre los UAVs de ala fija?",
+                answers: [
+                    "Mayor velocidad máxima",
+                    "Capacidad de vuelo estacionario (hover) y despegue/aterrizaje vertical",
+                    "Mayor autonomía de vuelo",
+                    "Menor costo de mantenimiento"
+                ],
+                correct: 1
+            },
+            {
+                question: "¿Qué tecnología permite a los UAVs evitar obstáculos automáticamente?",
+                answers: [
+                    "Sistemas de detección y evitación (DAA) con sensores LiDAR, radar o cámaras estereoscópicas",
+                    "Solo pintura reflectante",
+                    "Luces estroboscópicas",
+                    "Bocinas de advertencia"
+                ],
+                correct: 0
+            }
+        ];
+
+        // ============ FUNCIONES DE DIBUJO ============
+        function drawBackground() {
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, '#87CEEB');
+            gradient.addColorStop(1, '#E0F6FF');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Nubes animadas
+            const cloudOffset = (Date.now() * 0.01) % canvas.width;
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+            drawCloud(100 - cloudOffset, 80, 35);
+            drawCloud(350 - cloudOffset, 120, 40);
+            drawCloud(600 - cloudOffset, 60, 38);
+            drawCloud(850 - cloudOffset, 100, 42);
+            
+            // Edificios industriales de fondo
+            ctx.fillStyle = 'rgba(100, 100, 100, 0.25)';
+            for (let i = 0; i < 6; i++) {
+                const h = 60 + Math.random() * 80;
+                ctx.fillRect(100 + i * 140, canvas.height - h, 50, h);
+            }
+        }
+
+        function drawCloud(x, y, size) {
+            ctx.beginPath();
+            ctx.arc(x, y, size, 0, Math.PI * 2);
+            ctx.arc(x + size * 0.5, y, size * 0.7, 0, Math.PI * 2);
+            ctx.arc(x - size * 0.5, y, size * 0.7, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function drawUAV() {
+            ctx.save();
+            
+            // Cuerpo principal
+            const gradient = ctx.createLinearGradient(uav.x, uav.y, uav.x, uav.y + uav.height);
+            gradient.addColorStop(0, '#1e3a8a');
+            gradient.addColorStop(1, '#3b82f6');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(uav.x, uav.y, uav.width, uav.height);
+            
+            // Brazos de motores
+            ctx.fillStyle = '#334155';
+            const armPositions = [
+                [uav.x - 10, uav.y - 10],
+                [uav.x + uav.width - 5, uav.y - 10],
+                [uav.x - 10, uav.y + uav.height],
+                [uav.x + uav.width - 5, uav.y + uav.height]
+            ];
+            
+            armPositions.forEach(([x, y]) => {
+                ctx.fillRect(x, y, 15, 10);
+            });
+            
+            // Cámara central
+            ctx.fillStyle = '#ef4444';
+            ctx.beginPath();
+            ctx.arc(uav.x + uav.width/2, uav.y + uav.height/2, 10, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Hélices animadas
+            ctx.strokeStyle = '#60a5fa';
+            ctx.lineWidth = 3;
+            const rotation = Date.now() * 0.03;
+            
+            armPositions.forEach(([x, y], i) => {
+                ctx.save();
+                ctx.translate(x + 7.5, y + 5);
+                ctx.rotate(rotation + i * Math.PI / 2);
+                ctx.beginPath();
+                ctx.moveTo(-12, 0);
+                ctx.lineTo(12, 0);
+                ctx.moveTo(0, -12);
+                ctx.lineTo(0, 12);
+                ctx.stroke();
+                ctx.restore();
+            });
+            
+            ctx.restore();
+        }
+
+        function drawObstacles() {
+            obstacles.forEach(obs => {
+                const gradient = ctx.createLinearGradient(obs.x, 0, obs.x + obs.width, 0);
+                gradient.addColorStop(0, '#475569');
+                gradient.addColorStop(1, '#64748b');
+                ctx.fillStyle = gradient;
+                
+                if (obs.type === 'top') {
+                    ctx.fillRect(obs.x, 0, obs.width, obs.height);
+                    // Detalles industriales
+                    ctx.fillStyle = '#fbbf24';
+                    for (let i = 0; i < 4; i++) {
+                        ctx.fillRect(obs.x + 15 + i * 30, 15, 18, 12);
+                    }
+                } else {
+                    ctx.fillRect(obs.x, canvas.height - obs.height, obs.width, obs.height);
+                    ctx.fillStyle = '#fbbf24';
+                    for (let i = 0; i < 4; i++) {
+                        ctx.fillRect(obs.x + 15 + i * 30, canvas.height - obs.height + 15, 18, 12);
+                    }
+                }
+            });
+        }
+
+        function drawQuestions() {
+            questionsInAir.forEach((q, i) => {
+                const floatOffset = Math.sin(Date.now() * 0.003 + i * 0.5) * 12;
+                const y = q.y + floatOffset;
+                
+                // Glow exterior
+                const glowGradient = ctx.createRadialGradient(q.x, y, 0, q.x, y, 35);
+                glowGradient.addColorStop(0, 'rgba(245, 158, 11, 0.4)');
+                glowGradient.addColorStop(1, 'rgba(245, 158, 11, 0)');
+                ctx.fillStyle = glowGradient;
+                ctx.beginPath();
+                ctx.arc(q.x, y, 35, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Burbuja principal
+                const bubbleGradient = ctx.createRadialGradient(q.x - 5, y - 5, 0, q.x, y, 28);
+                bubbleGradient.addColorStop(0, '#ffffff');
+                bubbleGradient.addColorStop(1, '#fef3c7');
+                ctx.fillStyle = bubbleGradient;
+                ctx.beginPath();
+                ctx.arc(q.x, y, 28, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Borde
+                ctx.strokeStyle = '#f59e0b';
+                ctx.lineWidth = 4;
+                ctx.stroke();
+                
+                // Signo de interrogación
+                ctx.fillStyle = '#1e3a8a';
+                ctx.font = 'bold 32px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('?', q.x, y);
+            });
+        }
+
+        // ============ LÓGICA DEL JUEGO ============
+        function updateUAV() {
+            // Aplicar fricción
+            uav.velY *= uav.friction;
+            
+            // Actualizar posición
+            uav.y += uav.velY;
+            
+            // Límites del canvas
+            uav.y = Math.max(0, Math.min(canvas.height - uav.height, uav.y));
+        }
+
+        function updateObstacles() {
+            obstacles.forEach(obs => {
+                obs.x -= CONFIG.obstacleSpeed;
+            });
+            
+            obstacles = obstacles.filter(obs => obs.x + obs.width > 0);
+            
+            gameState.frameCount++;
+            if (gameState.frameCount % CONFIG.obstacleFreq === 0) {
+                createObstacle();
+            }
+            
+            checkCollisions();
+        }
+
+        function updateQuestions() {
+            questionsInAir.forEach(q => {
+                q.x -= CONFIG.obstacleSpeed * 0.6;
+            });
+            
+            questionsInAir = questionsInAir.filter(q => q.x > -30);
+            
+            gameState.questionFrameCount++;
+            if (gameState.questionFrameCount % 140 === 0 && gameState.correctAnswers < 15) {
+                createQuestion();
+            }
+            
+            checkQuestionCollection();
+        }
+
+        function createObstacle() {
+            const type = Math.random() > 0.5 ? 'top' : 'bottom';
+            const width = 150 + Math.random() * 100;
+            const height = 100 + Math.random() * 120;
+            
+            obstacles.push({
+                x: canvas.width,
+                width,
+                height,
+                type
+            });
+        }
+
+        function createQuestion() {
+            const y = 100 + Math.random() * (canvas.height - 200);
+            
+            questionsInAir.push({
+                x: canvas.width,
+                y: y,
+                radius: 28
+            });
+        }
+
+        function checkCollisions() {
+            obstacles.forEach((obs, index) => {
+                const collision = 
+                    uav.x < obs.x + obs.width &&
+                    uav.x + uav.width > obs.x &&
+                    (
+                        (obs.type === 'top' && uav.y < obs.height) ||
+                        (obs.type === 'bottom' && uav.y + uav.height > canvas.height - obs.height)
+                    );
+                
+                if (collision) {
+                    // Restar una pregunta correcta
+                    if (gameState.correctAnswers > 0) {
+                        gameState.correctAnswers--;
+                        updateCorrectAnswers();
+                    }
+                    
+                    gameState.score = Math.max(0, gameState.score - 10);
+                    updateScore();
+                    obstacles.splice(index, 1);
+                    
+                    // Efecto visual de colisión
+                    flashScreen('#ef4444');
+                }
+            });
+        }
+
+        function checkQuestionCollection() {
+            for (let i = questionsInAir.length - 1; i >= 0; i--) {
+                const q = questionsInAir[i];
+                const dx = (uav.x + uav.width/2) - q.x;
+                const dy = (uav.y + uav.height/2) - q.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < uav.width/2 + q.radius) {
+                    questionsInAir.splice(i, 1);
+                    gameState.score += 20;
+                    updateScore();
+                    pauseGameForQuestion();
+                    
+                    // Efecto visual de recolección
+                    flashScreen('#10b981');
+                    break;
+                }
+            }
+        }
+
+        function flashScreen(color) {
+            ctx.fillStyle = color + '40';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // ============ CONTROLES ============
+        function moveUp() {
+            if (!gameState.running || gameState.paused) return;
+            uav.velY = Math.max(-uav.maxVelY, uav.velY - uav.acceleration);
+        }
+
+        function moveDown() {
+            if (!gameState.running || gameState.paused) return;
+            uav.velY = Math.min(uav.maxVelY, uav.velY + uav.acceleration);
+        }
+
+        function stopMovement() {
+            // La fricción se encarga de detener el UAV gradualmente
+        }
+
+        // ============ GAME LOOP ============
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            drawBackground();
+            drawObstacles();
+            drawQuestions();
+            drawUAV();
+            
+            // Indicadores de zona segura
+            ctx.strokeStyle = 'rgba(16, 185, 129, 0.4)';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([8, 8]);
+            ctx.beginPath();
+            ctx.moveTo(0, 100);
+            ctx.lineTo(canvas.width, 100);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height - 100);
+            ctx.lineTo(canvas.width, canvas.height - 100);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // Actualizar estado
+            if (!gameState.paused) {
+                updateUAV();
+                updateObstacles();
+                updateQuestions();
+                
+                if (gameState.running) {
+                    gameState.score++;
+                    if (gameState.score % 10 === 0) updateScore();
+                }
+            }
+            
+            if (gameState.running) {
+                timers.animation = requestAnimationFrame(gameLoop);
+            }
+        }
+
+        // ============ SISTEMA DE PREGUNTAS ============
+        function pauseGameForQuestion() {
+            gameState.paused = true;
+            showQuestion();
+        }
+
+        function showQuestion() {
+            if (gameState.correctAnswers >= 15) {
+                endGame();
+                return;
+            }
+
+            const modal = document.getElementById('questionModal');
+            const question = questions[gameState.currentQuestion % questions.length];
+            
+            document.getElementById('modalQuestionNum').textContent = gameState.currentQuestion + 1;
+            document.getElementById('questionText').textContent = question.question;
+            
+            const answersContainer = document.getElementById('answersContainer');
+            answersContainer.innerHTML = '';
+            
+            question.answers.forEach((answer, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'answer-btn loading';
+                btn.textContent = answer;
+                btn.disabled = true;
+                
+                // Añadir contador visual
+                const countdown = document.createElement('span');
+                countdown.className = 'countdown-indicator';
+                countdown.textContent = '1';
+                btn.appendChild(countdown);
+                
+                answersContainer.appendChild(btn);
+            });
+
+            modal.style.display = 'block';
+
+            // Temporizador de pregunta
+            let timeLeft = CONFIG.questionTime;
+            document.getElementById('questionTimer').textContent = timeLeft;
+            
+            timers.question = setInterval(() => {
+                timeLeft--;
+                document.getElementById('questionTimer').textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timers.question);
+                    checkAnswer(-1);
+                }
+            }, 1000);
+            
+            // Habilitar respuestas después de 1 segundo
+            clearTimeout(timers.answerDelay);
+            timers.answerDelay = setTimeout(() => {
+                const answerButtons = document.querySelectorAll('.answer-btn');
+                answerButtons.forEach((btn, index) => {
+                    btn.disabled = false;
+                    btn.classList.remove('loading');
+                    btn.onclick = () => checkAnswer(index);
+                    
+                    // Remover el contador visual
+                    const countdown = btn.querySelector('.countdown-indicator');
+                    if (countdown) {
+                        countdown.remove();
+                    }
+                });
+            }, CONFIG.answerDelay);
+        }
+
+        function checkAnswer(selectedIndex) {
+            clearInterval(timers.question);
+            clearTimeout(timers.answerDelay);
+            
+            const question = questions[gameState.currentQuestion % questions.length];
+            const isCorrect = selectedIndex === question.correct;
+            const answerButtons = document.querySelectorAll('.answer-btn');
+            
+            // Deshabilitar todos los botones
+            answerButtons.forEach((btn, index) => {
+                btn.disabled = true;
+                if (index === question.correct) {
+                    btn.classList.add('correct');
+                }
+                if (index === selectedIndex && !isCorrect) {
+                    btn.classList.add('incorrect');
+                }
+            });
+            
+            // Esperar un momento antes de mostrar el resultado
+            setTimeout(() => {
+                if (isCorrect) {
+                    gameState.score += 100;
+                    gameState.correctAnswers++;
+                    updateCorrectAnswers();
+                    
+                    Swal.fire({
+                        title: '¡Excelente! ✅',
+                        html: `<p style="font-size: 1.1rem; line-height: 1.6;">${question.answers[question.correct]}</p>`,
+                        icon: 'success',
+                        confirmButtonText: 'Continuar Misión',
+                        confirmButtonColor: '#10b981',
+                        timer: 5000,
+                        timerProgressBar: true
+                    }).then(() => {
+                        resumeGame();
+                    });
+                } else {
+                    gameState.score = Math.max(0, gameState.score - 50);
+                    
+                    let message = selectedIndex === -1 ? '⏰ Tiempo agotado' : '❌ Respuesta incorrecta';
+                    
+                    Swal.fire({
+                        title: message,
+                        html: `<p style="font-size: 1.05rem; line-height: 1.6; margin-bottom: 1rem;"><strong>Respuesta correcta:</strong><br>${question.answers[question.correct]}</p>`,
+                        icon: 'error',
+                        confirmButtonText: 'Continuar',
+                        confirmButtonColor: '#ef4444',
+                        timer: 6000,
+                        timerProgressBar: true
+                    }).then(() => {
+                        resumeGame();
+                    });
+                }
+                
+                updateScore();
+                gameState.currentQuestion++;
+                gameState.questionsAnswered++;
+                
+                document.getElementById('questionModal').style.display = 'none';
+                
+                // Verificar si el jugador ha ganado
+                if (gameState.correctAnswers >= 15) {
+                    endGame();
+                }
+            }, 1500);
+        }
+
+        function resumeGame() {
+            gameState.paused = false;
+        }
+
+        // ============ CONTROLES DEL JUEGO ============
+        function startGame() {
+            if (gameState.running) return;
+            
+            // Reiniciar estado
+            gameState = {
+                running: true,
+                paused: false,
+                score: 0,
+                currentQuestion: 0,
+                questionsAnswered: 0,
+                correctAnswers: 0,
+                gameTime: 0,
+                frameCount: 0,
+                questionFrameCount: 0
+            };
+            
+            obstacles = [];
+            questionsInAir = [];
+            uav.y = canvas.height / 2;
+            uav.velY = 0;
+            
+            updateScore();
+            updateCorrectAnswers();
+            document.getElementById('gameTime').textContent = '00:00';
+            
+            document.getElementById('startBtn').disabled = true;
+            
+            // Iniciar temporizador de juego
+            timers.game = setInterval(() => {
+                if (!gameState.paused) {
+                    gameState.gameTime++;
+                    const mins = Math.floor(gameState.gameTime / 60);
+                    const secs = gameState.gameTime % 60;
+                    document.getElementById('gameTime').textContent = 
+                        `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                }
+            }, 1000);
+            
+            gameLoop();
+            
+            if (window.innerWidth <= 768) {
+                document.getElementById('controlButtons').style.display = 'flex';
+            }
+            
+            Swal.fire({
+                title: '🚁 Misión Iniciada',
+                text: '¡Buena suerte, piloto! Responde 15 preguntas correctas para ganar.',
+                icon: 'info',
+                timer: 3000,
+                showConfirmButton: false,
+                toast: true,
+                position: 'top'
+            });
+        }
+
+        function endGame() {
+            gameState.running = false;
+            clearInterval(timers.game);
+            
+            const timeBonus = Math.max(0, 500 - gameState.gameTime * 2);
+            const accuracyBonus = Math.floor((gameState.correctAnswers / 15) * 200);
+            const finalScore = gameState.score + timeBonus + accuracyBonus;
+            
+            const percentage = Math.floor((gameState.correctAnswers / 15) * 100);
+            let rank = '';
+            let rankIcon = '';
+            
+            if (percentage >= 90) {
+                rank = 'Piloto Elite';
+                rankIcon = '🏆';
+            } else if (percentage >= 70) {
+                rank = 'Piloto Experto';
+                rankIcon = '🥇';
+            } else if (percentage >= 50) {
+                rank = 'Piloto Competente';
+                rankIcon = '🥈';
+            } else {
+                rank = 'Piloto en Entrenamiento';
+                rankIcon = '📋';
+            }
+            
+            setTimeout(() => {
+                Swal.fire({
+                    title: `${rankIcon} ¡Felicidades! Ganaste respondiendo las 15 preguntas correctas`,
+                    html: `
+                        <div style="text-align: left; padding: 1rem;">
+                            <h3 style="color: #1e3a8a; margin-bottom: 1rem;">📊 Resultados:</h3>
+                            <p><strong>Rango:</strong> ${rank}</p>
+                            <p><strong>Precisión:</strong> ${percentage}% (${gameState.correctAnswers}/15 correctas)</p>
+                            <p><strong>Tiempo:</strong> ${document.getElementById('gameTime').textContent}</p>
+                            <hr style="margin: 1rem 0;">
+                            <p><strong>Puntuación base:</strong> ${gameState.score}</p>
+                            <p><strong>Bonus por tiempo:</strong> +${timeBonus}</p>
+                            <p><strong>Bonus por precisión:</strong> +${accuracyBonus}</p>
+                            <h3 style="color: #10b981; margin-top: 1rem;"><strong>Puntuación Final: ${finalScore}</strong></h3>
+                        </div>
+                    `,
+                    icon: 'success',
+                    confirmButtonText: '✅ Finalizar',
+                    confirmButtonColor: '#10b981',
+                    width: '600px'
+                }).then(() => {
+                    // Recargar la página para reiniciar el juego
+                    location.reload();
+                });
+            }, 500);
+        }
+
+        function updateScore() {
+            document.getElementById('score').textContent = gameState.score;
+        }
+
+        function updateCorrectAnswers() {
+            document.getElementById('correctAnswers').textContent = `${gameState.correctAnswers}/15`;
+        }
+
+        // ============ CONTROLES DE TECLADO ============
+        document.addEventListener('keydown', (e) => {
+            if (!gameState.running || gameState.paused) return;
+            
+            if (e.code === 'ArrowUp' || e.code === 'KeyW') {
+                e.preventDefault();
+                moveUp();
+            } else if (e.code === 'ArrowDown' || e.code === 'KeyS') {
+                e.preventDefault();
+                moveDown();
+            }
+        });
+
+        // ============ RESPONSIVE ============
+        window.addEventListener('resize', () => {
+            if (window.innerWidth <= 768 && gameState.running) {
+                document.getElementById('controlButtons').style.display = 'flex';
+            } else {
+                document.getElementById('controlButtons').style.display = 'none';
+            }
+        });
+
+        // ============ INICIALIZACIÓN ============
+        window.addEventListener('load', () => {
+            drawBackground();
+            drawUAV();
+            
+            ctx.fillStyle = '#1e3a8a';
+            ctx.font = 'bold 28px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('🚀 ¡Listo para la Misión!', canvas.width/2, canvas.height/2 - 20);
+            ctx.font = '18px Arial';
+            ctx.fillStyle = '#3b82f6';
+            ctx.fillText('Presiona "Iniciar Misión" para comenzar', canvas.width/2, canvas.height/2 + 30);
+        });
+
+        // Prevenir scroll con flechas
+        window.addEventListener('keydown', (e) => {
+            if(['ArrowUp', 'ArrowDown'].includes(e.code)) {
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>
