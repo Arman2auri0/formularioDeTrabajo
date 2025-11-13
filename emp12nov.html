@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plan Comercial y de Marketing - FishControl+ S.R.L.</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2b579a;
+            --secondary-color: #217346;
+            --accent-color: #d83b01;
+            --light-color: #f5f9fc;
+            --dark-color: #1e3f66;
+            --text-color: #323130;
+            --border-color: #e1dfdd;
+            --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --radius: 4px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            color: var(--text-color);
+            line-height: 1.6;
+            background-color: #f9f9f9;
+            font-size: 16px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 25px 0;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+        }
+        
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        nav {
+            background-color: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-item {
+            margin: 0;
+        }
+        
+        .nav-link {
+            display: block;
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 18px 20px;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+            font-weight: 500;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background-color: var(--light-color);
+            border-bottom: 3px solid var(--accent-color);
+            color: var(--primary-color);
+        }
+        
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        section {
+            background-color: white;
+            margin: 30px 0;
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 12px;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        h3 {
+            color: var(--secondary-color);
+            margin: 25px 0 15px;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        h4 {
+            color: var(--dark-color);
+            margin: 20px 0 12px;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        
+        p {
+            margin-bottom: 16px;
+            line-height: 1.7;
+        }
+        
+        ul, ol {
+            margin-left: 24px;
+            margin-bottom: 20px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            box-shadow: var(--shadow);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+        
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 14px 16px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            font-weight: 600;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: #f0f7ff;
+        }
+        
+        .highlight {
+            background-color: var(--light-color);
+            padding: 20px;
+            border-left: 4px solid var(--accent-color);
+            margin: 20px 0;
+            border-radius: var(--radius);
+        }
+        
+        .org-chart {
+            text-align: center;
+            margin: 25px 0;
+        }
+        
+        .org-level {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .org-node {
+            background-color: var(--light-color);
+            border: 1px solid var(--accent-color);
+            border-radius: var(--radius);
+            padding: 18px;
+            margin: 0 10px;
+            min-width: 200px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+        }
+        
+        .org-node:hover {
+            transform: translateY(-5px);
+        }
+        
+        .org-connector {
+            height: 30px;
+            width: 2px;
+            background-color: var(--accent-color);
+            margin: 0 auto;
+        }
+        
+        .timeline {
+            position: relative;
+            margin: 40px 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: var(--accent-color);
+            transform: translateX(-50%);
+        }
+        
+        .timeline-item {
+            display: flex;
+            margin-bottom: 35px;
+            position: relative;
+        }
+        
+        .timeline-content {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 22px;
+            width: 45%;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+        }
+        
+        .timeline-content:hover {
+            transform: scale(1.02);
+        }
+        
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-right: auto;
+        }
+        
+        .timeline-item:nth-child(even) .timeline-content {
+            margin-left: auto;
+        }
+        
+        .timeline-marker {
+            position: absolute;
+            left: 50%;
+            top: 25px;
+            width: 20px;
+            height: 20px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px var(--accent-color);
+        }
+        
+        .section-icon {
+            margin-right: 10px;
+            color: var(--accent-color);
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .org-node {
+                min-width: 180px;
+                margin: 8px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+            }
+            
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background-color: white;
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
+                z-index: 99;
+            }
+            
+            .nav-menu.active {
+                left: 0;
+            }
+            
+            .nav-item {
+                margin: 0;
+                width: 100%;
+            }
+            
+            .nav-link {
+                padding: 20px;
+                width: 100%;
+                display: block;
+                border-bottom: 1px solid var(--border-color);
+            }
+            
+            .org-level {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .org-node {
+                margin: 10px 0;
+                width: 80%;
+            }
+            
+            .timeline::before {
+                left: 20px;
+            }
+            
+            .timeline-item {
+                flex-direction: column;
+            }
+            
+            .timeline-content {
+                width: 100%;
+                margin-left: 40px !important;
+            }
+            
+            .timeline-marker {
+                left: 20px;
+            }
+            
+            section {
+                padding: 20px;
+            }
+            
+            h2 {
+                font-size: 1.6rem;
+            }
+            
+            h3 {
+                font-size: 1.4rem;
+            }
+            
+            h4 {
+                font-size: 1.2rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+            
+            header p {
+                font-size: 1rem;
+            }
+            
+            .container {
+                padding: 0 15px;
+            }
+            
+            section {
+                padding: 15px;
+                margin: 20px 0;
+            }
+            
+            th, td {
+                padding: 10px 12px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><i class="fas fa-fish section-icon"></i> FishControl+ S.R.L.</h1>
+            <p>Plan Comercial y de Marketing</p>
+        </div>
+    </header>
+    
+    <nav>
+        <div class="nav-container">
+            <div class="logo">FishControl+</div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#plan-comercial" class="nav-link active"><i class="fas fa-chart-line section-icon"></i>Plan Comercial</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#organizacion" class="nav-link"><i class="fas fa-users section-icon"></i>Organización</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#juridico-fiscal" class="nav-link"><i class="fas fa-balance-scale section-icon"></i>Jurídico-Fiscal</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#plan-accion" class="nav-link"><i class="fas fa-tasks section-icon"></i>Plan de Acción</a>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <section id="plan-comercial">
+            <h2><i class="fas fa-chart-line section-icon"></i>PLAN COMERCIAL Y DE MARKETING</h2>
+            
+            <h3>1. POTENCIALES CLIENTES</h3>
+            
+            <h4>Segmento Primario</h4>
+            <ul>
+                <li>Asociaciones de Piscicultores del Beni y Pando: Grupos organizados con capacidad de compra colectiva</li>
+                <li>Productores medianos y grandes: Con estanques de 500m² o más, facturación anual superior a Bs 100,000</li>
+                <li>Cooperativas acuícolas: Organizaciones que buscan tecnificar sus procesos productivos</li>
+            </ul>
+            
+            <h4>Segmento Secundario</h4>
+            <ul>
+                <li>Empresas agroindustriales diversificadas: Que integran piscicultura en sus operaciones</li>
+                <li>Proyectos gubernamentales: Programas de desarrollo productivo en el sector acuícola</li>
+                <li>Centros de investigación y universidades: Para proyectos experimentales y de capacitación</li>
+            </ul>
+            
+            <h4>Perfil del Cliente Ideal</h4>
+            <ul>
+                <li>Producción actual: 2-5 toneladas/ciclo</li>
+                <li>Desafíos: Pérdidas por control manual deficiente</li>
+                <li>Ubicación: Departamentos de Beni, Pando, Santa Cruz</li>
+                <li>Poder adquisitivo: Medio-alto</li>
+                <li>Mentalidad: Innovadora, orientada a la tecnificación</li>
+            </ul>
+            
+            <h3>2. PRESENCIA EN REDES SOCIALES Y SITIOS WEB</h3>
+            
+            <h4>Sitio Web Corporativo</h4>
+            <p><strong>Dominio:</strong> www.fishcontrolplus.com</p>
+            <p><strong>Contenido Principal:</strong></p>
+            <ul>
+                <li>Landing page con video demostrativo del Kit Aqua</li>
+                <li>Calculadora de ROI interactiva</li>
+                <li>Casos de éxito y testimoniales</li>
+                <li>Blog técnico sobre piscicultura automatizada</li>
+                <li>Formulario de cotización en línea</li>
+                <li>Chat en vivo para consultas técnicas</li>
+            </ul>
+            
+            <h4>Redes Sociales</h4>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Plataforma</th>
+                            <th>Frecuencia</th>
+                            <th>Contenido</th>
+                            <th>Inversión</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Facebook (@FishControlPlusBolivia)</td>
+                            <td>4 publicaciones/semana</td>
+                            <td>Tutoriales, testimonios, datos de producción, transmisiones en vivo</td>
+                            <td>Bs 500/mes en anuncios</td>
+                        </tr>
+                        <tr>
+                            <td>Instagram (@fishcontrol.plus)</td>
+                            <td>5 publicaciones/semana + 3 stories diarios</td>
+                            <td>Behind the scenes, infografías, reels educativos, comparativas</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>LinkedIn (FishControl+ S.R.L.)</td>
+                            <td>2 publicaciones/semana</td>
+                            <td>Artículos técnicos, participación en ferias, alianzas estratégicas</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>YouTube (FishControl+ Bolivia)</td>
+                            <td>2 videos/mes</td>
+                            <td>Tutoriales, webinars, casos de éxito, comparativas</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>WhatsApp Business</td>
+                            <td>Respuestas 24/7</td>
+                            <td>Catálogo digital, grupos exclusivos, estados promocionales</td>
+                            <td>-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <h3>3. ESTRATEGIAS DE PROMOCIÓN</h3>
+            
+            <h4>Marketing Digital</h4>
+            <ul>
+                <li><strong>Google Ads:</strong> Presupuesto Bs 800/mes, palabras clave específicas</li>
+                <li><strong>Email Marketing:</strong> Base inicial de 200 contactos, newsletter mensual</li>
+                <li><strong>Marketing de Contenidos:</strong> Blog con 2 artículos/semana, e-book gratuito</li>
+            </ul>
+            
+            <h4>Marketing Tradicional</h4>
+            <ul>
+                <li><strong>Ferias y Eventos:</strong> Feria Agropecuaria de Santa Cruz, Expo Acuicultura Beni</li>
+                <li><strong>Alianzas Estratégicas:</strong> Asociación de Piscicultores, proveedores de insumos</li>
+                <li><strong>Demostraciones Gratuitas:</strong> Instalación temporal en granjas modelo</li>
+            </ul>
+            
+            <h3>4. ESTRATEGIAS DE VENTAS</h3>
+            
+            <h4>Modelo de Ventas Consultivo</h4>
+            <ol>
+                <li><strong>Prospección Calificada (Semanas 1-2):</strong> Identificación y calificación de prospectos</li>
+                <li><strong>Diagnóstico en Campo (Semana 3):</strong> Visita técnica y análisis de necesidades</li>
+                <li><strong>Demostración Personalizada (Semana 4):</strong> Presentación del Kit Aqua</li>
+                <li><strong>Propuesta Comercial (Semana 5):</strong> Cotización formal con términos detallados</li>
+                <li><strong>Cierre y Seguimiento (Semana 6):</strong> Negociación, firma de contrato e instalación</li>
+            </ol>
+            
+            <h4>Opciones de Financiamiento</h4>
+            <ul>
+                <li>50% anticipo / 50% contra entrega (estándar)</li>
+                <li>30% / 35% / 35% a 30-60 días (clientes recurrentes)</li>
+                <li>Leasing con BISA o BNB (24-36 meses)</li>
+                <li>Descuento 5% por pago contado anticipado</li>
+            </ul>
+            
+            <h3>5. ANÁLISIS COMPETITIVO</h3>
+            
+            <h4>Competidores Identificados</h4>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Competidor</th>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th>Fortalezas</th>
+                            <th>Debilidades</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>AquaTech Solutions (Santa Cruz)</td>
+                            <td>Sistemas semi-automatizados importados</td>
+                            <td>Bs 12,000 - 15,000</td>
+                            <td>Mayor experiencia, respaldo internacional</td>
+                            <td>Precio elevado, servicio post-venta limitado</td>
+                        </tr>
+                        <tr>
+                            <td>PisciControl SRL (Cochabamba)</td>
+                            <td>Controladores básicos de oxigenación</td>
+                            <td>Bs 4,500 - 6,000</td>
+                            <td>Precio competitivo, mercado establecido</td>
+                            <td>Funcionalidad limitada, tecnología obsoleta</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <h4>Ventajas Competitivas de FishControl+</h4>
+            <ul>
+                <li>Tecnología Integral: Controla temperatura, oxígeno y alimentación</li>
+                <li>Precio Competitivo: 35% más económico que competencia internacional</li>
+                <li>Soporte Local: Asistencia técnica en menos de 48 horas</li>
+                <li>Personalización: Adaptación a necesidades específicas</li>
+                <li>Capacitación Incluida: Transferencia de conocimiento completa</li>
+                <li>Garantía Extendida: 12 meses vs. 6 meses de competencia</li>
+            </ul>
+        </section>
+        
+        <section id="organizacion">
+            <h2><i class="fas fa-users section-icon"></i>ORGANIZACIÓN</h2>
+            
+            <h3>1. ORGANIGRAMA DE LA EMPRESA</h3>
+            
+            <div class="org-chart">
+                <div class="org-level">
+                    <div class="org-node">
+                        <strong>JUNTA DE SOCIOS</strong>
+                    </div>
+                </div>
+                
+                <div class="org-connector"></div>
+                
+                <div class="org-level">
+                    <div class="org-node">
+                        <strong>GERENTE GENERAL</strong><br>
+                        Ing. Elmer Quispe Mamani
+                    </div>
+                </div>
+                
+                <div class="org-connector"></div>
+                
+                <div class="org-level">
+                    <div class="org-node">
+                        <strong>JEFE TÉCNICO Y PRODUCCIÓN</strong><br>
+                        Ing. José Armando López Chávez
+                    </div>
+                    <div class="org-node">
+                        <strong>JEFE COMERCIAL Y ADM.</strong><br>
+                        Ing. Elmer Quispe Mamani
+                    </div>
+                </div>
+                
+                <div class="org-connector"></div>
+                
+                <div class="org-level">
+                    <div class="org-node">
+                        <strong>TÉCNICO INSTALADOR</strong><br>
+                        (Tiempo parcial)
+                    </div>
+                    <div class="org-node">
+                        <strong>ASISTENTE PRODUCCIÓN</strong><br>
+                        (Año 2)
+                    </div>
+                    <div class="org-node">
+                        <strong>VENDEDOR TÉCNICO</strong><br>
+                        (Año 2)
+                    </div>
+                    <div class="org-node">
+                        <strong>CONTADOR EXTERNO</strong><br>
+                        (Servicios)
+                    </div>
+                </div>
+            </div>
+            
+            <h3>2. MIEMBROS DEL EQUIPO DE TRABAJO</h3>
+            
+            <h4>Socio 1: Ing. Elmer Quispe Mamani - Gerente General</h4>
+            <ul>
+                <li><strong>Formación:</strong> Ingeniería Electrónica (UMSA), Diplomado en Administración de Empresas (UCB)</li>
+                <li><strong>Experiencia:</strong> 5 años en automatización industrial, 2 años en proyectos IoT</li>
+                <li><strong>Habilidades:</strong> Programación de PLCs, diseño de sistemas de control, gestión de proyectos</li>
+            </ul>
+            
+            <h4>Socio 2: Ing. José Armando López Chávez - Jefe Técnico y Producción</h4>
+            <ul>
+                <li><strong>Formación:</strong> Ingeniería en Sistemas (UCB), Diplomado en Gestión de Calidad</li>
+                <li><strong>Experiencia:</strong> 4 años como analista de sistemas, experiencia familiar en piscicultura</li>
+                <li><strong>Habilidades:</strong> Desarrollo de software embebido, configuración de sensores, conocimiento práctico de piscicultura</li>
+            </ul>
+            
+            <h3>3. EXPERIENCIA Y HABILIDADES DEL EQUIPO</h3>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Competencia</th>
+                            <th>Elmer Quispe Mamani</th>
+                            <th>José Armando López Chávez</th>
+                            <th>Nivel Conjunto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Automatización Industrial</td>
+                            <td>Experto</td>
+                            <td>Intermedio</td>
+                            <td>Alto</td>
+                        </tr>
+                        <tr>
+                            <td>Programación PLC</td>
+                            <td>Experto</td>
+                            <td>Básico</td>
+                            <td>Alto</td>
+                        </tr>
+                        <tr>
+                            <td>Desarrollo Software</td>
+                            <td>Intermedio</td>
+                            <td>Experto</td>
+                            <td>Alto</td>
+                        </tr>
+                        <tr>
+                            <td>Electrónica Aplicada</td>
+                            <td>Experto</td>
+                            <td>Avanzado</td>
+                            <td>Alto</td>
+                        </tr>
+                        <tr>
+                            <td>Conocimiento Piscicultura</td>
+                            <td>Básico</td>
+                            <td>Experto</td>
+                            <td>Alto</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="highlight">
+                <h4>Fortalezas del Equipo</h4>
+                <ul>
+                    <li><strong>Complementariedad:</strong> Combinación ideal de expertise técnico y conocimiento del sector</li>
+                    <li><strong>Experiencia Validada:</strong> Prototipo funcional desarrollado y probado durante 6 meses</li>
+                    <li><strong>Red de Contactos:</strong> Relaciones en sector industrial y asociaciones de piscicultores</li>
+                    <li><strong>Capacidad de Ejecución:</strong> Equipo comprometido a tiempo completo con mentalidad lean</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section id="juridico-fiscal">
+            <h2><i class="fas fa-balance-scale section-icon"></i>ESTUDIO JURÍDICO-FISCAL</h2>
+            
+            <h3>1. IMPUESTOS NACIONALES</h3>
+            
+            <h4>Requisitos para Obtención del NIT</h4>
+            <ul>
+                <li>Testimonio de Constitución de Sociedad (original y copia legalizada)</li>
+                <li>Cédula de Identidad del Representante Legal (original y copia)</li>
+                <li>Formulario 4569 - Solicitud de Inscripción al Padrón Nacional de Contribuyentes</li>
+                <li>Documento de Domicilio Legal (factura de servicios no mayor a 3 meses)</li>
+                <li>Poder del Representante Legal (si corresponde)</li>
+            </ul>
+            
+            <h4>Impuestos Aplicables</h4>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Impuesto</th>
+                            <th>Tasa</th>
+                            <th>Base Imponible</th>
+                            <th>Periodicidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>IVA (Impuesto al Valor Agregado)</td>
+                            <td>13%</td>
+                            <td>Ventas netas</td>
+                            <td>Mensual</td>
+                        </tr>
+                        <tr>
+                            <td>IT (Impuesto a las Transacciones)</td>
+                            <td>3%</td>
+                            <td>Ingresos brutos</td>
+                            <td>Mensual</td>
+                        </tr>
+                        <tr>
+                            <td>IUE (Impuesto sobre las Utilidades)</td>
+                            <td>25%</td>
+                            <td>Utilidad neta</td>
+                            <td>Anual</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <h3>2. SEPREC</h3>
+            
+            <h4>Requisitos para Matrícula de Comercio - S.R.L.</h4>
+            <ul>
+                <li>Testimonio de Constitución de la Sociedad (original y 2 copias legalizadas)</li>
+                <li>Balance de Apertura (firmado por contador habilitado)</li>
+                <li>Certificado de Depósito del Capital Social (mínimo Bs 1,000)</li>
+                <li>Publicación en Prensa (edicto de constitución)</li>
+                <li>Formulario de Solicitud de Matrícula</li>
+                <li>Cédulas de Identidad de Socios (fotocopias)</li>
+            </ul>
+            
+            <h4>Costos de Matrícula de Comercio</h4>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Concepto</th>
+                            <th>Costo (Bs)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Constitución de S.R.L. en FUNDEMPRESA</td>
+                            <td>430</td>
+                        </tr>
+                        <tr>
+                            <td>Testimonio notariado (escritura pública)</td>
+                            <td>800</td>
+                        </tr>
+                        <tr>
+                            <td>Publicación en prensa</td>
+                            <td>350</td>
+                        </tr>
+                        <tr>
+                            <td>Tasa SEPREC - Inscripción matrícula</td>
+                            <td>420</td>
+                        </tr>
+                        <tr>
+                            <td><strong>TOTAL APROXIMADO</strong></td>
+                            <td><strong>2,000</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <h3>3. LICENCIA DE FUNCIONAMIENTO</h3>
+            
+            <h4>Requisitos para Licencia de Funcionamiento - La Paz</h4>
+            <ul>
+                <li>Formulario de Solicitud de Licencia</li>
+                <li>NIT de la Empresa (fotocopia)</li>
+                <li>Cédula de Identidad del Representante Legal (fotocopia)</li>
+                <li>Testimonio de Constitución de la S.R.L. (fotocopia legalizada)</li>
+                <li>Balance de Apertura (fotocopia con sello del Colegio de Contadores)</li>
+                <li>Certificado Catastral del Inmueble (costo: Bs 50)</li>
+                <li>Plano de Ubicación del Local</li>
+                <li>Certificado de Uso de Suelos (USPA) (costo: Bs 200)</li>
+                <li>Formulario de Inspección de Seguridad</li>
+            </ul>
+            
+            <h3>4. REGISTRO DE PROPIEDAD INTELECTUAL</h3>
+            
+            <h4>Registro de Marca - SENAPI</h4>
+            <ul>
+                <li><strong>Marca a Registrar:</strong> "FishControl+" y logotipo</li>
+                <li><strong>Clase Internacional:</strong> Clase 9 (aparatos e instrumentos científicos)</li>
+                <li><strong>Costo:</strong> Bs 700 (búsqueda + registro)</li>
+                <li><strong>Tiempo estimado:</strong> 6-8 meses</li>
+            </ul>
+            
+            <h4>Resumen de Inversión en Propiedad Intelectual</h4>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Registro</th>
+                            <th>Costo (Bs)</th>
+                            <th>Prioridad</th>
+                            <th>Timing</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Marca "FishControl+"</td>
+                            <td>700</td>
+                            <td>Alta</td>
+                            <td>Mes 1</td>
+                        </tr>
+                        <tr>
+                            <td>Software (Derecho Autor)</td>
+                            <td>210</td>
+                            <td>Alta</td>
+                            <td>Mes 2</td>
+                        </tr>
+                        <tr>
+                            <td>Diseño Industrial</td>
+                            <td>600</td>
+                            <td>Media</td>
+                            <td>Mes 6</td>
+                        </tr>
+                        <tr>
+                            <td>Modelo de Utilidad</td>
+                            <td>800</td>
+                            <td>Baja</td>
+                            <td>Año 2</td>
+                        </tr>
+                        <tr>
+                            <td><strong>TOTAL</strong></td>
+                            <td><strong>2,310</strong></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <section id="plan-accion">
+            <h2><i class="fas fa-tasks section-icon"></i>PLAN DE ACCIÓN</h2>
+            
+            <h3>CRONOGRAMA DE ACTIVIDADES - PUESTA EN MARCHA</h3>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <h4>FASE 1: Constitución Legal y Administrativa (Meses 1-2)</h4>
+                        <ul>
+                            <li>Trámites de constitución de S.R.L.</li>
+                            <li>Registros tributarios y municipales</li>
+                            <li>Infraestructura y equipamiento</li>
+                            <li><strong>Entregable:</strong> Empresa constituida legalmente</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <h4>FASE 2: Desarrollo de Producto y Proveedores (Mes 2)</h4>
+                        <ul>
+                            <li>Cadena de suministro</li>
+                            <li>Validación y certificación</li>
+                            <li><strong>Entregable:</strong> Producto validado listo para comercialización</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <h4>FASE 3: Marketing y Comercialización (Mes 3)</h4>
+                        <ul>
+                            <li>Presencia digital</li>
+                            <li>Lanzamiento comercial</li>
+                            <li><strong>Entregable:</strong> Pipeline de 15-20 oportunidades comerciales</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <h4>FASE 4: Operación y Crecimiento (Meses 4-12)</h4>
+                        <ul>
+                            <li>Consolidación (Meses 4-6)</li>
+                            <li>Escalamiento (Meses 7-9)</li>
+                            <li>Optimización (Meses 10-12)</li>
+                            <li><strong>Entregable:</strong> 60 kits vendidos en Año 1, rentabilidad alcanzada</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <h3>HITOS CRÍTICOS Y ENTREGABLES</h3>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Hito</th>
+                            <th>Fecha Meta</th>
+                            <th>Entregable</th>
+                            <th>Criterio de Éxito</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>H1: Empresa Constituida</td>
+                            <td>Semana 4</td>
+                            <td>Licencia funcionamiento</td>
+                            <td>Operación legal</td>
+                        </tr>
+                        <tr>
+                            <td>H2: Producto Listo</td>
+                            <td>Semana 12</td>
+                            <td>5 kits validados</td>
+                            <td>Prueba piloto exitosa</td>
+                        </tr>
+                        <tr>
+                            <td>H3: Lanzamiento Comercial</td>
+                            <td>Semana 16</td>
+                            <td>10 prospectos calificados</td>
+                            <td>Pipeline activo</td>
+                        </tr>
+                        <tr>
+                            <td>H4: Primera Venta</td>
+                            <td>Mes 4</td>
+                            <td>1er contrato firmado</td>
+                            <td>Ingresos iniciales</td>
+                        </tr>
+                        <tr>
+                            <td>H5: Punto de Equilibrio</td>
+                            <td>Mes 6</td>
+                            <td>Flujo caja positivo</td>
+                            <td>Autosustentabilidad</td>
+                        </tr>
+                        <tr>
+                            <td>H6: Expansión Regional</td>
+                            <td>Mes 9</td>
+                            <td>Cliente en Santa Cruz</td>
+                            <td>Presencia nacional</td>
+                        </tr>
+                        <tr>
+                            <td>H7: 60 Unidades Vendidas</td>
+                            <td>Mes 12</td>
+                            <td>Meta anual cumplida</td>
+                            <td>Rentabilidad comprobada</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="highlight">
+                <h4>Conclusión del Plan de Acción</h4>
+                <p>Este cronograma establece una ruta clara y realista para la puesta en marcha de FishControl+ S.R.L., con:</p>
+                <ul>
+                    <li>✅ 86 actividades específicas distribuidas en 12 meses</li>
+                    <li>✅ 7 hitos críticos con entregables medibles</li>
+                    <li>✅ Inversión inicial controlada de Bs 57,225</li>
+                    <li>✅ Punto de equilibrio alcanzable en mes 6</li>
+                    <li>✅ Utilidad neta proyectada de Bs 102,924 en año 1</li>
+                </ul>
+                <p>El plan balancea la necesidad de formalización legal, desarrollo de producto, construcción de marca y generación de ingresos, con una secuencia lógica que minimiza riesgos y maximiza las probabilidades de éxito.</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all nav links
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                });
+                
+                // Add active class to clicked link
+                this.classList.add('active');
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+                
+                // Close mobile menu if open
+                const navMenu = document.querySelector('.nav-menu');
+                navMenu.classList.remove('active');
+            });
+        });
+        
+        // Mobile menu toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        
+        hamburger.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+                navMenu.classList.remove('active');
+            }
+        });
+        
+        // Update active nav link on scroll
+        window.addEventListener('scroll', () => {
+            let current = '';
+            const sections = document.querySelectorAll('section');
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= (sectionTop - 100)) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
