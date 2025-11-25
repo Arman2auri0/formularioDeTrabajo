@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Culturas Originarias - URU y Yuracaré</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: #2c1810;
+            background-image: 
+                repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(193, 120, 56, 0.1) 35px, rgba(193, 120, 56, 0.1) 70px),
+                repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(139, 69, 19, 0.1) 35px, rgba(139, 69, 19, 0.1) 70px);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 50px 20px;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, #8b4513 0%, #d2691e 50%, #8b4513 100%);
+            border-radius: 15px;
+            border: 5px solid #cd853f;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 15px;
+            background: repeating-linear-gradient(
+                90deg,
+                #c41e3a 0px,
+                #c41e3a 30px,
+                #fcd116 30px,
+                #fcd116 60px,
+                #007a33 60px,
+                #007a33 90px
+            );
+        }
+
+        header::after {
+            content: '✦ ◆ ✦ ◆ ✦';
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fcd116;
+            font-size: 1.5em;
+            letter-spacing: 15px;
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            color: #fcd116;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
+            font-family: 'Georgia', serif;
+            letter-spacing: 2px;
+        }
+
+        header p {
+            font-size: 1.3em;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-style: italic;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            padding: 20px;
+        }
+
+        .card {
+            background: linear-gradient(135deg, #f5e6d3 0%, #e8d4b8 100%);
+            border-radius: 15px;
+            padding: 0;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 8px solid;
+        }
+
+        .card.uru {
+            border-color: #4a90e2;
+        }
+
+        .card.yurac {
+            border-color: #2d5016;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 20px;
+            z-index: 1;
+        }
+
+        .card.uru::before {
+            background: repeating-linear-gradient(
+                90deg,
+                #4a90e2 0px,
+                #4a90e2 20px,
+                #87ceeb 20px,
+                #87ceeb 40px,
+                #1e3a5f 40px,
+                #1e3a5f 60px
+            );
+        }
+
+        .card.yurac::before {
+            background: repeating-linear-gradient(
+                90deg,
+                #2d5016 0px,
+                #2d5016 20px,
+                #6b8e23 20px,
+                #6b8e23 40px,
+                #8b4513 40px,
+                #8b4513 60px
+            );
+        }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+        }
+
+        .card-header {
+            text-align: center;
+            padding: 40px 30px 20px;
+            position: relative;
+        }
+
+        .card.uru .card-header {
+            background: linear-gradient(180deg, rgba(74, 144, 226, 0.2) 0%, transparent 100%);
+        }
+
+        .card.yurac .card-header {
+            background: linear-gradient(180deg, rgba(45, 80, 22, 0.2) 0%, transparent 100%);
+        }
+
+        .card-icon {
+            font-size: 5em;
+            margin-bottom: 15px;
+            filter: drop-shadow(3px 3px 5px rgba(0,0,0,0.3));
+        }
+
+        .card-title {
+            font-size: 2.3em;
+            margin-bottom: 10px;
+            font-family: 'Georgia', serif;
+            font-weight: bold;
+        }
+
+        .card.uru .card-title {
+            color: #1e3a5f;
+        }
+
+        .card.yurac .card-title {
+            color: #2d5016;
+        }
+
+        .card-subtitle {
+            font-size: 1.2em;
+            font-style: italic;
+            color: #8b4513;
+            margin-bottom: 10px;
+        }
+
+        .decorative-line {
+            width: 80%;
+            height: 3px;
+            margin: 15px auto;
+            background: linear-gradient(90deg, transparent, #8b4513, transparent);
+        }
+
+        .card-body {
+            padding: 20px 30px;
+            color: #3e2723;
+            line-height: 1.8;
+            font-size: 1.05em;
+            text-align: justify;
+        }
+
+        .pdf-preview {
+            margin: 20px;
+            padding: 40px;
+            background: #fff;
+            border-radius: 10px;
+            text-align: center;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 3px dashed #8b4513;
+            color: #8b4513;
+        }
+
+        .pdf-preview-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+        }
+
+        .pdf-preview-text {
+            font-size: 1.1em;
+            color: #666;
+        }
+
+        .card-footer {
+            padding: 20px 30px 30px;
+        }
+
+        .btn-download {
+            display: block;
+            width: 100%;
+            padding: 18px 30px;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card.uru .btn-download {
+            background: linear-gradient(135deg, #4a90e2 0%, #1e3a5f 100%);
+        }
+
+        .card.yurac .btn-download {
+            background: linear-gradient(135deg, #6b8e23 0%, #2d5016 100%);
+        }
+
+        .btn-download:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+        }
+
+        .btn-download::before {
+            content: '📥';
+            margin-right: 10px;
+            font-size: 1.3em;
+        }
+
+        .btn-download::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-download:hover::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 50px 20px;
+            margin-top: 60px;
+            background: linear-gradient(135deg, #8b4513 0%, #d2691e 50%, #8b4513 100%);
+            border-radius: 15px;
+            border: 5px solid #cd853f;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            color: #fcd116;
+        }
+
+        footer p {
+            font-size: 1.3em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 10px;
+        }
+
+        footer .symbols {
+            font-size: 2em;
+            letter-spacing: 20px;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+            
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .card-title {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏔️ Culturas Originarias de Bolivia 🌿</h1>
+            <p>Pueblos ancestrales que conservan la sabiduría de nuestros abuelos</p>
+        </header>
+
+        <div class="cards-container">
+            <!-- Tarjeta Cultura URU -->
+            <div class="card uru">
+                <div class="card-header">
+                    <div class="card-icon">🌊</div>
+                    <h2 class="card-title">CULTURA URU</h2>
+                    <p class="card-subtitle">Uru Chipaya - Pueblo del Agua</p>
+                    <div class="decorative-line"></div>
+                </div>
+                
+                <div class="card-body">
+                    <p>Los URU son considerados el pueblo más antiguo de América. Conocidos como "el pueblo del agua", habitan las orillas del lago Poopó y mantienen vivas tradiciones milenarias del altiplano boliviano. Su lengua, el chipaya, es única y sus construcciones circulares de barro reflejan su profunda conexión con la Pachamama.</p>
+                </div>
+
+                <div class="pdf-preview">
+                    <iframe 
+                        src="https://drive.google.com/file/d/1nGa0lsGQrGZ0Fyz7XP2HGFRJTCwgqvyT/preview" 
+                        style="width: 100%; height: 400px; border: none; border-radius: 8px;"
+                        allow="autoplay">
+                    </iframe>
+                </div>
+
+                <div class="card-footer">
+                    <a href="https://drive.google.com/uc?export=download&id=1nGa0lsGQrGZ0Fyz7XP2HGFRJTCwgqvyT" class="btn-download">
+                        Descargar Tríptico URU
+                    </a>
+                </div>
+            </div>
+
+            <!-- Tarjeta Cultura Yuracaré -->
+            <div class="card yurac">
+                <div class="card-header">
+                    <div class="card-icon">🦜</div>
+                    <h2 class="card-title">CULTURA YURACARÉ</h2>
+                    <p class="card-subtitle">Guardianes de la Selva</p>
+                    <div class="decorative-line"></div>
+                </div>
+                
+                <div class="card-body">
+                    <p>Los Yuracaré son el pueblo de la selva tropical de Cochabamba. Su nombre significa "hijos del sol" y mantienen una relación sagrada con la naturaleza amazónica. Expertos pescadores, cazadores y agricultores, preservan conocimientos ancestrales sobre plantas medicinales y la biodiversidad del bosque tropical.</p>
+                </div>
+
+                <div class="pdf-preview">
+                    <iframe 
+                        src="https://drive.google.com/file/d/10fA3GZZ-dPQ9V0mbAUGFQybQkoNsUFrU/preview" 
+                        style="width: 100%; height: 400px; border: none; border-radius: 8px;"
+                        allow="autoplay">
+                    </iframe>
+                </div>
+
+                <div class="card-footer">
+                    <a href="https://drive.google.com/uc?export=download&id=10fA3GZZ-dPQ9V0mbAUGFQybQkoNsUFrU" class="btn-download">
+                        Descargar Tríptico Yuracaré
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>✦ Jallalla Bolivia - Preservando nuestra herencia cultural ✦</p>
+            <div class="symbols">🌾 ⛰️ 🌺</div>
+        </footer>
+    </div>
+</body>
+</html>
