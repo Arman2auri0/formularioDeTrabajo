@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD Supabase - Clientes</title>
+    <style>
+    body {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background: #f4f7fa;
+        margin: 0;
+        padding: 40px;
+        color: #333;
+    }
+
+    h1, h2 {
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: #1a2a3a;
+    }
+
+    form {
+        background: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    input {
+        flex: 1;
+        min-width: 250px;
+        padding: 12px;
+        border: 1px solid #d0d7df;
+        border-radius: 8px;
+        font-size: 15px;
+        transition: 0.2s;
+    }
+
+    input:focus {
+        border-color: #0056d6;
+        box-shadow: 0 0 5px rgba(0, 86, 214, 0.3);
+        outline: none;
+    }
+
+    button {
+        background: #0056d6;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 8px;
+        font-size: 15px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    button:hover {
+        background: #003c9d;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 25px;
+        background: #ffffff;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    th {
+        background: #0056d6;
+        color: white;
+        padding: 12px;
+        text-align: left;
+        font-weight: 500;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: .5px;
+    }
+
+    td {
+        padding: 12px;
+        border-bottom: 1px solid #e5e8ec;
+        font-size: 15px;
+    }
+
+    tr:hover td {
+        background: #f1f5fb;
+        transition: 0.2s;
+    }
+
+    /* Botón eliminar */
+    td button:nth-child(2) {
+        background: #d62828 !important;
+    }
+
+    td button:nth-child(2):hover {
+        background: #a71d1d !important;
+    }
+</style>
+</head>
+<body>
+
+<h1>Gestión de Clientes</h1>
+
+<!-- FORMULARIO AGREGAR / EDITAR -->
+<form id="formCliente">
+    <input type="hidden" id="id">
+    <input type="text" id="nombre" placeholder="Nombre" required>
+    <input type="email" id="correo" placeholder="Correo" required>
+    <button type="submit">Guardar</button>
+</form>
+
+<h2>Lista de Clientes</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody id="tablaClientes"></tbody>
+</table>
+
+<script type="module">
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+    // ================================
+    // CONFIGURACIÓN SUPABASE
+    // ================================
+    const supabaseUrl = "https://bckdufayyifrthhwryyk.supabase.co";
+    const supabaseKey = "sb_publishable_3SZgdUiR2oaWDpUS4ZFKbA_isuA_L1h"; 
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    // =====================================================
+    // CREAR o ACTUALIZAR CLIENTE
+    // =====================================================
+    document.getElementById("formCliente").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const id = document.getElementById("id").value;
+        const nombre = document.getElementById("nombre").value;
+        const correo = document.getElementById("correo").value;
+
+        let data, error;
+
+        if (id === "") {
+            // Crear nuevo registro
+            ({ data, error } = await supabase
+                .from("clientes")
+                .insert([{ nombre, correo }]));
+        } else {
+            // Actualizar registro existente
+            ({ data, error } = await supabase
+                .from("clientes")
+                .update({ nombre, correo })
+                .eq("id", id));
+        }
+
+        if (error) {
+            alert("Error: " + error.message);
+            return;
+        }
+
+        // Reset del formulario
+        document.getElementById("id").value = "";
+        document.getElementById("formCliente").reset();
+
+        cargarClientes();
+    });
+
+    // =====================================================
+    // LEER CLIENTES
+    // =====================================================
+    async function cargarClientes() {
+        const { data, error } = await supabase
+            .from("clientes")
+            .select("*")
+            .order("id", { ascending: true });
+
+        const tbody = document.getElementById("tablaClientes");
+        tbody.innerHTML = "";
+
+        data.forEach(cli => {
+            const tr = document.createElement("tr");
+
+            tr.innerHTML = `
+                <td>${cli.id}</td>
+                <td>${cli.nombre}</td>
+                <td>${cli.correo}</td>
+                <td>
+                    <button onclick='editar(${cli.id}, "${cli.nombre}", "${cli.correo}")'>Editar</button>
+                    <button onclick='eliminar(${cli.id})' style="background:red; color:white;">Eliminar</button>
+                </td>
+            `;
+
+            tbody.appendChild(tr);
+        });
+    }
+
+    // =====================================================
+    // EDITAR CLIENTE
+    // =====================================================
+    window.editar = function(id, nombre, correo) {
+        document.getElementById("id").value = id;
+        document.getElementById("nombre").value = nombre;
+        document.getElementById("correo").value = correo;
+    };
+
+    // =====================================================
+    // ELIMINAR CLIENTE
+    // =====================================================
+    window.eliminar = async function(id) {
+        if (!confirm("¿Seguro que quieres eliminar este cliente?")) return;
+
+        const { error } = await supabase
+            .from("clientes")
+            .delete()
+            .eq("id", id);
+
+        if (error) {
+            alert("Error: " + error.message);
+            return;
+        }
+
+        cargarClientes();
+    };
+
+    // Ejecutar inicialización
+    cargarClientes();
+</script>
+
+</body>
+</html>
