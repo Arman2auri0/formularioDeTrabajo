@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Navidad 2025 | Familia Otazu Quisokala</title>
+    <style>
+        :root {
+            --primary-gold: #D4AF37;
+            --deep-blue: #050810;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Alex+Brush&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html { 
+            width: 100%; height: 100%; 
+            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+            overflow: hidden; 
+            font-family: 'Cinzel', serif;
+            touch-action: none;
+        }
+        canvas { display: block; width: 100%; height: 100%; }
+
+        /* LOADER MEJORADO */
+        #loader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            z-index: 100; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center;
+            transition: opacity 0.8s ease;
+        }
+        .loader-text { 
+            color: var(--primary-gold); 
+            font-size: 1.2rem;
+            letter-spacing: 4px; 
+            margin-bottom: 30px; 
+            animation: pulse 1.5s infinite;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+        }
+        .loader-bar-bg { 
+            width: 250px; height: 4px; 
+            background: rgba(255,255,255,0.1); 
+            border-radius: 10px; 
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+        .loader-bar-fill { 
+            width: 0%; height: 100%; 
+            background: linear-gradient(90deg, var(--primary-gold), #FFF);
+            transition: width 0.3s ease;
+            box-shadow: 0 0 15px var(--primary-gold);
+        }
+
+        /* UI MEJORADA */
+        #ui {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; display: flex; flex-direction: column;
+            justify-content: space-between; padding: 20px;
+            opacity: 0; transition: opacity 1s ease;
+        }
+        .header { 
+            text-align: center; 
+            color: var(--primary-gold); 
+            font-size: clamp(0.65rem, 2vw, 0.9rem);
+            letter-spacing: clamp(1px, 0.5vw, 3px);
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+            animation: fadeIn 2s ease;
+            padding: 0 10px;
+        }
+        
+        /* TARJETA CENTRAL MEJORADA */
+        .message-card {
+            position: absolute; 
+            top: 50%; left: 50%; 
+            transform: translate(-50%, -50%);
+            text-align: center; 
+            width: 90%;
+            max-width: 600px;
+            pointer-events: none;
+            animation: cardAppear 1.5s ease;
+            padding: 0 20px;
+        }
+        .title { 
+            font-family: 'Alex Brush', cursive; 
+            font-size: clamp(2rem, 12vw, 5rem);
+            color: white; 
+            text-shadow: 0 0 20px #D4AF37, 0 0 40px rgba(212, 175, 55, 0.5);
+            margin: 0; 
+            line-height: 1.2;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        .subtitle { 
+            font-size: clamp(0.9rem, 4vw, 1.8rem);
+            color: #D4AF37; 
+            letter-spacing: clamp(2px, 1vw, 5px);
+            margin-top: 15px; 
+            text-transform: uppercase;
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.7);
+        }
+        
+        /* MENSAJE AÑO NUEVO */
+        .newyear-message {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            width: 90%;
+            max-width: 700px;
+            pointer-events: none;
+            padding: 0 20px;
+        }
+        .newyear-title {
+            font-family: 'Alex Brush', cursive;
+            font-size: clamp(2.5rem, 10vw, 5rem);
+            color: #FFD700;
+            text-shadow: 0 0 30px #FFD700, 0 0 60px rgba(255, 215, 0, 0.6);
+            margin: 0;
+            line-height: 1.3;
+            animation: glow 1.5s ease-in-out infinite alternate;
+        }
+        .newyear-subtitle {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(0.85rem, 3.5vw, 1.5rem);
+            color: white;
+            margin-top: 20px;
+            line-height: 1.6;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+        .newyear-year {
+            font-size: clamp(3rem, 15vw, 7rem);
+            font-weight: 700;
+            color: #FF1493;
+            text-shadow: 0 0 40px #FF1493, 0 0 80px rgba(255, 20, 147, 0.5);
+            margin-top: 15px;
+            animation: pulse 1s ease-in-out infinite;
+        }
+        
+        /* BOTONES MEJORADOS */
+        .footer { 
+            display: flex; 
+            justify-content: center; 
+            gap: clamp(8px, 2vw, 15px);
+            pointer-events: auto; 
+            padding-bottom: clamp(15px, 5vh, 30px);
+            flex-wrap: wrap;
+        }
+        button {
+            background: rgba(212, 175, 55, 0.15);
+            border: 2px solid var(--primary-gold);
+            color: white;
+            padding: clamp(10px, 2vh, 14px) clamp(15px, 4vw, 28px);
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            text-transform: uppercase;
+            font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+            font-weight: 600;
+            letter-spacing: clamp(1px, 0.3vw, 2px);
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        button::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 0; height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        button:active { 
+            transform: scale(0.95);
+            background: var(--primary-gold); 
+            color: #000;
+        }
+        
+        .hidden { display: none !important; }
+        
+        @keyframes pulse { 
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; } 
+        }
+        @keyframes glow {
+            from { text-shadow: 0 0 20px #D4AF37, 0 0 30px rgba(212, 175, 55, 0.5); }
+            to { text-shadow: 0 0 30px #D4AF37, 0 0 50px rgba(212, 175, 55, 0.8); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes cardAppear {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+        
+        /* ESTRELLAS DE FONDO */
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <div class="loader-text">✨ CARGANDO EXPERIENCIA ✨</div>
+        <div class="loader-bar-bg"><div class="loader-bar-fill" id="progress"></div></div>
+    </div>
+
+    <div class="stars" id="stars"></div>
+    <canvas id="world"></canvas>
+
+    <div id="ui">
+        <div class="header">🎄 OTAZU QUISOKALA · 2025-2026 🎄</div>
+        
+        <div class="message-card" id="card">
+            <h1 class="title">Feliz Navidad</h1>
+            <div class="subtitle">Familia<br>Otazu Quisokala</div>
+        </div>
+
+        <div class="newyear-message hidden" id="newyearCard">
+            <h1 class="newyear-title">¡Feliz Año Nuevo!</h1>
+            <div class="newyear-year">2026</div>
+            <p class="newyear-subtitle">
+                Que este nuevo año esté lleno de<br>
+                amor, salud, prosperidad y bendiciones<br>
+                para toda la familia Otazu Quisokala
+            </p>
+        </div>
+
+        <div class="footer">
+            <button onclick="app.setMode('TEXT')">✨ Mensaje</button>
+            <button onclick="app.setMode('TREE')">🎄 Árbol</button>
+            <button onclick="app.setMode('FIREWORKS')">🎆 Año Nuevo</button>
+        </div>
+    </div>
+
+    <script>
+        const CONFIG = {
+            particleCount: Math.min(800, window.innerWidth < 768 ? 400 : 800),
+            text: "OTAZU\nQUISOKALA",
+            colors: ['#D4AF37', '#FFF', '#F2D06B', '#FFD700']
+        };
+
+        class App {
+            constructor() {
+                this.canvas = document.getElementById('world');
+                this.ctx = this.canvas.getContext('2d', { alpha: false });
+                this.particles = [];
+                this.width = window.innerWidth;
+                this.height = window.innerHeight;
+                this.mode = 'TEXT';
+                
+                this.rotX = 0;
+                this.rotY = 0;
+                this.targetRotX = 0;
+                this.targetRotY = 0;
+                this.time = 0;
+                
+                window.addEventListener('resize', () => this.resize());
+                this.initInput();
+                this.createStars();
+            }
+
+            createStars() {
+                const starsContainer = document.getElementById('stars');
+                for(let i = 0; i < 50; i++) {
+                    const star = document.createElement('div');
+                    star.className = 'star';
+                    star.style.left = Math.random() * 100 + '%';
+                    star.style.top = Math.random() * 100 + '%';
+                    star.style.animationDelay = Math.random() * 3 + 's';
+                    starsContainer.appendChild(star);
+                }
+            }
+
+            resize() {
+                this.width = this.canvas.width = window.innerWidth;
+                this.height = this.canvas.height = window.innerHeight;
+                if(this.mode === 'TEXT') this.scanText();
+            }
+
+            initInput() {
+                let lastX = 0, lastY = 0;
+                
+                const handleMove = (x, y) => {
+                    this.targetRotY = (x / this.width - 0.5) * 1.2;
+                    this.targetRotX = (y / this.height - 0.5) * 1.2;
+                };
+                
+                document.addEventListener('touchmove', e => {
+                    e.preventDefault();
+                    handleMove(e.touches[0].clientX, e.touches[0].clientY);
+                }, { passive: false });
+                
+                document.addEventListener('mousemove', e => {
+                    handleMove(e.clientX, e.clientY);
+                });
+            }
+
+            async start() {
+                this.resize();
+                this.updateLoader(10);
+
+                // Crear partículas
+                for(let i = 0; i < CONFIG.particleCount; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const radius = Math.random() * 300;
+                    this.particles.push({
+                        x: Math.cos(angle) * radius,
+                        y: Math.sin(angle) * radius,
+                        z: (Math.random() - 0.5) * 500,
+                        tx: 0, ty: 0, tz: 0,
+                        vx: 0, vy: 0, vz: 0,
+                        color: CONFIG.colors[Math.floor(Math.random() * CONFIG.colors.length)],
+                        size: Math.random() * 1.5 + 1,
+                        life: 1,
+                        mode: 'idle'
+                    });
+                }
+                this.updateLoader(50);
+
+                setTimeout(() => {
+                    this.scanText();
+                    this.updateLoader(100);
+                    
+                    setTimeout(() => {
+                        const loader = document.getElementById('loader');
+                        loader.style.opacity = '0';
+                        setTimeout(() => {
+                            loader.style.display = 'none';
+                            document.getElementById('ui').style.opacity = '1';
+                            this.setMode('TEXT');
+                            this.animate();
+                        }, 800);
+                    }, 500);
+                }, 100);
+            }
+
+            updateLoader(percent) {
+                document.getElementById('progress').style.width = percent + '%';
+            }
+
+            scanText() {
+                const c = document.createElement('canvas');
+                const cx = c.getContext('2d');
+                const isMobile = window.innerWidth < 768;
+                c.width = this.width;
+                c.height = this.height;
+                
+                const fontSize = isMobile ? 
+                    Math.min(this.width * 0.18, 80) : 
+                    Math.min(this.width * 0.14, 120);
+                    
+                cx.font = `bold ${fontSize}px "Cinzel"`;
+                cx.fillStyle = 'white';
+                cx.textAlign = 'center';
+                cx.textBaseline = 'middle';
+                
+                const lines = CONFIG.text.split('\n');
+                const lineHeight = fontSize * (isMobile ? 1.3 : 1.2);
+                
+                lines.forEach((l, i) => {
+                    cx.fillText(l, c.width/2, c.height/2 + (i - 0.5) * lineHeight);
+                });
+
+                const data = cx.getImageData(0, 0, c.width, c.height).data;
+                const step = isMobile ? 
+                    Math.max(4, Math.floor(this.width / 60)) : 
+                    Math.max(3, Math.floor(this.width / 80));
+                let pIndex = 0;
+
+                for(let y = 0; y < c.height && pIndex < this.particles.length; y += step) {
+                    for(let x = 0; x < c.width && pIndex < this.particles.length; x += step) {
+                        if(data[(y * c.width + x) * 4 + 3] > 128) {
+                            let p = this.particles[pIndex];
+                            p.tx = x - c.width/2;
+                            p.ty = y - c.height/2;
+                            p.tz = (Math.random() - 0.5) * 50;
+                            p.mode = 'text';
+                            pIndex++;
+                        }
+                    }
+                }
+            }
+
+            setMode(newMode) {
+                this.mode = newMode;
+                const card = document.getElementById('card');
+                const newyearCard = document.getElementById('newyearCard');
+                
+                if(newMode === 'TEXT') {
+                    card.classList.remove('hidden');
+                    newyearCard.classList.add('hidden');
+                    this.scanText();
+                    this.stopVibration();
+                } 
+                else if(newMode === 'TREE') {
+                    card.classList.add('hidden');
+                    newyearCard.classList.add('hidden');
+                    this.stopVibration();
+                    this.particles.forEach((p, i) => {
+                        p.mode = 'tree';
+                        const angle = i * 0.25;
+                        const h = (i / this.particles.length) * 700 - 350;
+                        const r = (1 - Math.abs(h) / 350) * 180;
+                        
+                        p.tx = Math.cos(angle) * r;
+                        p.ty = h;
+                        p.tz = Math.sin(angle) * r;
+                        
+                        if(Math.random() > 0.85) p.color = ['#FF0000', '#0000FF', '#FFFFFF'][Math.floor(Math.random()*3)];
+                        else p.color = Math.random() > 0.5 ? '#00FF00' : '#D4AF37';
+                        p.size = Math.random() > 0.95 ? 4 : Math.random() * 2 + 1;
+                    });
+                }
+                else if(newMode === 'FIREWORKS') {
+                    card.classList.add('hidden');
+                    newyearCard.classList.remove('hidden');
+                    this.startVibration();
+                    this.particles.forEach(p => {
+                        p.mode = 'fire';
+                        p.x = (Math.random() - 0.5) * 100;
+                        p.y = 200 + Math.random() * 100;
+                        p.z = (Math.random() - 0.5) * 100;
+                        
+                        const theta = Math.random() * Math.PI * 2;
+                        const phi = Math.acos((Math.random() * 2) - 1);
+                        const v = Math.random() * 12 + 8;
+                        
+                        p.vx = v * Math.sin(phi) * Math.cos(theta);
+                        p.vy = v * Math.sin(phi) * Math.sin(theta) - 5;
+                        p.vz = v * Math.cos(phi);
+                        p.color = ['#FF0066', '#FFFF00', '#00FFFF', '#FF00FF', '#00FF00'][Math.floor(Math.random()*5)];
+                        p.life = 1;
+                        p.size = Math.random() * 2.5 + 1.5;
+                    });
+                }
+            }
+
+            startVibration() {
+                if ('vibrate' in navigator) {
+                    this.vibrationInterval = setInterval(() => {
+                        navigator.vibrate([50, 100, 50, 100, 50]);
+                    }, 500);
+                }
+            }
+
+            stopVibration() {
+                if (this.vibrationInterval) {
+                    clearInterval(this.vibrationInterval);
+                    this.vibrationInterval = null;
+                }
+                if ('vibrate' in navigator) {
+                    navigator.vibrate(0);
+                }
+            }
+
+            animate() {
+                this.time += 0.016;
+                
+                // Fondo con gradiente
+                const gradient = this.ctx.createRadialGradient(
+                    this.width/2, this.height/2, 0,
+                    this.width/2, this.height/2, this.width
+                );
+                gradient.addColorStop(0, '#1B2735');
+                gradient.addColorStop(1, '#090A0F');
+                this.ctx.fillStyle = gradient;
+                this.ctx.fillRect(0, 0, this.width, this.height);
+
+                this.rotX += (this.targetRotX - this.rotX) * 0.08;
+                this.rotY += (this.targetRotY - this.rotY) * 0.08;
+                
+                if(this.mode === 'TREE') this.targetRotY += 0.008;
+
+                this.particles.forEach((p, i) => {
+                    if(this.mode === 'FIREWORKS' && p.mode === 'fire') {
+                        p.vy += 0.3;
+                        p.x += p.vx;
+                        p.y += p.vy;
+                        p.z += p.vz;
+                        p.vx *= 0.98;
+                        p.vy *= 0.98;
+                        p.vz *= 0.98;
+                        p.life -= 0.01;
+                        
+                        if(p.life <= 0) {
+                            p.x = (Math.random() - 0.5) * 100;
+                            p.y = 200 + Math.random() * 100;
+                            p.z = (Math.random() - 0.5) * 100;
+                            const theta = Math.random() * Math.PI * 2;
+                            const phi = Math.acos((Math.random() * 2) - 1);
+                            const v = Math.random() * 12 + 8;
+                            p.vx = v * Math.sin(phi) * Math.cos(theta);
+                            p.vy = v * Math.sin(phi) * Math.sin(theta) - 5;
+                            p.vz = v * Math.cos(phi);
+                            p.life = 1;
+                        }
+                    } else {
+                        const speed = this.mode === 'TEXT' ? 0.08 : 0.06;
+                        p.x += (p.tx - p.x) * speed;
+                        p.y += (p.ty - p.y) * speed;
+                        p.z += (p.tz - p.z) * speed;
+                    }
+
+                    let px = p.x, py = p.y, pz = p.z;
+                    
+                    // Rotación Y
+                    let cos = Math.cos(this.rotY), sin = Math.sin(this.rotY);
+                    let x1 = px * cos - pz * sin;
+                    let z1 = pz * cos + px * sin;
+                    
+                    // Rotación X
+                    cos = Math.cos(this.rotX);
+                    sin = Math.sin(this.rotX);
+                    let y2 = py * cos - z1 * sin;
+                    let z2 = z1 * cos + py * sin;
+
+                    let scale = 600 / (600 + z2);
+                    if(scale < 0.1) return;
+
+                    const alpha = this.mode === 'FIREWORKS' ? p.life : 1;
+                    this.ctx.fillStyle = p.color;
+                    this.ctx.globalAlpha = alpha;
+                    this.ctx.beginPath();
+                    this.ctx.arc(
+                        x1 * scale + this.width/2, 
+                        y2 * scale + this.height/2, 
+                        p.size * scale, 
+                        0, Math.PI * 2
+                    );
+                    this.ctx.fill();
+                });
+                
+                this.ctx.globalAlpha = 1;
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        window.app = null;
+        window.onload = () => {
+            window.app = new App();
+            window.app.start();
+            
+            setTimeout(() => {
+                const loader = document.getElementById('loader');
+                if(loader.style.display !== 'none') {
+                    loader.style.display = 'none';
+                    document.getElementById('ui').style.opacity = '1';
+                    window.app.setMode('TEXT');
+                    window.app.animate();
+                }
+            }, 4000);
+        };
+    </script>
+</body>
+</html>
