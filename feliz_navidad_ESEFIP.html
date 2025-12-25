@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feliz Navidad - ESEFIP</title>
+
+  <!-- CSS incrustado -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      background: #222;
+      font-family: "Inter", sans-serif;
+      touch-action: none;
+    }
+
+    canvas.webgl {
+      width: 100% !important;
+      height: 100% !important;
+      display: block;
+    }
+
+    .webgl {
+      position: fixed;
+      top: 0;
+      left: 0;
+      outline: none;
+      z-index: 99999;
+    }
+
+    h1 {
+      font-size: 2rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5rem;
+      font-weight: 100;
+      color: white;
+    }
+
+    #loader {
+      display: grid;
+      place-content: center;
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background-color: #b7d4c8ee;
+      backdrop-filter: blur(5px);
+    }
+
+    #navidad-mensajes {
+      position: fixed;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100000;
+      font-family: 'Poppins', sans-serif;
+      font-size: 3.8rem;
+      font-weight: 800;
+      color: #FFF;
+      text-shadow: 
+        0 0 10px #ff0000,
+        0 0 20px #ff3333,
+        0 0 30px #ff6666,
+        0 0 40px #ff9999,
+        2px 2px 4px rgba(0, 0, 0, 0.9),
+        -2px -2px 4px rgba(255, 255, 255, 0.3);
+      pointer-events: none;
+      text-align: center;
+      min-width: 200px;
+      max-width: 90vw;
+      padding: 20px 30px;
+      box-sizing: border-box;
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      background: linear-gradient(135deg, 
+        rgba(200, 0, 0, 0.3) 0%, 
+        rgba(139, 0, 0, 0.5) 50%, 
+        rgba(255, 69, 0, 0.3) 100%);
+      border-radius: 20px;
+      border: 3px solid #ffcc00;
+      box-shadow: 
+        0 0 30px rgba(255, 0, 0, 0.7),
+        0 0 60px rgba(255, 204, 0, 0.5),
+        inset 0 0 20px rgba(255, 255, 255, 0.2);
+      animation: border-glow 3s infinite alternate;
+      letter-spacing: 1px;
+      line-height: 1.2;
+    }
+
+    @keyframes border-glow {
+      0% {
+        border-color: #ffcc00;
+        box-shadow: 
+          0 0 30px rgba(255, 0, 0, 0.7),
+          0 0 60px rgba(255, 204, 0, 0.5),
+          inset 0 0 20px rgba(255, 255, 255, 0.2);
+      }
+      100% {
+        border-color: #ff3333;
+        box-shadow: 
+          0 0 40px rgba(255, 0, 0, 0.9),
+          0 0 80px rgba(255, 51, 51, 0.7),
+          inset 0 0 30px rgba(255, 255, 255, 0.3);
+      }
+    }
+
+    #navidad-mensajes.gold {
+      color: #FFD700;
+      text-shadow: 
+        0 0 15px #FFD700,
+        0 0 30px #FFA500,
+        0 0 45px #FF8C00,
+        2px 2px 6px rgba(0, 0, 0, 0.9),
+        -2px -2px 6px rgba(255, 255, 255, 0.3);
+      background: linear-gradient(135deg, 
+        rgba(184, 134, 11, 0.3) 0%, 
+        rgba(218, 165, 32, 0.5) 50%, 
+        rgba(255, 215, 0, 0.3) 100%);
+      border: 3px solid #FFD700;
+    }
+
+    #navidad-mensajes.blue {
+      color: #00FFFF;
+      text-shadow: 
+        0 0 15px #00FFFF,
+        0 0 30px #0080FF,
+        0 0 45px #0040FF,
+        2px 2px 6px rgba(0, 0, 0, 0.9),
+        -2px -2px 6px rgba(255, 255, 255, 0.3);
+      background: linear-gradient(135deg, 
+        rgba(0, 100, 255, 0.3) 0%, 
+        rgba(0, 150, 255, 0.5) 50%, 
+        rgba(0, 200, 255, 0.3) 100%);
+      border: 3px solid #00FFFF;
+    }
+
+    #navidad-mensajes.green {
+      color: #00FF00;
+      text-shadow: 
+        0 0 15px #00FF00,
+        0 0 30px #00CC00,
+        0 0 45px #009900,
+        2px 2px 6px rgba(0, 0, 0, 0.9),
+        -2px -2px 6px rgba(255, 255, 255, 0.3);
+      background: linear-gradient(135deg, 
+        rgba(0, 100, 0, 0.3) 0%, 
+        rgba(0, 150, 0, 0.5) 50%, 
+        rgba(0, 255, 0, 0.3) 100%);
+      border: 3px solid #00FF00;
+    }
+
+    @media (max-width: 900px) {
+      #navidad-mensajes {
+        font-size: 2.8rem;
+        top: 8%;
+        padding: 15px 20px;
+        border-width: 2px;
+      }
+    }
+    @media (max-width: 600px) {
+      #navidad-mensajes {
+        font-size: 2rem;
+        top: 5%;
+        min-width: 120px;
+        padding: 10px 15px;
+        border-width: 2px;
+        text-shadow: 
+          0 0 8px #ff0000,
+          0 0 16px #ff3333,
+          2px 2px 3px rgba(0, 0, 0, 0.9);
+      }
+    }
+  </style>
+</head>
+<body>
+  <video id="video-bg" autoplay loop muted playsinline style="position:fixed;top:0;left:0;width:100vw;height:100vh;object-fit:cover;z-index:0;pointer-events:none;">
+    <source src="https://github.com/Baque2005/Organizador/raw/refs/heads/master/From%20KlickPin%20CF%20Christmas%20Cards%20I%20Merry%20Christmas.mp4" type="video/mp4">
+  </video>
+  <canvas class="webgl" style="z-index:1;"></canvas>
+  <div id="navidad-mensajes"></div>
+  
+  <!-- Botón de música -->
+  <button id="btn-musica" style="position:fixed;top:20px;right:20px;z-index:100001;background:linear-gradient(135deg, #ff0000, #ff9900);border:none;border-radius:50px;padding:12px 22px;font-size:1.1rem;box-shadow:0 4px 15px rgba(255, 0, 0, 0.5);cursor:pointer;transition:all 0.3s;color:white;font-weight:bold;">
+    🎵 Música Navideña
+  </button>
+  <audio id="audio-musica" src="https://github.com/Baque2005/Organizador/raw/refs/heads/master/Mariah%20Carey%20-%20All%20I%20Want%20for%20Christmas%20Is%20You%20(Make%20My%20Wish%20Come%20True%20Edition).mp3"></audio>
+
+  <!-- Shaders -->
+  <script type="x-shader/x-vertex" id="vertexshaderCandle">
+    void main() {
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  </script>
+
+  <script type="x-shader/x-fragment" id="fragmentshaderCandle">
+    uniform float time; 
+    uniform float colorSpeed;
+    uniform float delay; 
+    uniform vec3 baseColor;
+    uniform vec3 finalColor;
+    varying vec2 vUv;
+
+    void main() {
+      float animatedTime = time - delay;
+      animatedTime = mod(animatedTime, colorSpeed);
+      float mixFactor = animatedTime / colorSpeed;
+      vec3 finalColor = mix(baseColor, finalColor, mixFactor);
+      gl_FragColor = vec4(finalColor, 1.0);
+    }
+  </script>
+
+  <!-- JS incrustado -->
+  <script type="module">
+    import * as THREE from "https://esm.sh/three@0.151.3"
+    import { OrbitControls } from "https://esm.sh/three@0.151.3/addons/controls/OrbitControls.js"
+    import { OutlineEffect } from "https://esm.sh/three@0.151.3/addons/effects/OutlineEffect.js"
+    import { GLTFLoader } from "https://esm.sh/three@0.151.3/examples/jsm/loaders/GLTFLoader.js"
+
+    // Música: botón y audio
+    const btnMusica = document.getElementById('btn-musica');
+    const audioMusica = document.getElementById('audio-musica');
+    let musicaActiva = false;
+    btnMusica.addEventListener('click', () => {
+      if (!musicaActiva) {
+        audioMusica.currentTime = 53;
+        audioMusica.play();
+        btnMusica.textContent = '⏸️ Pausar Música';
+        btnMusica.style.background = 'linear-gradient(135deg, #00cc00, #009900)';
+        musicaActiva = true;
+      } else {
+        audioMusica.pause();
+        btnMusica.textContent = '🎵 Música Navideña';
+        btnMusica.style.background = 'linear-gradient(135deg, #ff0000, #ff9900)';
+        musicaActiva = false;
+      }
+    });
+    
+    audioMusica.addEventListener('ended', () => {
+      btnMusica.textContent = '🎵 Música Navideña';
+      btnMusica.style.background = 'linear-gradient(135deg, #ff0000, #ff9900)';
+      musicaActiva = false;
+    });
+
+    const _VS = `
+    uniform float pointMultiplier;
+    attribute float size;
+    attribute float angle;
+    attribute vec4 aColor;
+    varying vec4 vColor;
+    varying vec2 vAngle;
+    void main() {
+      vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+      gl_Position = projectionMatrix * mvPosition;
+      gl_PointSize = size * pointMultiplier / gl_Position.w;
+      vAngle = vec2(cos(angle), sin(angle));
+      vColor = aColor;
+    }`;
+
+    const _FS = `
+    uniform sampler2D diffuseTexture;
+    varying vec4 vColor;
+    varying vec2 vAngle;
+    void main() {
+      vec2 coords = (gl_PointCoord - 0.5) * mat2(vAngle.x, vAngle.y, -vAngle.y, vAngle.x) + 0.5;
+      gl_FragColor = texture2D(diffuseTexture, coords) * vColor;
+    }`;
+
+    function getLinearSpline(lerp) {
+      const points = [];
+      const _lerp = lerp;
+      function addPoint(t, d) { points.push([t, d]); }
+      function getValueAt(t) {
+        let p1 = 0;
+        for (let i = 0; i < points.length; i++) {
+          if (points[i][0] >= t) { break; }
+          p1 = i;
+        }
+        const p2 = Math.min(points.length - 1, p1 + 1);
+        if (p1 == p2) return points[p1][1];
+        return _lerp((t - points[p1][0]) / (points[p2][0] - points[p1][0]), points[p1][1], points[p2][1]);
+      }
+      return { addPoint, getValueAt };
+    }
+
+    function getParticleSystem(params) {
+      const { camera, emitter, parent, rate, texture } = params;
+      const uniforms = {
+        diffuseTexture: { value: new THREE.TextureLoader().load(texture) },
+        pointMultiplier: { value: window.innerHeight / (2.0 * Math.tan(30.0 * Math.PI / 180.0)) }
+      };
+      const _material = new THREE.ShaderMaterial({
+        uniforms, vertexShader: _VS, fragmentShader: _FS,
+        blending: THREE.AdditiveBlending, depthTest: true, depthWrite: false,
+        transparent: true, vertexColors: true
+      });
+
+      let _particles = [];
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute('position', new THREE.Float32BufferAttribute([], 3));
+      geometry.setAttribute('size', new THREE.Float32BufferAttribute([], 1));
+      geometry.setAttribute('aColor', new THREE.Float32BufferAttribute([], 4));
+      geometry.setAttribute('angle', new THREE.Float32BufferAttribute([], 1));
+      const _points = new THREE.Points(geometry, _material);
+      parent.add(_points);
+
+      const alphaSpline = getLinearSpline((t, a, b) => a + t * (b - a));
+      alphaSpline.addPoint(0.0, 0.0); alphaSpline.addPoint(0.6, 1.0); alphaSpline.addPoint(1.0, 0.0);
+
+      const colorSpline = getLinearSpline((t, a, b) => a.clone().lerp(b, t));
+      colorSpline.addPoint(0.0, new THREE.Color(0xFFFFFF)); colorSpline.addPoint(1.0, new THREE.Color(0xff8080));
+
+      const sizeSpline = getLinearSpline((t, a, b) => a + t * (b - a));
+      sizeSpline.addPoint(0.0, 0.0); sizeSpline.addPoint(1.0, 1.0);
+
+      const radius = 0.5; const maxLife = 1.5; const maxSize = 3.0; let gdfsghk = 0.0;
+
+      function _AddParticles(timeElapsed) {
+        gdfsghk += timeElapsed;
+        const n = Math.floor(gdfsghk * rate); gdfsghk -= n / rate;
+        for (let i = 0; i < n; i++) {
+          const life = (Math.random() * 0.75 + 0.25) * maxLife;
+          _particles.push({
+            position: new THREE.Vector3((Math.random() * 1.5 - 1) * radius, (Math.random() * .125 - 1) * radius, (Math.random() * 1.5 - 1) * radius).add(emitter.position),
+            size: (Math.random() * 0.5 + 0.5) * maxSize,
+            colour: new THREE.Color(), alpha: 1.0, life, maxLife: life,
+            rotation: Math.random() * 2.0 * Math.PI, rotationRate: Math.random() * 0.01 - 0.005,
+            velocity: new THREE.Vector3(0, 1.5, 0),
+          });
+        }
+      }
+
+      function _UpdateGeometry() {
+        const positions = [], sizes = [], colours = [], angles = [];
+        for (let p of _particles) {
+          positions.push(p.position.x, p.position.y, p.position.z);
+          colours.push(p.colour.r, p.colour.g, p.colour.b, p.alpha);
+          sizes.push(p.currentSize); angles.push(p.rotation);
+        }
+        geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+        geometry.setAttribute('size', new THREE.Float32BufferAttribute(sizes, 1));
+        geometry.setAttribute('aColor', new THREE.Float32BufferAttribute(colours, 4));
+        geometry.setAttribute('angle', new THREE.Float32BufferAttribute(angles, 1));
+        geometry.attributes.position.needsUpdate = true;
+        geometry.attributes.size.needsUpdate = true;
+        geometry.attributes.aColor.needsUpdate = true;
+        geometry.attributes.angle.needsUpdate = true;
+      }
+      _UpdateGeometry();
+
+      function _UpdateParticles(timeElapsed) {
+        for (let p of _particles) { p.life -= timeElapsed; }
+        _particles = _particles.filter(p => p.life > 0.0);
+        for (let p of _particles) {
+          const t = 1.0 - p.life / p.maxLife;
+          p.rotation += p.rotationRate;
+          p.alpha = alphaSpline.getValueAt(t);
+          p.currentSize = p.size * sizeSpline.getValueAt(t);
+          p.colour.copy(colorSpline.getValueAt(t));
+          p.position.add(p.velocity.clone().multiplyScalar(timeElapsed));
+          const drag = p.velocity.clone().multiplyScalar(timeElapsed * 0.1);
+          drag.x = Math.sign(p.velocity.x) * Math.min(Math.abs(drag.x), Math.abs(p.velocity.x));
+          drag.y = Math.sign(p.velocity.y) * Math.min(Math.abs(drag.y), Math.abs(p.velocity.y));
+          drag.z = Math.sign(p.velocity.z) * Math.min(Math.abs(drag.z), Math.abs(p.velocity.z));
+          p.velocity.sub(drag);
+        }
+        _particles.sort((a, b) => camera.position.distanceTo(b.position) - camera.position.distanceTo(a.position));
+      }
+
+      function update(timeElapsed) { _AddParticles(timeElapsed); _UpdateParticles(timeElapsed); _UpdateGeometry(); }
+      return { update };
+    }
+
+    const canvas = document.querySelector('canvas.webgl');
+    const scene = new THREE.Scene();
+    const gltfLoader = new GLTFLoader();
+    const textureLoader = new THREE.TextureLoader();
+    const sizes = { width: window.innerWidth, height: window.innerHeight };
+    const camera = new THREE.PerspectiveCamera(10, sizes.width / sizes.height, 0.1, 1000);
+    const controls = new OrbitControls(camera, canvas);
+    const minPan = new THREE.Vector3(-5, -2, -5), maxPan = new THREE.Vector3(5, 2, 5);
+    let clock = new THREE.Clock(), mixer;
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+    const effect = new OutlineEffect(renderer, { defaultThickness: 0.0014, defaultColor: new THREE.Color(0x202020).toArray(), defaultAlpha: 1, defaultVisible: true });
+    renderer.setSize(sizes.width, sizes.height);
+
+    // Mensajes de navidad para ESEFIP - MÁS VISIBLES Y LLAMATIVOS
+    const mensajes = [
+      {text: "🎄 ¡FELIZ NAVIDAD LES DESEO ESEFIP! 🎄", color: "gold"},
+      {text: "🔒 EMPRESA DE SEGURIDAD FÍSICA Y PRIVADA 🔒", color: "blue"},
+      {text: "✨ GRACIAS POR PROTEGER LO QUE MÁS IMPORTA ✨", color: "gold"},
+      {text: "🛡️ SEGURIDAD • CONFIANZA • COMPROMISO 🛡️", color: "green"},
+      {text: "⭐ QUE ESTA NAVIDAD LLENE DE PAZ SUS HOGARES ⭐", color: "gold"},
+      {text: "🚨 ESEFIP - PROTEGIENDO CON EXCELENCIA 🚨", color: "blue"},
+      {text: "🎁 FELICES FIESTAS Y PRÓSPERO AÑO NUEVO 🎁", color: "gold"},
+      {text: "💼 SU SEGURIDAD ES NUESTRA PRIORIDAD 💼", color: "green"},
+      {text: "🙏 DESEAMOS BENDICIONES PARA TODOS 🙏", color: "gold"},
+      {text: "🤝 GRACIAS POR CONFIAR EN NOSOTROS 🤝", color: "blue"},
+      {text: "🎅 ¡FELIZ NAVIDAD DEL EQUIPO ESEFIP! 🎅", color: "gold"}
+    ];
+    
+    let mensajeIndex = 0;
+    const mensajeDiv = document.getElementById('navidad-mensajes');
+
+    // Función para animar el texto con efecto de brillo
+    function animarTexto() {
+      mensajeDiv.style.transform = 'translateX(-50%) scale(1.05)';
+      mensajeDiv.style.opacity = '0.8';
+      setTimeout(() => {
+        mensajeDiv.style.transform = 'translateX(-50%) scale(1)';
+        mensajeDiv.style.opacity = '1';
+      }, 200);
+    }
+
+    function ajustarFuenteMensaje() {
+      const w = window.innerWidth;
+      if (w < 600) {
+        mensajeDiv.style.fontSize = '2rem';
+      } else if (w < 900) {
+        mensajeDiv.style.fontSize = '2.8rem';
+      } else {
+        mensajeDiv.style.fontSize = '3.8rem';
+      }
+    }
+
+    window.addEventListener('resize', ajustarFuenteMensaje);
+    ajustarFuenteMensaje();
+
+    function mostrarMensaje() {
+      const mensajeActual = mensajes[mensajeIndex];
+      
+      // Aplicar animación de salida
+      mensajeDiv.style.opacity = '0';
+      mensajeDiv.style.transform = 'translateX(-50%) scale(0.8)';
+      
+      setTimeout(() => {
+        // Cambiar texto y color
+        mensajeDiv.innerText = mensajeActual.text;
+        mensajeDiv.className = mensajeActual.color;
+        
+        // Aplicar animación de entrada
+        mensajeDiv.style.opacity = '1';
+        mensajeDiv.style.transform = 'translateX(-50%) scale(1.1)';
+        animarTexto();
+        
+        mensajeIndex = (mensajeIndex + 1) % mensajes.length;
+        
+        // Configurar siguiente cambio con diferentes tiempos según el mensaje
+        const tiempoVisible = mensajeActual.text.length > 50 ? 2800 : 2200;
+        setTimeout(mostrarMensaje, tiempoVisible);
+      }, 500);
+    }
+
+    mensajeDiv.style.transition = 'all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+    mostrarMensaje();
+
+    // Efecto de parpadeo adicional
+    setInterval(() => {
+      mensajeDiv.style.textShadow = `
+        0 0 ${10 + Math.random() * 20}px ${mensajeDiv.classList.contains('gold') ? '#FFD700' : 
+        mensajeDiv.classList.contains('blue') ? '#00FFFF' : '#ff0000'},
+        0 0 ${20 + Math.random() * 40}px ${mensajeDiv.classList.contains('gold') ? '#FFA500' : 
+        mensajeDiv.classList.contains('blue') ? '#0080FF' : '#ff3333'},
+        2px 2px 6px rgba(0, 0, 0, 0.9)
+      `;
+    }, 1000);
+
+    const getLights = () => {
+      const ambientLight = new THREE.AmbientLight("#ffffff", .9)
+      scene.add(ambientLight)
+      const light = new THREE.DirectionalLight('#ffffff')
+      scene.add(light)
+      light.position.set(-2, 5, 0); light.intensity = .35
+    }
+
+    const getControls = () => {
+      controls.enableDamping = true; controls.enableZoom = true; controls.enablePan = false; 
+      controls.minPolarAngle = Math.PI / 5; controls.maxPolarAngle = Math.PI / 2;
+      if (sizes.width < 768) { controls.minDistance = 18; controls.maxDistance = 35; } 
+      else { controls.minDistance = 20; controls.maxDistance = 47; }
+    }
+
+    const getModels = () => {
+      gltfLoader.load('https://rawcdn.githack.com/ricardoolivaalonso/threejs-journey01/e3cfc35a8270972a21435ad885da2bab54ec2d11/model.glb',
+        (gltf) => {
+          gltf.scene.traverse(child => { child.material = bakedMaterial; });
+          scene.add(gltf.scene); scene.position.set(0, -.3, 0);
+        });
+      gltfLoader.load('https://rawcdn.githack.com/ricardoolivaalonso/threejs-journey01/e3cfc35a8270972a21435ad885da2bab54ec2d11/model2.glb',
+        (gltf) => {
+          gltf.scene.traverse(child => {
+            if (child.material) {
+              if (child.material.name === 'GiftBox' || child.name.toLowerCase().includes('gift')) {
+                child.material = new THREE.MeshPhysicalMaterial({ color: 0xffff00, roughness: 0.5, metalness: 0.3, reflectivity: 0.7, side: THREE.DoubleSide });
+              }
+              if (child.material.name == 'SnowSimple') child.material = snowMaterial;
+              if (child.material.name == 'Window') child.material = windowMaterial;
+              if (child.material.name == 'NeonBase') child.material = neonBaseMaterial;
+              if (child.material.name == 'Neon.001') child.material = neonMaterial2;
+              if (child.material.name == 'Neon') child.material = neonMaterial;
+              if (child.material.name == 'Fire') child.material = fireMaterial;
+            }
+          });
+          const animations = gltf.animations;
+          mixer = new THREE.AnimationMixer(gltf.scene);
+          animations.forEach(clip => mixer.clipAction(clip).play());
+          scene.add(gltf.scene); scene.position.set(0, -.3, 0);
+        });
+    }
+
+    // Rotación automática de la cámara
+    let autoAngle = 0;
+    function autoRotateCamera() {
+      autoAngle += 0.008;
+      const radius = sizes.width < 600 ? 60 : sizes.width < 900 ? 80 : 110;
+      const y = sizes.width < 600 ? 18 : 22;
+      camera.position.x = Math.cos(autoAngle) * radius;
+      camera.position.z = Math.sin(autoAngle) * radius;
+      camera.position.y = y;
+      camera.lookAt(0, 0, 0);
+    }
+
+    const getCamera = () => {
+      const aspect = sizes.width / sizes.height;
+      let fov;
+      if (sizes.width < 600) {
+        fov = 22;
+      } else if (sizes.width < 900) {
+        fov = 18;
+      } else {
+        fov = 14;
+      }
+      camera.fov = fov; camera.aspect = aspect; camera.updateProjectionMatrix();
+      camera.position.set(110, 22, 0);
+      scene.add(camera);
+    }
+
+    const bakedTexture = textureLoader.load('https://rawcdn.githack.com/ricardoolivaalonso/threejs-journey01/e3cfc35a8270972a21435ad885da2bab54ec2d11/baked.jpg')
+    bakedTexture.flipY = false
+    const bakedMaterial = new THREE.MeshStandardMaterial({ map: bakedTexture, side: THREE.DoubleSide, roughness: .5 })
+    const snowMaterial = new THREE.MeshPhysicalMaterial({ color: 0xeeeeee, roughness: .6, metalness: .1, reflectivity: .75 })
+    const windowMaterial = new THREE.MeshBasicMaterial({ color: 0xFFDCC2, side: THREE.DoubleSide })
+    const neonBaseMaterial = new THREE.MeshStandardMaterial({ emissive: 0xffffff, side: THREE.DoubleSide })
+    const neonMaterial = new THREE.ShaderMaterial({ uniforms: { time: { value: 1.0 }, delay: { value: 1.0 }, colorSpeed: { value: 5.0 }, baseColor: { value: new THREE.Color(0xaa00ff) }, finalColor: { value: new THREE.Color(0xffccff) } }, vertexShader: document.getElementById('vertexshaderCandle').textContent, fragmentShader: document.getElementById('fragmentshaderCandle').textContent })
+    const neonMaterial2 = new THREE.ShaderMaterial({ uniforms: { time: { value: 1.0 }, delay: { value: 1.0 }, colorSpeed: { value: 5.0 }, baseColor: { value: new THREE.Color(0xe39f9f) }, finalColor: { value: new THREE.Color(0xffffff) } }, vertexShader: document.getElementById('vertexshaderCandle').textContent, fragmentShader: document.getElementById('fragmentshaderCandle').textContent })
+    const fireMaterial = new THREE.MeshPhongMaterial({ color: 0xffdab9, side: THREE.DoubleSide }); fireMaterial.userData.outlineParameters = { thickness: 0 }
+    const cube = new THREE.Mesh(new THREE.BoxGeometry(1, .01, .5), new THREE.MeshStandardMaterial({ color: 0xffffff }))
+    cube.position.set(.1, -2.2, -1.6); scene.add(cube)
+    const fireEffect = getParticleSystem({ camera, emitter: cube, parent: scene, rate: 200, texture: 'https://rawcdn.githack.com/ricardoolivaalonso/threejs-journey01/e3cfc35a8270972a21435ad885da2bab54ec2d11/fire.png' })
+
+    const tick = () => {
+      window.requestAnimationFrame(tick);
+      let delta = clock.getDelta(); if (mixer) mixer.update(delta);
+      neonMaterial.uniforms.time.value += 0.075; neonMaterial2.uniforms.time.value += 0.09; fireEffect.update(0.016);
+      autoRotateCamera();
+      controls.target.clamp(minPan, maxPan);
+      renderer.render(scene, camera); effect.render(scene, camera);
+    }
+
+    window.addEventListener('resize', () => {
+      sizes.width = window.innerWidth; sizes.height = window.innerHeight;
+      camera.aspect = sizes.width / sizes.height; camera.updateProjectionMatrix();
+      renderer.setSize(sizes.width, sizes.height); renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      getControls(); getCamera();
+    });
+
+    getModels(); getLights(); getControls(); getCamera(); tick();
+  </script>
+</body>
+</html>
