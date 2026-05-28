@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Winie Poo 3D</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Caveat:wght@400;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #1a0a00;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Caveat', cursive;
+    overflow: hidden;
+    background-image: 
+      radial-gradient(ellipse at 20% 50%, #3d1a00 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 50%, #2a0d00 0%, transparent 60%);
+  }
+
+  h1 {
+    font-family: 'Permanent Marker', cursive;
+    color: #ff6b35;
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    letter-spacing: 4px;
+    margin-bottom: 6px;
+    text-shadow: 0 0 30px rgba(255,107,53,0.6), 3px 3px 0 #8b2500;
+    animation: titlePulse 3s ease-in-out infinite;
+  }
+  @keyframes titlePulse {
+    0%,100% { text-shadow: 0 0 30px rgba(255,107,53,0.6), 3px 3px 0 #8b2500; }
+    50%      { text-shadow: 0 0 60px rgba(255,107,53,0.9), 3px 3px 0 #8b2500; }
+  }
+
+  .subtitle { color: #cc4400; font-size: 1.1rem; margin-bottom: 30px; opacity: 0.8; }
+
+  .scene {
+    width: 220px;
+    height: 380px;
+    perspective: 900px;
+    perspective-origin: 50% 40%;
+    cursor: grab;
+    user-select: none;
+  }
+  .scene:active { cursor: grabbing; }
+
+  .cube {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transform: rotateX(-20deg) rotateY(30deg);
+  }
+
+  .face {
+    position: absolute;
+    border-radius: 10px;
+  }
+
+  .front {
+    width: 160px; height: 300px;
+    left: 30px; top: 40px;
+    background: linear-gradient(160deg,#f7ea50 0%,#e8d520 50%,#d4c010 100%);
+    transform: translateZ(25px);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: inset -6px -6px 18px rgba(0,0,0,0.18), inset 3px 3px 8px rgba(255,255,255,0.35);
+    overflow: hidden;
+  }
+
+  .back {
+    width: 160px; height: 300px;
+    left: 30px; top: 40px;
+    background: linear-gradient(160deg,#f7ea50 0%,#e8d520 50%,#d4c010 100%);
+    transform: rotateY(180deg) translateZ(25px);
+    box-shadow: inset -4px -4px 14px rgba(0,0,0,0.3);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+
+  .right {
+    width: 50px; height: 300px;
+    left: 165px; top: 40px;
+    background: linear-gradient(180deg,#b8a600 0%,#988800 100%);
+    transform: rotateY(90deg) translateZ(25px) translateX(-25px);
+    transform-origin: left center;
+    box-shadow: inset -4px 0 12px rgba(0,0,0,0.35);
+  }
+
+  .left {
+    width: 50px; height: 300px;
+    left: 30px; top: 40px;
+    background: linear-gradient(180deg,#e0cc1a 0%,#c0ac00 100%);
+    transform: rotateY(-90deg) translateZ(25px) translateX(25px);
+    transform-origin: right center;
+  }
+
+  .top {
+    width: 160px; height: 50px;
+    left: 30px; top: 15px;
+    background: linear-gradient(90deg,#111 0%,#2a2a2a 50%,#111 100%);
+    transform: rotateX(90deg) translateZ(25px) translateY(25px);
+    transform-origin: bottom center;
+    border-radius: 8px 8px 0 0;
+    box-shadow: inset 0 -3px 8px rgba(0,0,0,0.6);
+  }
+
+  .bottom {
+    width: 160px; height: 50px;
+    left: 30px; top: 315px;
+    background: linear-gradient(90deg,#b8a600 0%,#9e8e00 100%);
+    transform: rotateX(-90deg) translateZ(25px) translateY(-25px);
+    transform-origin: top center;
+    border-radius: 0 0 8px 8px;
+  }
+
+  .drawing-svg { width: 148px; height: 285px; }
+
+  .controls {
+    margin-top: 28px;
+    display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
+  }
+  .btn {
+    font-family: 'Permanent Marker', cursive;
+    background: transparent;
+    border: 2px solid #ff6b35;
+    color: #ff6b35;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+  }
+  .btn:hover {
+    background: #ff6b35; color: #1a0a00;
+    box-shadow: 0 0 20px rgba(255,107,53,0.5);
+    transform: translateY(-2px);
+  }
+
+  .hint {
+    color: #664422; font-size: 1rem; margin-top: 14px; text-align: center;
+    animation: blink 2s ease-in-out infinite;
+  }
+  @keyframes blink {
+    0%,100% { opacity:0.4; } 50% { opacity:1; }
+  }
+
+  .particle {
+    position: fixed; border-radius: 50%;
+    background: #ff6b35; pointer-events: none;
+    animation: particleFly linear infinite; opacity: 0;
+  }
+  @keyframes particleFly {
+    0%   { transform: translateY(100vh) rotate(0deg);   opacity:0; }
+    10%  { opacity: 0.5; }
+    90%  { opacity: 0.15; }
+    100% { transform: translateY(-80px) rotate(720deg); opacity:0; }
+  }
+
+  @keyframes floatIdle {
+    0%,100% { transform: rotateX(var(--rx)) rotateY(var(--ry)) translateY(0px); }
+    50%      { transform: rotateX(var(--rx)) rotateY(var(--ry)) translateY(-14px); }
+  }
+  .cube.idle { animation: floatIdle 4s ease-in-out infinite; }
+
+  @keyframes spinAnim {
+    from { transform: rotateX(var(--rx)) rotateY(var(--ry)); }
+    to   { transform: rotateX(var(--rx)) rotateY(calc(var(--ry) + 360deg)); }
+  }
+  .cube.spinning { animation: spinAnim 1s cubic-bezier(.4,0,.2,1) forwards; }
+
+  @keyframes poseAnim {
+    0%   { transform: rotateX(var(--rx)) rotateY(var(--ry)) scale(1); }
+    15%  { transform: rotateX(calc(var(--rx) - 25deg)) rotateY(calc(var(--ry) + 20deg)) scale(1.12); }
+    35%  { transform: rotateX(calc(var(--rx) + 20deg)) rotateY(calc(var(--ry) - 18deg)) scale(0.93); }
+    55%  { transform: rotateX(calc(var(--rx) - 15deg)) rotateY(calc(var(--ry) + 30deg)) scale(1.08); }
+    75%  { transform: rotateX(calc(var(--rx) + 10deg)) rotateY(calc(var(--ry) - 10deg)) scale(0.97); }
+    100% { transform: rotateX(var(--rx)) rotateY(var(--ry)) scale(1); }
+  }
+  .cube.posing { animation: poseAnim 0.9s ease-in-out forwards; }
+
+  @keyframes resetAnim {
+    to { transform: rotateX(-20deg) rotateY(30deg); }
+  }
+  .cube.resetting { animation: resetAnim 0.6s cubic-bezier(.4,0,.2,1) forwards; }
+</style>
+</head>
+<body>
+
+<script>
+  for(let i=0;i<14;i++){
+    const p=document.createElement('div');
+    p.className='particle';
+    p.style.left=Math.random()*100+'vw';
+    p.style.animationDuration=(3+Math.random()*5)+'s';
+    p.style.animationDelay=(Math.random()*6)+'s';
+    const s=(2+Math.random()*4)+'px';
+    p.style.width=p.style.height=s;
+    document.body.appendChild(p);
+  }
+</script>
+
+<h1>WINIE POO</h1>
+<p class="subtitle">La obra maestra de pepa belen 🎨</p>
+
+<div class="scene" id="scene">
+  <div class="cube idle" id="cube"
+       style="--rx:-20deg; --ry:30deg;">
+
+    <div class="face top"></div>
+
+    <!-- CARA FRONTAL: dibujo original -->
+    <div class="face front">
+      <svg class="drawing-svg" viewBox="0 0 148 285" xmlns="http://www.w3.org/2000/svg">
+        <!-- Hair -->
+        <line x1="28" y1="22" x2="46" y2="8"  stroke="#cc2200" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="42" y1="19" x2="57" y2="6"  stroke="#cc2200" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="56" y1="18" x2="68" y2="5"  stroke="#cc2200" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="70" y1="17" x2="79" y2="5"  stroke="#cc2200" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="84" y1="18" x2="91" y2="7"  stroke="#cc2200" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="98" y1="20" x2="103" y2="10" stroke="#cc2200" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="110" y1="23" x2="115" y2="14" stroke="#cc2200" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="22" y1="35" x2="12" y2="50" stroke="#cc2200" stroke-width="2.2" stroke-linecap="round"/>
+        <line x1="126" y1="35" x2="136" y2="50" stroke="#cc2200" stroke-width="2.2" stroke-linecap="round"/>
+        <!-- Eyebrows -->
+        <path d="M32 46 Q47 39 63 44" stroke="#cc2200" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M85 44 Q101 39 116 46" stroke="#cc2200" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <!-- Eyes -->
+        <ellipse cx="48" cy="57" rx="11" ry="8" stroke="#cc2200" stroke-width="2" fill="rgba(204,34,0,0.12)"/>
+        <ellipse cx="100" cy="57" rx="11" ry="8" stroke="#cc2200" stroke-width="2" fill="rgba(204,34,0,0.12)"/>
+        <circle cx="48"  cy="57" r="4.5" fill="#cc2200"/>
+        <circle cx="100" cy="57" r="4.5" fill="#cc2200"/>
+        <circle cx="50" cy="55" r="1.5" fill="rgba(255,255,255,0.6)"/>
+        <circle cx="102" cy="55" r="1.5" fill="rgba(255,255,255,0.6)"/>
+        <!-- Nose -->
+        <path d="M70 68 Q65 76 67 83 Q73 90 81 86" stroke="#cc2200" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <circle cx="81" cy="84" r="3.5" stroke="#cc2200" stroke-width="1.5" fill="rgba(204,34,0,0.18)"/>
+        <!-- Mouth -->
+        <path d="M50 98 Q74 112 98 98" stroke="#cc2200" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <!-- Beard -->
+        <line x1="22" y1="72"  x2="15" y2="98"  stroke="#cc2200" stroke-width="2" stroke-linecap="round"/>
+        <line x1="27" y1="88"  x2="21" y2="112" stroke="#cc2200" stroke-width="2" stroke-linecap="round"/>
+        <line x1="35" y1="100" x2="30" y2="123" stroke="#cc2200" stroke-width="2" stroke-linecap="round"/>
+        <line x1="46" y1="108" x2="43" y2="130" stroke="#cc2200" stroke-width="2" stroke-linecap="round"/>
+        <line x1="59" y1="112" x2="57" y2="133" stroke="#cc2200" stroke-width="2" stroke-linecap="round"/>
+        <line x1="74" y1="113" x2="74" y2="134" stroke="#cc2200" stroke-width="2" stroke-linecap="round"/>
+        <line x1="88" y1="112" x2="89" y2="133" stroke="#cc2200" stroke-width="2" stroke-linecap="round"/>
+        <line x1="101" y1="109" x2="103" y2="130" stroke="#cc2200" stroke-width="2" stroke-linecap="round"/>
+        <line x1="112" y1="101" x2="116" y2="122" stroke="#cc2200" stroke-width="2" stroke-linecap="round"/>
+        <line x1="120" y1="88"  x2="127" y2="108" stroke="#cc2200" stroke-width="2" stroke-linecap="round"/>
+        <line x1="126" y1="72"  x2="134" y2="90"  stroke="#cc2200" stroke-width="2" stroke-linecap="round"/>
+        <!-- Neck -->
+        <line x1="74" y1="112" x2="74" y2="135" stroke="#cc2200" stroke-width="2.2" stroke-linecap="round"/>
+        <!-- Body bubble -->
+        <ellipse cx="74" cy="168" rx="44" ry="30" stroke="#cc2200" stroke-width="2"
+                 fill="rgba(204,34,0,0.07)" stroke-dasharray="5,2.5"/>
+        <text x="74" y="162" text-anchor="middle" fill="#cc2200"
+              font-family="Caveat,cursive" font-size="15" font-weight="700">Winie</text>
+        <text x="74" y="180" text-anchor="middle" fill="#cc2200"
+              font-family="Caveat,cursive" font-size="15" font-weight="700">Poo</text>
+        <!-- Arms -->
+        <line x1="30" y1="148" x2="10" y2="130" stroke="#cc2200" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="118" y1="148" x2="138" y2="130" stroke="#cc2200" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="8"   cy="128" r="5.5" stroke="#cc2200" stroke-width="2" fill="rgba(204,34,0,0.15)"/>
+        <circle cx="140" cy="128" r="5.5" stroke="#cc2200" stroke-width="2" fill="rgba(204,34,0,0.15)"/>
+        <!-- Legs -->
+        <line x1="64"  y1="198" x2="56"  y2="240" stroke="#cc2200" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="84"  y1="198" x2="92"  y2="240" stroke="#cc2200" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Feet -->
+        <path d="M52 240 Q49 247 60 249" stroke="#cc2200" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M96 240 Q99 247 88 249" stroke="#cc2200" stroke-width="2" fill="none" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <!-- CARA TRASERA: nuevo dibujo de la foto (carita + cuerpito con brazos arriba) -->
+    <div class="face back">
+      <svg class="drawing-svg" viewBox="0 0 148 285" xmlns="http://www.w3.org/2000/svg"
+           style="transform: scaleX(-1);">
+
+        <!-- Pelo: rayas diagonales en la parte superior -->
+        <line x1="30" y1="18" x2="48" y2="6"  stroke="#cc2200" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="44" y1="15" x2="60" y2="4"  stroke="#cc2200" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="58" y1="13" x2="72" y2="3"  stroke="#cc2200" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="72" y1="12" x2="84" y2="3"  stroke="#cc2200" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="86" y1="13" x2="96" y2="4"  stroke="#cc2200" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="99" y1="16" x2="108" y2="7" stroke="#cc2200" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="112" y1="20" x2="119" y2="12" stroke="#cc2200" stroke-width="2.5" stroke-linecap="round"/>
+
+        <!-- Cejas gruesas y expresivas -->
+        <path d="M28 42 Q48 34 66 40" stroke="#cc2200" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <path d="M82 40 Q100 34 120 42" stroke="#cc2200" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+        <!-- Ojos: alargados / entrecerrados como en la foto -->
+        <ellipse cx="47" cy="54" rx="13" ry="6" stroke="#cc2200" stroke-width="2" fill="rgba(204,34,0,0.1)"/>
+        <ellipse cx="101" cy="54" rx="13" ry="6" stroke="#cc2200" stroke-width="2" fill="rgba(204,34,0,0.1)"/>
+        <!-- Pupila pequeña centrada -->
+        <circle cx="47"  cy="54" r="3.5" fill="#cc2200"/>
+        <circle cx="101" cy="54" r="3.5" fill="#cc2200"/>
+        <!-- Brillo -->
+        <circle cx="49" cy="52" r="1.2" fill="rgba(255,255,255,0.55)"/>
+        <circle cx="103" cy="52" r="1.2" fill="rgba(255,255,255,0.55)"/>
+
+        <!-- Nariz: forma de tridente pequeño -->
+        <path d="M68 64 L68 76 M62 76 Q68 80 74 76" stroke="#cc2200" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+        <!-- Boca: sonrisa amplia hacia arriba -->
+        <path d="M48 92 Q74 108 100 92" stroke="#cc2200" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <!-- Dientes insinuados -->
+        <line x1="60" y1="95" x2="60" y2="100" stroke="#cc2200" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="74" y1="98" x2="74" y2="103" stroke="#cc2200" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="88" y1="95" x2="88" y2="100" stroke="#cc2200" stroke-width="1.5" stroke-linecap="round"/>
+
+        <!-- Barba/bigote lateral izquierdo -->
+        <line x1="22" y1="65" x2="12" y2="85"  stroke="#cc2200" stroke-width="2" stroke-linecap="round"/>
+        <line x1="26" y1="78" x2="16" y2="100" stroke="#cc2200" stroke-width="2" stroke-linecap="round"/>
+        <line x1="32" y1="90" x2="24" y2="112" stroke="#cc2200" stroke-width="2" stroke-linecap="round"/>
+        <!-- Barba/bigote lateral derecho -->
+        <line x1="126" y1="65" x2="136" y2="85"  stroke="#cc2200" stroke-width="2" stroke-linecap="round"/>
+        <line x1="122" y1="78" x2="132" y2="100" stroke="#cc2200" stroke-width="2" stroke-linecap="round"/>
+        <line x1="116" y1="90" x2="124" y2="112" stroke="#cc2200" stroke-width="2" stroke-linecap="round"/>
+        <!-- Barba inferior -->
+        <line x1="44" y1="108" x2="42" y2="128" stroke="#cc2200" stroke-width="2" stroke-linecap="round"/>
+        <line x1="57" y1="114" x2="56" y2="133" stroke="#cc2200" stroke-width="2" stroke-linecap="round"/>
+        <line x1="74" y1="116" x2="74" y2="135" stroke="#cc2200" stroke-width="2" stroke-linecap="round"/>
+        <line x1="91" y1="114" x2="92" y2="133" stroke="#cc2200" stroke-width="2" stroke-linecap="round"/>
+        <line x1="104" y1="108" x2="106" y2="128" stroke="#cc2200" stroke-width="2" stroke-linecap="round"/>
+
+        <!-- Cuello -->
+        <line x1="74" y1="116" x2="74" y2="136" stroke="#cc2200" stroke-width="2.5" stroke-linecap="round"/>
+
+        <!-- Cuerpo: torso rectangular redondeado (como en la foto) -->
+        <rect x="50" y="136" width="48" height="55" rx="10" ry="10"
+              stroke="#cc2200" stroke-width="2" fill="rgba(204,34,0,0.08)"/>
+        <!-- Detalle de ropa (líneas horizontales en torso) -->
+        <line x1="54" y1="152" x2="94" y2="152" stroke="#cc2200" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+        <line x1="54" y1="163" x2="94" y2="163" stroke="#cc2200" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+        <line x1="54" y1="174" x2="94" y2="174" stroke="#cc2200" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+
+        <!-- Brazo izquierdo: LEVANTADO (como en la foto, brazo arriba en ángulo) -->
+        <line x1="50" y1="148" x2="22" y2="118" stroke="#cc2200" stroke-width="3" stroke-linecap="round"/>
+        <!-- Mano izquierda -->
+        <circle cx="19" cy="115" r="6" stroke="#cc2200" stroke-width="2" fill="rgba(204,34,0,0.12)"/>
+        <!-- Dedos mano izquierda -->
+        <line x1="14" y1="110" x2="10" y2="104" stroke="#cc2200" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="19" y1="108" x2="17" y2="102" stroke="#cc2200" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="24" y1="110" x2="24" y2="104" stroke="#cc2200" stroke-width="1.5" stroke-linecap="round"/>
+
+        <!-- Brazo derecho: levantado también (simétrico) -->
+        <line x1="98" y1="148" x2="126" y2="118" stroke="#cc2200" stroke-width="3" stroke-linecap="round"/>
+        <!-- Mano derecha -->
+        <circle cx="129" cy="115" r="6" stroke="#cc2200" stroke-width="2" fill="rgba(204,34,0,0.12)"/>
+        <!-- Dedos mano derecha -->
+        <line x1="124" y1="110" x2="120" y2="104" stroke="#cc2200" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="129" y1="108" x2="129" y2="102" stroke="#cc2200" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="134" y1="110" x2="138" y2="104" stroke="#cc2200" stroke-width="1.5" stroke-linecap="round"/>
+
+        <!-- Piernas -->
+        <line x1="63" y1="191" x2="55" y2="238" stroke="#cc2200" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="85" y1="191" x2="93" y2="238" stroke="#cc2200" stroke-width="2.5" stroke-linecap="round"/>
+
+        <!-- Pies -->
+        <path d="M51 238 Q46 246 59 248" stroke="#cc2200" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M97 238 Q102 246 89 248" stroke="#cc2200" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+        <!-- Texto lado B -->
+        <text x="74" y="268" text-anchor="middle" fill="#cc2200"
+              font-family="Caveat,cursive" font-size="13" font-weight="700" opacity="0.7">✨ otro lado ✨</text>
+      </svg>
+    </div>
+
+    <div class="face right"></div>
+    <div class="face left"></div>
+    <div class="face bottom"></div>
+  </div>
+</div>
+
+<div class="controls">
+  <button class="btn" id="btnSpin">🔄 Girar</button>
+  <button class="btn" id="btnPose">💥 Pose</button>
+  <button class="btn" id="btnReset">↩ Reset</button>
+</div>
+<p class="hint">← Arrastra para rotar →</p>
+
+<script>
+  const cube  = document.getElementById('cube');
+  const scene = document.getElementById('scene');
+
+  let rotX = -20, rotY = 30;
+
+  function setVars() {
+    cube.style.setProperty('--rx', rotX + 'deg');
+    cube.style.setProperty('--ry', rotY + 'deg');
+  }
+
+  function applyTransform() {
+    cube.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+  }
+
+  function clearAnim(nextClass) {
+    cube.className = 'cube';
+    void cube.offsetWidth;
+    setVars();
+    if (nextClass) cube.classList.add(nextClass);
+  }
+
+  let dragging = false, sx, sy;
+
+  scene.addEventListener('mousedown', e => {
+    dragging = true;
+    sx = e.clientX; sy = e.clientY;
+    clearAnim();
+    applyTransform();
+  });
+  window.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    rotY += (e.clientX - sx) * 0.55;
+    rotX -= (e.clientY - sy) * 0.55;
+    rotX = Math.max(-70, Math.min(70, rotX));
+    applyTransform();
+    sx = e.clientX; sy = e.clientY;
+  });
+  window.addEventListener('mouseup', () => {
+    if (!dragging) return;
+    dragging = false;
+    clearAnim('idle');
+  });
+
+  scene.addEventListener('touchstart', e => {
+    dragging = true;
+    sx = e.touches[0].clientX; sy = e.touches[0].clientY;
+    clearAnim();
+    applyTransform();
+    e.preventDefault();
+  }, { passive: false });
+  window.addEventListener('touchmove', e => {
+    if (!dragging) return;
+    rotY += (e.touches[0].clientX - sx) * 0.55;
+    rotX -= (e.touches[0].clientY - sy) * 0.55;
+    rotX = Math.max(-70, Math.min(70, rotX));
+    applyTransform();
+    sx = e.touches[0].clientX; sy = e.touches[0].clientY;
+    e.preventDefault();
+  }, { passive: false });
+  window.addEventListener('touchend', () => {
+    if (!dragging) return;
+    dragging = false;
+    clearAnim('idle');
+  });
+
+  document.getElementById('btnSpin').addEventListener('click', () => {
+    clearAnim('spinning');
+    cube.addEventListener('animationend', () => {
+      rotY += 360;
+      clearAnim('idle');
+    }, { once: true });
+  });
+
+  document.getElementById('btnPose').addEventListener('click', () => {
+    clearAnim('posing');
+    cube.addEventListener('animationend', () => {
+      clearAnim('idle');
+    }, { once: true });
+  });
+
+  document.getElementById('btnReset').addEventListener('click', () => {
+    rotX = -20; rotY = 30;
+    clearAnim('resetting');
+    cube.addEventListener('animationend', () => {
+      clearAnim('idle');
+    }, { once: true });
+  });
+</script>
+</body>
+</html>
