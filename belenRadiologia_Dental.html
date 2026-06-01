@@ -1,0 +1,1693 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>RadioDent — Asistente de Radiología Dental</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #070b10;
+  --bg2: #0c1118;
+  --surface: #111820;
+  --surface2: #161e28;
+  --surface3: #1c2534;
+  --border: #243040;
+  --border2: #2e3d50;
+  --accent: #4e9eff;
+  --accent-dim: rgba(78,158,255,0.12);
+  --accent-glow: rgba(78,158,255,0.25);
+  --green: #3ecf8e;
+  --green-dim: rgba(62,207,142,0.12);
+  --amber: #f0c060;
+  --amber-dim: rgba(240,192,96,0.12);
+  --rose: #f06080;
+  --rose-dim: rgba(240,96,128,0.1);
+  --violet: #a78bfa;
+  --violet-dim: rgba(167,139,250,0.12);
+  --cyan: #22d3ee;
+  --cyan-dim: rgba(34,211,238,0.1);
+  --text: #dce8f0;
+  --text2: #7d98b0;
+  --text3: #4a6070;
+  --text4: #2e4055;
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'IBM Plex Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+  --r: 10px;
+  --r-sm: 6px;
+  --shadow: 0 8px 32px rgba(0,0,0,0.5);
+  --header-h: 64px;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; max-width: 100vw; overflow-x: hidden; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+  max-width: 100vw;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: linear-gradient(rgba(78,158,255,0.015) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(78,158,255,0.015) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ========== HEADER ========== */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: rgba(7,11,16,0.95);
+  backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border);
+  height: var(--header-h);
+}
+
+.header-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 20px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.logo-mark {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--cyan) 100%);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+  box-shadow: 0 0 20px rgba(78,158,255,0.4);
+  flex-shrink: 0;
+}
+
+.logo-text strong {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  display: block;
+}
+
+.logo-text span {
+  font-size: 0.62rem;
+  color: var(--text3);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.header-divider {
+  width: 1px;
+  height: 28px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+.header-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.htag {
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  border: 1px solid;
+  white-space: nowrap;
+}
+.htag-blue  { background: var(--accent-dim); color: var(--accent); border-color: rgba(78,158,255,0.3); }
+.htag-green { background: var(--green-dim); color: var(--green); border-color: rgba(62,207,142,0.3); }
+.htag-amber { background: var(--amber-dim); color: var(--amber); border-color: rgba(240,192,96,0.3); }
+.htag-violet{ background: var(--violet-dim); color: var(--violet); border-color: rgba(167,139,250,0.3); }
+
+.header-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.kb-counter {
+  font-size: 0.7rem;
+  color: var(--text3);
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+.kb-counter strong { color: var(--accent); }
+
+/* Mobile menu button */
+.mobile-menu-btn {
+  display: none;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--surface2);
+  color: var(--text2);
+  cursor: pointer;
+  font-size: 16px;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+.mobile-menu-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ========== LAYOUT ========== */
+.layout {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 270px 1fr;
+  gap: 20px;
+  min-height: calc(100vh - var(--header-h));
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* ========== SIDEBAR ========== */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: sticky;
+  top: calc(var(--header-h) + 20px);
+  max-height: calc(100vh - var(--header-h) - 40px);
+  overflow-y: auto;
+}
+
+.sidebar::-webkit-scrollbar { width: 3px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+/* Mobile sidebar overlay */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 300;
+  backdrop-filter: blur(4px);
+}
+
+.sidebar-overlay.open { display: block; }
+
+/* Mobile sidebar drawer */
+.sidebar-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 300px;
+  max-width: 85vw;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  z-index: 301;
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebar-drawer.open { transform: translateX(0); }
+
+.drawer-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.drawer-title {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.drawer-close {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--surface2);
+  color: var(--text3);
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+.drawer-close:hover { border-color: var(--rose); color: var(--rose); }
+
+.drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.drawer-body::-webkit-scrollbar { width: 3px; }
+.drawer-body::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+
+.panel-head {
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.panel-head-icon { font-size: 13px; opacity: 0.7; }
+
+.panel-head h3 {
+  font-size: 0.66rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text2);
+}
+
+.panel-body { padding: 12px 14px; }
+
+/* Search */
+.search-wrap { position: relative; }
+
+.search-icon {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text3);
+  font-size: 13px;
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  padding: 9px 12px 9px 32px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+.search-input::placeholder { color: var(--text4); }
+
+.search-results {
+  margin-top: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.search-results::-webkit-scrollbar { width: 3px; }
+.search-results::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+.s-item {
+  padding: 7px 10px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  font-size: 0.78rem;
+  color: var(--text2);
+  transition: all 0.15s;
+  border: 1px solid transparent;
+  line-height: 1.4;
+}
+.s-item:hover { background: var(--surface2); color: var(--text); border-color: var(--border); }
+.s-item mark { background: rgba(240,192,96,0.22); color: var(--amber); border-radius: 2px; padding: 0 1px; }
+.s-empty { padding: 12px; font-size: 0.78rem; color: var(--text3); text-align: center; }
+
+/* Categories */
+.cat-list { display: flex; flex-direction: column; gap: 2px; }
+
+.cat-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  font-size: 0.79rem;
+  color: var(--text2);
+  transition: all 0.15s;
+  border: 1px solid transparent;
+  background: none;
+  text-align: left;
+  font-family: var(--font-sans);
+}
+.cat-btn:hover { background: var(--surface2); color: var(--text); border-color: var(--border); }
+.cat-btn.active { background: var(--accent-dim); color: var(--accent); border-color: rgba(78,158,255,0.25); }
+
+.cat-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+.cat-count {
+  margin-left: auto;
+  font-size: 0.66rem;
+  font-family: var(--font-mono);
+  padding: 1px 6px;
+  border-radius: 10px;
+  background: var(--surface3);
+  color: var(--text3);
+}
+
+/* TTS */
+.tts-btns { display: flex; gap: 6px; margin-bottom: 12px; }
+
+.tts-btn {
+  flex: 1;
+  padding: 7px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--text2);
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.15s;
+  font-family: var(--font-sans);
+}
+.tts-btn:hover { border-color: var(--accent); color: var(--accent); }
+.tts-btn.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+
+.tts-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.tts-label { font-size: 0.7rem; color: var(--text3); width: 50px; flex-shrink: 0; }
+
+.tts-range {
+  flex: 1;
+  -webkit-appearance: none;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--border2);
+  outline: none;
+}
+.tts-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  box-shadow: 0 0 6px var(--accent-glow);
+}
+.tts-val { font-size: 0.68rem; color: var(--text2); font-family: var(--font-mono); width: 30px; text-align: right; }
+
+/* Stats */
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+.stat-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 10px;
+  text-align: center;
+}
+.stat-num { font-family: var(--font-mono); font-size: 1.25rem; font-weight: 500; line-height: 1; }
+.stat-lbl { font-size: 0.6rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 4px; }
+
+/* ========== MAIN CHAT ========== */
+.chat-wrap {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - var(--header-h) - 40px);
+  min-height: 500px;
+}
+
+.chat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.chat-topbar {
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.chat-topbar-avatar {
+  width: 34px;
+  height: 34px;
+  background: linear-gradient(135deg, var(--green) 0%, var(--accent) 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  box-shadow: 0 0 14px rgba(62,207,142,0.3);
+  flex-shrink: 0;
+}
+
+.chat-topbar-info h2 { font-family: var(--font-serif); font-size: 0.95rem; color: var(--text); }
+.chat-topbar-info p { font-size: 0.68rem; color: var(--text3); margin-top: 1px; }
+
+.online-dot {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  color: var(--green);
+  white-space: nowrap;
+}
+.online-dot::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+  animation: blink 2s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+/* Messages */
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  scroll-behavior: smooth;
+}
+.messages::-webkit-scrollbar { width: 4px; }
+.messages::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+
+.msg {
+  display: flex;
+  gap: 9px;
+  animation: msgIn 0.28s ease;
+}
+@keyframes msgIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.msg.user { flex-direction: row-reverse; }
+
+.msg-av {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+.msg.user .msg-av { background: linear-gradient(135deg, var(--accent), #0060c0); }
+.msg.assistant .msg-av { background: linear-gradient(135deg, var(--green), var(--accent)); }
+
+.msg-body {
+  max-width: 85%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.msg.user .msg-body { align-items: flex-end; }
+
+.bubble {
+  padding: 11px 14px;
+  border-radius: 14px;
+  font-size: 0.865rem;
+  line-height: 1.65;
+}
+.msg.user .bubble {
+  background: linear-gradient(135deg, var(--accent), #1a6fcc);
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+.msg.assistant .bubble {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-bottom-left-radius: 4px;
+}
+.bubble strong { color: var(--accent); font-weight: 600; }
+.bubble em { color: var(--amber); font-style: normal; font-weight: 500; }
+.bubble ul { margin: 8px 0 8px 18px; }
+.bubble li { margin-bottom: 3px; }
+.bubble ol { margin: 8px 0 8px 18px; }
+.bubble b  { color: var(--green); font-weight: 600; }
+
+.cat-badge-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 7px;
+  border-radius: 10px;
+  font-size: 0.63rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.msg-actions { display: flex; gap: 5px; flex-wrap: wrap; }
+.msg.user .msg-actions { justify-content: flex-end; }
+
+.act-btn {
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 0.66rem;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text3);
+  transition: all 0.15s;
+  font-family: var(--font-sans);
+}
+.act-btn:hover { color: var(--accent); border-color: rgba(78,158,255,0.4); }
+.act-btn.speaking { color: var(--green); border-color: rgba(62,207,142,0.4); }
+
+/* Typing */
+.typing-dots { display: flex; gap: 4px; align-items: center; padding: 6px 10px; }
+.td { width: 7px; height: 7px; border-radius: 50%; background: var(--text3); animation: td 1.4s infinite ease-in-out; }
+.td:nth-child(1) { animation-delay: -0.32s; }
+.td:nth-child(2) { animation-delay: -0.16s; }
+@keyframes td {
+  0%, 80%, 100% { transform: scale(0.55); opacity: 0.35; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+/* Chips */
+.chips-row {
+  padding: 0;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 6px;
+  flex-shrink: 0;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.28s ease, opacity 0.22s ease, padding 0.28s ease;
+}
+.chips-row.visible {
+  max-height: 44px;
+  opacity: 1;
+  padding: 0 18px 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.chips-row::-webkit-scrollbar { display: none; }
+.chips-row { -ms-overflow-style: none; scrollbar-width: none; }
+
+.chip {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.73rem;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--text2);
+  transition: all 0.15s;
+  font-family: var(--font-sans);
+  white-space: nowrap;
+}
+.chip:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+
+/* Speaking bar */
+.speaking-bar {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  background: rgba(62,207,142,0.08);
+  border-top: 1px solid rgba(62,207,142,0.18);
+  font-size: 0.74rem;
+  color: var(--green);
+  flex-shrink: 0;
+}
+.speaking-bar.show { display: flex; }
+
+.waves { display: flex; gap: 3px; align-items: center; }
+.wb { width: 3px; background: var(--green); border-radius: 2px; animation: wb 1s infinite ease-in-out; }
+.wb:nth-child(1) { height: 7px;  animation-delay: 0s; }
+.wb:nth-child(2) { height: 13px; animation-delay: 0.1s; }
+.wb:nth-child(3) { height: 9px;  animation-delay: 0.2s; }
+.wb:nth-child(4) { height: 15px; animation-delay: 0.15s; }
+.wb:nth-child(5) { height: 7px;  animation-delay: 0.25s; }
+@keyframes wb {
+  0%, 100% { transform: scaleY(0.5); opacity: 0.5; }
+  50% { transform: scaleY(1); opacity: 1; }
+}
+
+.stop-speak {
+  margin-left: auto;
+  padding: 3px 10px;
+  border-radius: var(--r-sm);
+  border: 1px solid rgba(62,207,142,0.3);
+  background: transparent;
+  color: var(--green);
+  cursor: pointer;
+  font-size: 0.7rem;
+  font-family: var(--font-sans);
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.stop-speak:hover { background: rgba(62,207,142,0.12); }
+
+/* Input */
+.input-row {
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 9px;
+  align-items: flex-end;
+  flex-shrink: 0;
+  width: 100%;
+  overflow: hidden;
+}
+.input-wrap { flex: 1; min-width: 0; }
+
+.msg-input {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 0.86rem;
+  padding: 10px 14px;
+  outline: none;
+  resize: none;
+  max-height: 100px;
+  min-height: 42px;
+  line-height: 1.5;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.msg-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+.msg-input::placeholder { color: var(--text4); }
+
+.send-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, var(--accent), #1a6fcc);
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(78,158,255,0.3);
+}
+.send-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(78,158,255,0.45); }
+.send-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* ========== WELCOME ========== */
+.welcome { padding: 20px 16px; text-align: center; width: 100%; max-width: 100%; overflow: hidden; }
+.welcome-icon { font-size: 40px; margin-bottom: 12px; display: block; }
+.welcome h2 { font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: 8px; color: var(--text); }
+.welcome p { font-size: 0.82rem; color: var(--text2); max-width: 100%; margin: 0 auto 20px; line-height: 1.65; padding: 0 4px; }
+
+.topic-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 9px;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.topic-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+.topic-card:hover {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(78,158,255,0.15);
+}
+.tc-ico { font-size: 17px; margin-bottom: 5px; }
+.tc-title { font-size: 0.78rem; font-weight: 600; color: var(--text); line-height: 1.3; }
+.tc-desc  { font-size: 0.68rem; color: var(--text3); margin-top: 2px; line-height: 1.4; }
+
+/* ========== BOTTOM NAV (Mobile) ========== */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 150;
+  background: rgba(7,11,16,0.97);
+  border-top: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+  padding: 8px 0 env(safe-area-inset-bottom, 8px);
+}
+
+.bottom-nav-inner {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.bnav-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 6px 12px;
+  border: none;
+  background: none;
+  color: var(--text3);
+  cursor: pointer;
+  border-radius: var(--r-sm);
+  transition: all 0.15s;
+  font-family: var(--font-sans);
+}
+.bnav-btn.active { color: var(--accent); }
+.bnav-icon { font-size: 18px; }
+.bnav-label { font-size: 0.6rem; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; }
+
+/* ========== RESPONSIVE BREAKPOINTS ========== */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .layout { grid-template-columns: 240px 1fr; gap: 16px; padding: 16px; }
+  .header-tags .htag:nth-child(n+3) { display: none; }
+}
+
+/* Small tablet / large phone */
+@media (max-width: 768px) {
+  :root { --header-h: 56px; }
+
+  .header-inner { padding: 0 16px; gap: 10px; }
+  .logo-text span { display: none; }
+  .header-divider { display: none; }
+  .header-tags { display: none; }
+  .kb-counter { display: none; }
+  .mobile-menu-btn { display: flex; }
+
+  .layout {
+    grid-template-columns: 1fr;
+    padding: 10px 10px 80px;
+    gap: 10px;
+    min-height: auto;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  /* Hide desktop sidebar */
+  .sidebar { display: none; }
+
+  /* Chat fills screen */
+  .chat-wrap {
+    height: calc(100vh - var(--header-h) - 80px - 20px);
+    min-height: 400px;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .chat-card {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .messages {
+    padding: 14px 12px;
+  }
+
+  .input-row {
+    padding: 10px 12px;
+    width: 100%;
+  }
+
+  .topic-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .welcome { padding: 14px 10px; }
+  .welcome-icon { font-size: 34px; }
+  .welcome h2 { font-size: 1.1rem; }
+  .welcome p { font-size: 0.79rem; }
+
+  .bottom-nav { display: block; }
+
+  .msg-body { max-width: 88%; }
+  .bubble { font-size: 0.845rem; padding: 10px 12px; }
+}
+
+/* Mobile phone */
+@media (max-width: 480px) {
+  .header-inner { padding: 0 12px; }
+
+  .layout { padding: 8px 8px 80px; gap: 8px; width: 100%; }
+
+  .topic-grid { grid-template-columns: repeat(2, 1fr); gap: 7px; }
+  .tc-title { font-size: 0.74rem; }
+  .tc-desc { display: none; }
+
+  .chat-topbar { padding: 10px 12px; }
+  .chat-topbar-info p { display: none; }
+  .messages { padding: 12px 10px; gap: 12px; }
+  .input-row { padding: 8px 10px; gap: 7px; }
+
+  .msg-body { max-width: 92%; }
+  .bubble { font-size: 0.83rem; padding: 9px 11px; }
+
+  .chips-row.visible { padding: 0 10px 8px; }
+  .chip { font-size: 0.7rem; padding: 5px 10px; }
+
+  .speaking-bar { padding: 7px 10px; font-size: 0.7rem; }
+  
+  .send-btn { width: 40px; height: 40px; font-size: 15px; }
+  .msg-input { min-height: 40px; font-size: 0.84rem; }
+}
+
+/* Very small screens */
+@media (max-width: 360px) {
+  .topic-grid { grid-template-columns: 1fr; }
+  .welcome h2 { font-size: 1rem; }
+}
+
+/* Landscape mobile: shorter chat */
+@media (max-height: 500px) and (orientation: landscape) {
+  .welcome { padding: 10px 12px; }
+  .welcome-icon { font-size: 24px; margin-bottom: 6px; }
+  .topic-grid { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .chat-wrap { height: calc(100vh - var(--header-h) - 16px); }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-mark">🦷</div>
+      <div class="logo-text">
+        <strong>RadioDent</strong>
+        <span>Asistente de Radiología Dental</span>
+      </div>
+    </div>
+    <div class="header-divider"></div>
+    <div class="header-tags">
+      <span class="htag htag-blue">Anatomía Dentaria</span>
+      <span class="htag htag-green">Técnicas Intraorales</span>
+      <span class="htag htag-amber">Anatomía Radiológica</span>
+      <span class="htag htag-violet">Patologías</span>
+    </div>
+    <div class="header-right">
+      <span class="kb-counter">Base: <strong id="kbCount">—</strong> preguntas</span>
+      <button class="mobile-menu-btn" onclick="openDrawer()" title="Menú">☰</button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile sidebar overlay + drawer -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeDrawer()"></div>
+<div class="sidebar-drawer" id="sidebarDrawer">
+  <div class="drawer-header">
+    <span class="drawer-title">📚 Herramientas</span>
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  </div>
+  <div class="drawer-body" id="drawerBody">
+    <!-- panels injected by JS -->
+  </div>
+</div>
+
+<div class="layout">
+  <!-- SIDEBAR (desktop) -->
+  <aside class="sidebar" id="desktopSidebar">
+    <!-- panels injected by JS -->
+  </aside>
+
+  <!-- CHAT -->
+  <main class="chat-wrap">
+    <div class="chat-card">
+
+      <div class="chat-topbar">
+        <div class="chat-topbar-avatar">🤖</div>
+        <div class="chat-topbar-info">
+          <h2>Asistente Dental IA</h2>
+          <p>Anatomía · Técnicas · Patologías · Física de la Radiación</p>
+        </div>
+        <div class="online-dot">En línea</div>
+      </div>
+
+      <div class="messages" id="messages">
+        <div class="welcome" id="welcomeScreen">
+          <span class="welcome-icon">🦷</span>
+          <h2>Bienvenido al Asistente RadioDent</h2>
+          <p>Base de conocimiento ampliada con anatomía dentaria, técnicas radiográficas, anatomía radiológica, patologías orales y física de la radiación.</p>
+          <div class="topic-grid">
+            <div class="topic-card" onclick="askQ('¿Qué es el periodonto y cuál es su función?')">
+              <div class="tc-ico">🦴</div>
+              <div class="tc-title">Periodonto</div>
+              <div class="tc-desc">Tejidos de soporte dental</div>
+            </div>
+            <div class="topic-card" onclick="askQ('¿Cuáles son las técnicas radiográficas intraorales?')">
+              <div class="tc-ico">📡</div>
+              <div class="tc-title">Técnicas Radiográficas</div>
+              <div class="tc-desc">Periapical, bite-wing, oclusales</div>
+            </div>
+            <div class="topic-card" onclick="askQ('¿Cuál es la diferencia entre dentición primaria y permanente?')">
+              <div class="tc-ico">🧒</div>
+              <div class="tc-title">Denticiones</div>
+              <div class="tc-desc">Primaria vs permanente</div>
+            </div>
+            <div class="topic-card" onclick="askQ('¿Qué es la técnica de bisección del ángulo?')">
+              <div class="tc-ico">📐</div>
+              <div class="tc-title">Bisección del Ángulo</div>
+              <div class="tc-desc">Teorema de Cieszinski</div>
+            </div>
+            <div class="topic-card" onclick="askQ('¿Qué tejidos componen el diente?')">
+              <div class="tc-ico">🔬</div>
+              <div class="tc-title">Tejidos Dentales</div>
+              <div class="tc-desc">Esmalte, dentina, cemento, pulpa</div>
+            </div>
+            <div class="topic-card" onclick="askQ('¿Qué es la radiación ionizante y cómo se produce en radiología dental?')">
+              <div class="tc-ico">⚡</div>
+              <div class="tc-title">Física de la Radiación</div>
+              <div class="tc-desc">Rayos X y radioprotección</div>
+            </div>
+            <div class="topic-card" onclick="askQ('¿Cómo se ve la lámina dura en la radiografía?')">
+              <div class="tc-ico">🩻</div>
+              <div class="tc-title">Anatomía Radiológica</div>
+              <div class="tc-desc">Estructuras en imagen</div>
+            </div>
+            <div class="topic-card" onclick="askQ('¿Qué es la periodontitis y cómo se ve en radiografía?')">
+              <div class="tc-ico">🔴</div>
+              <div class="tc-title">Patologías</div>
+              <div class="tc-desc">Diagnóstico radiológico</div>
+            </div>
+            <div class="topic-card" onclick="askQ('¿Cuáles son los errores más comunes en la técnica radiográfica?')">
+              <div class="tc-ico">⚠️</div>
+              <div class="tc-title">Errores Técnicos</div>
+              <div class="tc-desc">Prevención y corrección</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="chips-row" id="chipsRow"></div>
+
+      <div class="speaking-bar" id="speakingBar">
+        <div class="waves">
+          <div class="wb"></div><div class="wb"></div><div class="wb"></div>
+          <div class="wb"></div><div class="wb"></div>
+        </div>
+        <span id="speakingText">Leyendo respuesta…</span>
+        <button class="stop-speak" onclick="ttsStop()">Detener ✕</button>
+      </div>
+
+      <div class="input-row">
+        <div class="input-wrap">
+          <textarea class="msg-input" id="userInput"
+            placeholder="Escribe tu pregunta sobre radiología dental…"
+            rows="1"
+            onkeydown="handleKey(event)"
+            oninput="autoResize(this)"
+            onfocus="showChipsBar()"
+            onblur="hideChipsBar()"></textarea>
+        </div>
+        <button class="send-btn" id="sendBtn" onclick="sendMessage()" title="Enviar">➤</button>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Bottom Navigation (mobile) -->
+<nav class="bottom-nav" id="bottomNav">
+  <div class="bottom-nav-inner">
+    <button class="bnav-btn active" id="bnavChat" onclick="bnavSwitch('chat')">
+      <span class="bnav-icon">💬</span>
+      <span class="bnav-label">Chat</span>
+    </button>
+    <button class="bnav-btn" id="bnavSearch" onclick="openDrawerTab('search')">
+      <span class="bnav-icon">🔍</span>
+      <span class="bnav-label">Buscar</span>
+    </button>
+    <button class="bnav-btn" id="bnavTopics" onclick="openDrawerTab('topics')">
+      <span class="bnav-icon">📚</span>
+      <span class="bnav-label">Temas</span>
+    </button>
+    <button class="bnav-btn" id="bnavVoice" onclick="openDrawerTab('voice')">
+      <span class="bnav-icon">🔊</span>
+      <span class="bnav-label">Voz</span>
+    </button>
+  </div>
+</nav>
+
+<script>
+// =====================================================================
+// KNOWLEDGE BASE
+// =====================================================================
+const KB = [
+{ id:1,  cat:'anatomia', q:'¿Qué es un diente heterodonto?',
+  a:'Un <strong>diente heterodonto</strong> significa que los dientes tienen formas diferentes. El sistema dentario humano es heterodonto porque posee:<ul><li><strong>Incisivos</strong> — forma de cincel para cortar</li><li><strong>Caninos</strong> — forma cónica para desgarrar</li><li><strong>Premolares</strong> — forma bicúspide para triturar</li><li><strong>Molares</strong> — forma cuadrangular para moler</li></ul>Esta variedad de formas permite realizar diferentes funciones durante la masticación.' },
+{ id:2,  cat:'anatomia', q:'¿Qué es un diente pleurodonto?',
+  a:'Un diente <strong>pleurodonto</strong> es aquel que se implanta en los maxilares mediante la interposición de un tejido blando llamado <em>Periodonto</em>. En los humanos todos los dientes son pleurodontos, lo que significa que no están fusionados directamente al hueso sino que están suspendidos en su alvéolo por el ligamento periodontal.' },
+{ id:3,  cat:'anatomia', q:'¿Cuáles son los grupos de dientes en la dentadura?',
+  a:'La dentadura se divide en dos grupos:<br><strong>Dientes Anteriores:</strong><ul><li><strong>Incisivos</strong> — función estética/fonética 90%, masticatoria 10%; acción: cortar</li><li><strong>Caninos</strong> — función estética/fonética 80%, masticatoria 20%; acción: desgarrar</li></ul><strong>Dientes Posteriores:</strong><ul><li><strong>Premolares</strong> — estética 40%, masticatoria 60%</li><li><strong>Molares</strong> — estética 10%, masticatoria 90%; principal función: triturar</li></ul>' },
+{ id:4,  cat:'anatomia', q:'¿Qué es la dentición primaria y cuántos dientes tiene?',
+  a:'La <strong>dentición primaria</strong> (decidua o de leche) consta de <em>20 dientes</em>. Sus características:<ul><li>Funcionan hasta aproximadamente los <strong>10 años</strong></li><li>Color <strong>blanco lechoso ligeramente azulado</strong></li><li>Más pequeños que los permanentes</li><li>Raíces más cortas y reabsorbibles</li></ul>' },
+{ id:5,  cat:'anatomia', q:'¿Qué es la dentición permanente y cuántos dientes tiene?',
+  a:'La <strong>dentición permanente</strong> consta de <em>32 dientes</em>:<ul><li>Color <strong>blanco marfil</strong> (blanco-amarillento)</li><li>Mayor tamaño que los deciduos</li><li>Superficie menos lisa</li><li>Incluye 4 terceros molares (17-21 años)</li></ul>' },
+{ id:6,  cat:'anatomia', q:'¿Cuáles son las edades de erupción de los dientes permanentes?',
+  a:'Cronología de erupción:<br><strong>Maxilar superior:</strong><ul><li>Incisivos centrales: 7-8 años</li><li>Incisivos laterales: 8 años</li><li>Caninos: 11-12 años</li><li>1er premolar: 10-11 años</li><li>1er molar: 6-7 años (primer permanente en erupcionar)</li><li>3er molar: 17-21 años</li></ul><strong>Mandíbula:</strong><ul><li>Incisivos centrales: 6-7 años</li><li>Caninos: 9-10 años</li><li>3er molar: 18-21 años</li></ul>' },
+{ id:7,  cat:'anatomia', q:'¿Qué tejidos componen el diente?',
+  a:'El diente está formado por cuatro tejidos:<ul><li><strong>Esmalte</strong> — capa más externa de la corona; sustancia natural más densa del organismo</li><li><strong>Dentina</strong> — cuerpo principal del diente; menor mineralización que el esmalte</li><li><strong>Cemento</strong> — cubre la raíz; muy delgado</li><li><strong>Pulpa dental</strong> — tejido blando central; provee nutrición y vitalidad</li></ul>' },
+{ id:8,  cat:'anatomia', q:'¿Qué es el periodonto?',
+  a:'El <strong>periodonto</strong> es el conjunto de tejidos de soporte del diente:<ul><li><strong>Ligamento periodontal</strong> — tejido conjuntivo fibroso que une la raíz al alveolo</li><li><strong>Hueso alveolar</strong> — proceso óseo que aloja las raíces</li><li><strong>Cemento</strong> — cubre la raíz dental</li><li><strong>Encía</strong> — tejido blando que recubre el hueso alveolar</li></ul>' },
+{ id:9,  cat:'anatomia', q:'¿Qué es la clasificación de Angle para la maloclusión?',
+  a:'La <strong>Clasificación de Angle</strong> se basa en la relación del primer molar permanente:<ul><li><strong>Clase I</strong> — Oclusión normal</li><li><strong>Clase II División 1</strong> — Dientes anteriores superiores proinclinados</li><li><strong>Clase II División 2</strong> — Dientes anteriores superiores retroinclinados</li><li><strong>Clase III</strong> — Prognatismo mandibular</li></ul>' },
+{ id:10, cat:'anatomia', q:'¿Cuáles son las caras del diente?',
+  a:'Los dientes tienen <strong>5 a 6 caras</strong>:<ul><li><strong>Vestibular/Labial</strong> — en contacto con la mucosa vestibular o los labios</li><li><strong>Lingual/Palatina</strong> — en contacto con la lengua o el paladar</li><li><strong>Mesial</strong> — cara proximal más cercana a la línea media</li><li><strong>Distal</strong> — cara proximal más lejana a la línea media</li><li><strong>Oclusal/Incisal</strong> — superficie de masticación o corte</li></ul>' },
+{ id:11, cat:'anatomia', q:'¿Qué es la cámara pulpar?',
+  a:'La <strong>cámara pulpar</strong> es el espacio en el interior del diente que aloja la <em>pulpa dental</em>. Radiográficamente aparece <strong>radiolúcida</strong>. Se comunica con los conductos radiculares. El foramen apical permite el ingreso del paquete vásculo-nervioso.' },
+{ id:12, cat:'anatomia', q:'¿Qué es el ligamento periodontal?',
+  a:'El <strong>ligamento periodontal</strong> conecta el cemento radicular con la pared del alveolo óseo. Tiene un grosor de 0.15-0.38 mm. Radiográficamente se observa como una <em>línea radiolúcida continua</em> de grosor uniforme alrededor de la raíz.' },
+{ id:13, cat:'anatomia', q:'¿Qué es el esmalte dental?',
+  a:'El <strong>esmalte dental</strong> es la <em>sustancia natural más densa del organismo</em>. Cubre únicamente la corona anatómica. Gran radiopacidad en imagen. La <em>unión amelodentinaria</em> se visualiza como interfase clara entre esmalte y dentina.' },
+{ id:14, cat:'anatomia', q:'¿Qué es el odontograma y el sistema FDI?',
+  a:'El <strong>odontograma</strong> registra información dental en la historia clínica. El <strong>Sistema FDI</strong>:<ul><li>El <em>primer dígito</em> indica el cuadrante (1-4 permanentes, 5-8 deciduos)</li><li>El <em>segundo dígito</em> indica el diente (1-8)</li></ul>Ejemplo: 21 = incisivo central superior izquierdo.' },
+{ id:15, cat:'anatomia', q:'¿Cuáles son las edades de erupción de los dientes deciduos?',
+  a:'Cronología de erupción primaria:<ul><li><strong>Incisivos centrales inferiores</strong>: 6-10 meses</li><li><strong>Incisivos centrales superiores</strong>: 8-12 meses</li><li><strong>Caninos</strong>: 16-22 meses</li><li><strong>1er molar deciduo</strong>: 13-19 meses</li><li><strong>2do molar deciduo</strong>: 25-33 meses</li></ul>La dentición primaria completa se establece alrededor de los <em>3 años de edad</em>.' },
+{ id:16, cat:'anatomia', q:'¿Qué es la unión cemento-esmalte (UCE)?',
+  a:'La <strong>UCE</strong> es la zona donde se unen corona y raíz. Sirve como referencia para medir la pérdida ósea en enfermedad periodontal. Normalmente se ubica a 1.5-2 mm de la cresta alveolar.' },
+{ id:17, cat:'anatomia', q:'¿Cuáles son las funciones de la dentición?',
+  a:'<ul><li><strong>Masticación</strong> — fragmentación de alimentos</li><li><strong>Fonética</strong> — pronunciación de sonidos</li><li><strong>Estética</strong> — perfil facial y sonrisa</li><li><strong>Deglución</strong> — preparación del bolo alimenticio</li><li><strong>Mantenimiento del espacio</strong> — los deciduos conservan espacio para los permanentes</li></ul>' },
+{ id:18, cat:'anatomia', q:'¿Qué es la oclusión dental?',
+  a:'La <strong>oclusión dental</strong> es la relación de contacto entre dientes durante el cierre mandibular. En <em>oclusión ideal</em> cada diente superior ocluye con dos inferiores y viceversa (excepto incisivos centrales inferiores y terceros molares superiores).' },
+{ id:24, cat:'tecnicas', q:'¿Cuáles son las técnicas radiográficas intraorales?',
+  a:'Las técnicas intraorales se clasifican en:<br><strong>Técnicas Periapicales:</strong><ul><li>Bisección del ángulo (Técnica de Dieck)</li><li>Paralelismo / Cilindro largo (Mc Cormack-Fitzgerald)</li><li>Transcigomática (T-T)</li></ul><strong>Técnicas Coronales:</strong><ul><li>Bite Wing (aleta de mordida)</li></ul><strong>Técnicas Oclusales:</strong><ul><li>Total anterior / Lateral</li></ul>' },
+{ id:25, cat:'tecnicas', q:'¿Qué es el Teorema de Cieszinski?',
+  a:'El <strong>Teorema de Cieszinski</strong> (Ley de la Isometría) es el fundamento geométrico de la bisección del ángulo:<ul><li>Se traza la <em>bisectriz</em> del ángulo formado por el eje largo del diente y el plano de la película</li><li>El rayo central se dirige <em>perpendicular a esa bisectriz</em>, pasando por el ápice</li><li>La imagen obtenida es igual al tamaño real del diente</li></ul>' },
+{ id:26, cat:'tecnicas', q:'¿Cuál es el protocolo de toma radiográfica periapical?',
+  a:'El protocolo tiene <strong>10 pasos</strong>:<ol><li>Recepción de la indicación</li><li>Paciente sentado con protección (chaleco plomado, collar tiroideo)</li><li>Examen facial y oral</li><li>Posición de la cabeza</li><li>Ubicación y sujeción del paquete radiográfico</li><li>Angulación vertical del rayo central</li><li>Angulación horizontal del rayo central</li><li>Punto de incidencia facial</li><li>Distancia foco-película</li><li>Determinación del tiempo de exposición</li></ol>' },
+{ id:27, cat:'tecnicas', q:'¿Cómo se posiciona la cabeza del paciente?',
+  a:'<ul><li><strong>Para todos:</strong> plano bipupilar paralelo al horizontal; plano sagital perpendicular al horizontal</li><li><strong>Maxilar:</strong> Plano de Camper paralelo al horizontal → sillón <em>vertical</em></li><li><strong>Mandíbula:</strong> plano tragus-comisura labial paralelo al horizontal → sillón <em>reclinado</em></li></ul>' },
+{ id:28, cat:'tecnicas', q:'¿Cómo se ubica el paquete radiográfico?',
+  a:'Reglas de ubicación:<ul><li>La <em>cara activa</em> hacia el tubo generador</li><li>Eje largo <strong>vertical</strong> para dientes anteriores</li><li>Eje largo <strong>horizontal</strong> para dientes posteriores</li><li>Borde libre sobresale <strong>2-3 mm</strong> del plano oclusal</li></ul><strong>Sujeción:</strong> Maxilar: dedo pulgar / Mandíbula: dedo índice (mano opuesta).' },
+{ id:29, cat:'tecnicas', q:'¿Qué es la angulación vertical del rayo central?',
+  a:'<em>Maxilar:</em> Incisivos 40-45°, Caninos 45-50°, Premolares 30-35°, Molares 20-25°<br><em>Mandíbula:</em> Incisivos −15 a −20°, Caninos −25°, Premolares −10°, Molares −5° a 0°<br><ul><li>RC inclinado hacia abajo → angulación <strong>positiva (+)</strong></li><li>RC inclinado hacia arriba → angulación <strong>negativa (−)</strong></li></ul>' },
+{ id:30, cat:'tecnicas', q:'¿Qué pasa si la angulación vertical es incorrecta?',
+  a:'Errores de angulación vertical:<ul><li><strong>Angulación MENOR</strong> a la correcta → imagen <em>elongada</em> (dientes excesivamente largos)</li><li><strong>Angulación MAYOR</strong> a la correcta → imagen <em>acortada</em> (dientes cortos y anchos)</li></ul>' },
+{ id:31, cat:'tecnicas', q:'¿Qué es la angulación horizontal del rayo central?',
+  a:'La <strong>angulación horizontal</strong> es el ángulo entre el RC y el plano medio sagital. Una angulación horizontal incorrecta produce <em>superposición de las caras interproximales</em>. Para dos dientes: RC tangente a sus caras proximales.' },
+{ id:32, cat:'tecnicas', q:'¿Cuáles son los puntos de incidencia facial para el maxilar?',
+  a:'Los puntos se proyectan sobre el plano de Camper:<ul><li><strong>Incisivo central</strong> → Punta de la nariz</li><li><strong>Incisivo lateral</strong> → Ala de la nariz</li><li><strong>Canino</strong> → Surco naso-labial</li><li><strong>Premolares</strong> → Línea media del ojo</li><li><strong>1er Molar</strong> → Ángulo externo del ojo</li><li><strong>2do Molar</strong> → Ángulo externo de la órbita</li></ul>' },
+{ id:33, cat:'tecnicas', q:'¿Qué es la técnica de cilindro largo o de paralelismo?',
+  a:'La <strong>Técnica de Cilindro Largo</strong> se basa en:<ul><li>Receptor <em>paralelo</em> al eje longitudinal del diente</li><li>RC <em>perpendicular</em> al diente y al receptor</li><li>Fuente a 40 cm</li><li>Requiere posicionadores XCP</li></ul>Produce imagen <em>isométrica e isomorfa</em>. Indicada en periodoncia, endodoncia, implantología.' },
+{ id:34, cat:'tecnicas', q:'¿Qué es la técnica Bite Wing?',
+  a:'La <strong>Técnica Bite Wing</strong> (aleta de mordida):<ul><li>Muestra corona y 1/3 cervical de ambas arcadas simultáneamente</li><li>Angulación vertical: 5°-10°</li><li>Ideal para detectar <em>caries interproximales</em></li><li>También evalúa cresta alveolar y restauraciones</li></ul>' },
+{ id:35, cat:'tecnicas', q:'¿Cuáles son los errores más comunes en la técnica radiográfica?',
+  a:'Errores frecuentes:<ul><li><strong>Elongación</strong> — angulación vertical insuficiente</li><li><strong>Acortamiento</strong> — angulación vertical excesiva</li><li><strong>Superposición interproximal</strong> — angulación horizontal incorrecta</li><li><strong>Corte del ápice</strong> — película mal posicionada</li><li><strong>Imagen borrosa</strong> — movimiento durante la exposición</li><li><strong>Subexposición/Sobreexposición</strong> — tiempo de exposición incorrecto</li></ul>' },
+{ id:36, cat:'tecnicas', q:'¿Cómo se protege al operador y al paciente de la radiación?',
+  a:'Medidas de <strong>radioprotección</strong>:<ul><li><strong>Chaleco plomado</strong> — mínimo 0.25 mm PbEq; protege zona abdominal</li><li><strong>Collar tiroideo</strong> — protege glándula tiroides</li><li><strong>Biombo plomado</strong> — operador; mínimo 0.5 mm PbEq</li><li><strong>Distancia</strong> — operador a <em>2 metros</em> de la fuente, en ángulo 90°-135° al RC</li></ul>Límite para el operador: <em>20 mSv/año</em>.' },
+{ id:45, cat:'radiologia', q:'¿Cómo se ve el esmalte dental en la radiografía?',
+  a:'El <strong>esmalte dental</strong> aparece como la zona más <em>radiopaca</em> (más blanca) del diente por ser la sustancia más densa del organismo. La <strong>unión amelodentinaria</strong> se visualiza como una interfase clara que separa esmalte de dentina.' },
+{ id:46, cat:'radiologia', q:'¿Cómo se ve la dentina en la radiografía?',
+  a:'La <strong>dentina</strong> tiene menor radiopacidad que el esmalte. Su imagen es <em>comparable a la del hueso</em>. Forma el cuerpo principal del diente y rodea la cavidad pulpar.' },
+{ id:47, cat:'radiologia', q:'¿Cómo se ve la pulpa dental en radiografía?',
+  a:'La <strong>pulpa dental</strong> y los conductos radiculares son <em>radiolúcidos</em> (oscuros) al ser tejido blando. La cámara pulpar se observa en la corona y los conductos hasta los ápices.' },
+{ id:48, cat:'radiologia', q:'¿Qué es la lámina dura y cómo se ve radiográficamente?',
+  a:'La <strong>lámina dura</strong> es el hueso compacto que contornea el alveolo. Radiográficamente: <em>línea radiopaca densa y delgada</em> que envuelve la raíz. Su discontinuidad indica patología periodontal o periapical.' },
+{ id:49, cat:'radiologia', q:'¿Qué es el espacio del ligamento periodontal radiográficamente?',
+  a:'Se observa como una <em>línea radiolúcida continua de grosor uniforme</em> entre la raíz y la lámina dura. Su ensanchamiento indica patología (proceso inflamatorio o fuerza oclusal excesiva).' },
+{ id:50, cat:'radiologia', q:'¿Qué es el agujero incisivo y cómo se ve en radiografía?',
+  a:'Radiográficamente: <em>zona radiolúcida ovalada</em> entre las raíces de los incisivos centrales superiores. No debe confundirse con lesión periapical. Es el orificio de embocadura bucal del conducto nasopalatino.' },
+{ id:51, cat:'radiologia', q:'¿Qué son los senos maxilares radiográficamente?',
+  a:'<em>Áreas radiolúcidas</em> por encima de los ápices de premolares y molares superiores. Los tabiques internos se ven como <em>líneas radiopacas</em>. Pueden estar cerca de los ápices dentarios y simular lesiones.' },
+{ id:52, cat:'radiologia', q:'¿Qué es la cresta alveolar y cómo se ve en radiografía?',
+  a:'La <strong>cresta alveolar</strong> se ubica normalmente a 1.5-2.0 mm de la UCE. Radiográficamente: <em>línea radiopaca</em>. Su pérdida de altura indica enfermedad periodontal.' },
+{ id:53, cat:'radiologia', q:'¿Qué es el agujero mentoniano y cómo se observa radiográficamente?',
+  a:'Radiográficamente: <em>área radiolúcida pequeña, ovoide o redonda</em> cerca de los ápices de premolares inferiores. Puede simular una lesión periapical. Su posición varía entre individuos.' },
+{ id:54, cat:'radiologia', q:'¿Qué es el conducto mandibular radiográficamente?',
+  a:'Radiográficamente: <em>banda radiolúcida contorneada por dos líneas radiopacas delgadas</em> bajo los ápices de los molares inferiores. Conduce el nervio e irrigación dentaria inferior.' },
+{ id:55, cat:'radiologia', q:'¿Cuál es la apariencia radiográfica del hueso esponjoso?',
+  a:'Se observa como una <em>red de trabéculas radiopacas</em> que delimitan espacios medulares radiolúcidos. El patrón es variable: más fino y denso en el maxilar anterior; más grueso y espaciado en mandíbula posterior.' },
+{ id:61, cat:'patologia', q:'¿Qué es un absceso periapical y cómo se diferencia del periodontal?',
+  a:'<ul><li><strong>Absceso Periapical</strong> — origen en pulpa infectada; zona radiolúcida en el ápice</li><li><strong>Absceso Periodontal</strong> — origen en tejidos de soporte; relacionado con bolsas periodontales</li><li><strong>Absceso Gingival</strong> — localizado en la encía</li></ul>El periapical muestra radiolucencia apical; el periodontal muestra pérdida ósea lateral.' },
+{ id:62, cat:'patologia', q:'¿Qué es la periodontitis y cómo se ve en radiografía?',
+  a:'Hallazgos radiográficos de <strong>periodontitis</strong>:<ul><li>Pérdida de altura ósea (distancia cresta-UCE > 2 mm)</li><li>Ensanchamiento del ligamento periodontal</li><li>Pérdida de continuidad de cortical alveolar</li><li>Defectos óseos angulares o verticales</li></ul>Patrón horizontal (más común) o vertical/angular.' },
+{ id:63, cat:'patologia', q:'¿Qué es la caries dental y cómo se ve en radiografía?',
+  a:'Hallazgos radiográficos de <strong>caries</strong>:<ul><li><strong>Caries interproximal</strong> — zona radiolúcida triangular en cara proximal (detectable en bite-wing)</li><li><strong>Caries oclusal</strong> — radiolucencia bajo el esmalte oclusal</li><li><strong>Caries cervical</strong> — radiolucencia en el cuello del diente</li></ul>La radiografía puede subestimar el tamaño real de la lesión.' },
+{ id:64, cat:'patologia', q:'¿Qué es un granuloma periapical radiográficamente?',
+  a:'El <strong>granuloma periapical</strong> es una lesión inflamatoria crónica. Radiográficamente:<ul><li>Zona <em>radiolúcida redondeada u ovalada</em> en el ápice</li><li>Bordes generalmente bien definidos</li><li>Diámetro habitualmente < 1 cm</li><li>Lámina dura periapical interrumpida</li></ul>No diferenciable del quiste apical solo por radiografía; requiere histopatología.' },
+{ id:65, cat:'patologia', q:'¿Qué es un quiste radicular y cómo se ve en radiografía?',
+  a:'El <strong>quiste radicular</strong> es la lesión quística más frecuente de los maxilares. Radiográficamente:<ul><li>Zona <em>radiolúcida bien definida, redondeada</em>, asociada al ápice del diente</li><li>Bordeada por una <em>línea radiopaca continua</em> (cortical)</li><li>Generalmente mayor tamaño que el granuloma</li></ul>' },
+{ id:66, cat:'patologia', q:'¿Qué es la hipercementosis?',
+  a:'La <strong>hipercementosis</strong> es el depósito excesivo de cemento en la raíz. Radiográficamente: <em>engrosamiento radiopaco</em> en el ápice, con aspecto de raíz ensanchada. Puede complicar las exodoncias.' },
+{ id:67, cat:'patologia', q:'¿Qué es la reabsorción radicular y sus tipos?',
+  a:'<ul><li><strong>Reabsorción externa apical</strong> — acortamiento del ápice</li><li><strong>Reabsorción externa cervical</strong> — destrucción de cemento y dentina cervical</li><li><strong>Reabsorción interna</strong> — radiolucencia oval dentro del conducto radicular</li></ul>' },
+{ id:72, cat:'fisica', q:'¿Qué es la radiación ionizante y cómo se produce en radiología dental?',
+  a:'En radiología dental se produce en el <strong>tubo de rayos X</strong> mediante bombardeo de electrones acelerados sobre un ánodo de tungsteno. El 99% de la energía se convierte en <em>calor</em>; solo el 1% produce rayos X. Su interacción con la materia produce <em>ionización</em> que puede dañar el ADN celular.' },
+{ id:73, cat:'fisica', q:'¿Qué factores determinan la calidad y cantidad del haz de rayos X?',
+  a:'<ul><li><strong>kVp</strong> — determina la <em>calidad</em> (penetrabilidad); en dental: 60-90 kVp</li><li><strong>mA</strong> — determina la <em>cantidad</em> de rayos X (intensidad)</li><li><strong>Tiempo de exposición</strong> — junto con mA determina la dosis total (mAs)</li><li><strong>Distancia foco-película</strong> — mayor distancia = menor intensidad (ley inversa del cuadrado)</li></ul>' },
+{ id:74, cat:'fisica', q:'¿Qué es la radiolucencia y la radiopacidad?',
+  a:'<ul><li><strong>Radiolúcido</strong> — permite el paso de rayos X; aparece <em>oscuro/negro</em>. Ej: pulpa, aire, lesiones quísticas</li><li><strong>Radiopaco</strong> — absorbe/bloquea los rayos X; aparece <em>claro/blanco</em>. Ej: esmalte, metal, hueso</li></ul>Escala: metal > esmalte > dentina/cemento/hueso > tejidos blandos > aire.' },
+{ id:75, cat:'fisica', q:'¿Cuáles son los efectos biológicos de los rayos X?',
+  a:'<ul><li><strong>Efectos deterministas</strong> — dependen de la dosis; tienen umbral; ej. eritema, cataratas</li><li><strong>Efectos estocásticos</strong> — probabilísticos; sin umbral seguro; ej. cáncer, mutaciones genéticas</li></ul><strong>Tejidos más radiosensibles:</strong> médula ósea, gónadas, cristalino, tiroides, mucosas.' },
+{ id:76, cat:'fisica', q:'¿Cuáles son las unidades de medición de la radiación?',
+  a:'<ul><li><strong>Gray (Gy)</strong> — dosis absorbida; 1 Gy = 1 J/kg</li><li><strong>Sievert (Sv)</strong> — dosis efectiva; considera tipo de radiación y sensibilidad del tejido</li></ul>En dental, las dosis son del orden de microsieverts (μSv). 1 periapical convencional: ~1-8 μSv.' },
+{ id:77, cat:'fisica', q:'¿Cuáles son los principios de la radioprotección ALARA?',
+  a:'El principio <strong>ALARA</strong> (As Low As Reasonably Achievable):<ul><li><strong>Justificación</strong> — beneficio diagnóstico debe superar el riesgo</li><li><strong>Optimización</strong> — menor dosis posible para imagen diagnóstica aceptable</li><li><strong>Limitación de dosis</strong> — no superar límites establecidos (20 mSv/año para operadores)</li></ul>' },
+{ id:78, cat:'fisica', q:'¿Qué es la ley del inverso del cuadrado de la distancia?',
+  a:'La intensidad de la radiación es inversamente proporcional al cuadrado de la distancia:<ul><li>Si se <em>duplica</em> la distancia → intensidad se <em>reduce a 1/4</em></li><li>Si se <em>triplica</em> → se <em>reduce a 1/9</em></li></ul>Por ello el cilindro largo (40 cm) expone a menor dosis por unidad de superficie que el cilindro corto (20 cm).' },
+{ id:79, cat:'fisica', q:'¿Qué es la película digital y cuáles son sus ventajas?',
+  a:'<strong>Ventajas de la radiografía digital:</strong><ul><li>Reducción de dosis de radiación (hasta 80% menos)</li><li>Imagen inmediata (sin revelado químico)</li><li>Posibilidad de ajustar contraste y brillo</li><li>Almacenamiento y envío digital</li><li>Sin residuos químicos contaminantes</li></ul>' },
+];
+
+// =====================================================================
+// STATE
+// =====================================================================
+let currentCat = 'all';
+let currentSpeakMsgId = null;
+let ttsRate = 1.0, ttsPitch = 1.0;
+let currentUtterance = null;
+let isLoading = false;
+let sessionAsked = 0, sessionAI = 0;
+
+// =====================================================================
+// BUILD PANELS HTML
+// =====================================================================
+function buildPanelsHTML() {
+  return `
+    <div class="panel">
+      <div class="panel-head"><span class="panel-head-icon">⌕</span><h3>Búsqueda</h3></div>
+      <div class="panel-body">
+        <div class="search-wrap">
+          <span class="search-icon">⌕</span>
+          <input type="text" class="search-input" placeholder="Buscar pregunta o concepto…" autocomplete="off" oninput="doSearch(this.value, this)" />
+        </div>
+        <div class="search-results-panel"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><span class="panel-head-icon">📚</span><h3>Temas</h3></div>
+      <div class="panel-body">
+        <div class="cat-list">
+          <button class="cat-btn cat-all-btn active" onclick="filterCat(this,'all')">
+            <span class="cat-dot" style="background:var(--accent)"></span> Todos
+            <span class="cat-count cat-count-all">—</span>
+          </button>
+          <button class="cat-btn" onclick="filterCat(this,'anatomia')">
+            <span class="cat-dot" style="background:var(--cyan)"></span> Anatomía Dentaria
+            <span class="cat-count cat-count-anatomia">—</span>
+          </button>
+          <button class="cat-btn" onclick="filterCat(this,'tecnicas')">
+            <span class="cat-dot" style="background:var(--green)"></span> Técnicas Intraorales
+            <span class="cat-count cat-count-tecnicas">—</span>
+          </button>
+          <button class="cat-btn" onclick="filterCat(this,'radiologia')">
+            <span class="cat-dot" style="background:var(--violet)"></span> Anatomía Radiológica
+            <span class="cat-count cat-count-radiologia">—</span>
+          </button>
+          <button class="cat-btn" onclick="filterCat(this,'patologia')">
+            <span class="cat-dot" style="background:var(--rose)"></span> Patologías
+            <span class="cat-count cat-count-patologia">—</span>
+          </button>
+          <button class="cat-btn" onclick="filterCat(this,'fisica')">
+            <span class="cat-dot" style="background:var(--amber)"></span> Física de la Radiación
+            <span class="cat-count cat-count-fisica">—</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><span class="panel-head-icon">📊</span><h3>Estadísticas</h3></div>
+      <div class="panel-body">
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-num stat-questions" style="color:var(--accent)">—</div><div class="stat-lbl">Preguntas</div></div>
+          <div class="stat-card"><div class="stat-num" style="color:var(--green)">6</div><div class="stat-lbl">Categorías</div></div>
+          <div class="stat-card"><div class="stat-num stat-asked" style="color:var(--amber)">0</div><div class="stat-lbl">Consultadas</div></div>
+          <div class="stat-card"><div class="stat-num stat-ai" style="color:var(--violet)">0</div><div class="stat-lbl">Resp. IA</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><span class="panel-head-icon">🔊</span><h3>Control de Voz</h3></div>
+      <div class="panel-body">
+        <div class="tts-btns">
+          <button class="tts-btn tts-play" title="Reproducir" onclick="ttsToggle()">▶</button>
+          <button class="tts-btn tts-pause" title="Pausar" onclick="ttsPause()">⏸</button>
+          <button class="tts-btn" title="Detener" onclick="ttsStop()">⏹</button>
+        </div>
+        <div class="tts-row">
+          <label class="tts-label">Velocidad</label>
+          <input type="range" class="tts-range" min="0.5" max="2" step="0.1" value="1" oninput="updateRate(this.value)">
+          <span class="tts-val tts-rate-val">1.0x</span>
+        </div>
+        <div class="tts-row">
+          <label class="tts-label">Tono</label>
+          <input type="range" class="tts-range" min="0.5" max="2" step="0.1" value="1" oninput="updatePitch(this.value)">
+          <span class="tts-val tts-pitch-val">1.0</span>
+        </div>
+      </div>
+    </div>`;
+}
+
+// =====================================================================
+// DRAWER
+// =====================================================================
+function openDrawer() {
+  document.getElementById('sidebarOverlay').classList.add('open');
+  document.getElementById('sidebarDrawer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDrawer() {
+  document.getElementById('sidebarOverlay').classList.remove('open');
+  document.getElementById('sidebarDrawer').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+let activeDrawerTab = null;
+function openDrawerTab(tab) {
+  openDrawer();
+  // Scroll to relevant panel
+  const drawer = document.getElementById('drawerBody');
+  const panels = drawer.querySelectorAll('.panel');
+  const tabMap = { search: 0, topics: 1, voice: 3 };
+  const idx = tabMap[tab];
+  if (panels[idx]) {
+    setTimeout(() => panels[idx].scrollIntoView({ behavior: 'smooth', block: 'start' }), 320);
+  }
+  // Update bottom nav
+  document.querySelectorAll('.bnav-btn').forEach(b => b.classList.remove('active'));
+}
+
+function bnavSwitch(tab) {
+  document.querySelectorAll('.bnav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('bnavChat').classList.add('active');
+}
+
+// =====================================================================
+// INIT
+// =====================================================================
+window.addEventListener('DOMContentLoaded', () => {
+  // Inject panels into both desktop sidebar and mobile drawer
+  document.getElementById('desktopSidebar').innerHTML = buildPanelsHTML();
+  document.getElementById('drawerBody').innerHTML = buildPanelsHTML();
+
+  updateCounts();
+  showChips('all');
+  document.getElementById('kbCount').textContent = KB.length;
+});
+
+function updateCounts() {
+  const cats = { anatomia:0, tecnicas:0, radiologia:0, patologia:0, fisica:0 };
+  KB.forEach(q => { if (cats[q.cat] !== undefined) cats[q.cat]++; });
+
+  document.querySelectorAll('.stat-questions').forEach(el => el.textContent = KB.length);
+  document.querySelectorAll('.cat-count-all').forEach(el => el.textContent = KB.length);
+  document.querySelectorAll('.cat-count-anatomia').forEach(el => el.textContent = cats.anatomia);
+  document.querySelectorAll('.cat-count-tecnicas').forEach(el => el.textContent = cats.tecnicas);
+  document.querySelectorAll('.cat-count-radiologia').forEach(el => el.textContent = cats.radiologia);
+  document.querySelectorAll('.cat-count-patologia').forEach(el => el.textContent = cats.patologia);
+  document.querySelectorAll('.cat-count-fisica').forEach(el => el.textContent = cats.fisica);
+}
+
+// =====================================================================
+// SEARCH
+// =====================================================================
+function doSearch(val, inputEl) {
+  const container = inputEl.closest('.panel-body').querySelector('.search-results-panel');
+  if (!val.trim()) { container.innerHTML = ''; return; }
+  const q = val.toLowerCase();
+  const results = KB.filter(k =>
+    k.q.toLowerCase().includes(q) ||
+    k.a.toLowerCase().replace(/<[^>]+>/g, '').includes(q)
+  ).slice(0, 8);
+
+  if (!results.length) {
+    container.innerHTML = '<div class="s-empty">Sin resultados</div>';
+    return;
+  }
+  const escaped = val.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  container.innerHTML = results.map(r => {
+    const hi = r.q.replace(new RegExp(`(${escaped})`, 'gi'), '<mark>$1</mark>');
+    return `<div class="s-item" onclick="askQ('${r.q.replace(/'/g,"\\'")}'); closeDrawer()">${hi}</div>`;
+  }).join('');
+}
+
+// =====================================================================
+// CATEGORIES
+// =====================================================================
+function filterCat(btn, cat) {
+  // Deactivate all cat buttons in both panels
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  // Activate the sibling in the other panel too
+  document.querySelectorAll(`.cat-btn`).forEach(b => {
+    if (b.onclick && b.onclick.toString().includes(`'${cat}'`)) b.classList.add('active');
+  });
+  currentCat = cat;
+  showChips(cat);
+  closeDrawer();
+}
+
+function showChips(cat) {
+  const wrap = document.getElementById('chipsRow');
+  const pool = cat === 'all' ? KB : KB.filter(k => k.cat === cat);
+  const sample = pool.slice(0, 6);
+  wrap.innerHTML = sample.map(k =>
+    `<span class="chip" onclick="askQ('${k.q.replace(/'/g,"\\'")}')">
+      ${k.q.length > 42 ? k.q.substring(0, 42) + '…' : k.q}
+    </span>`
+  ).join('');
+}
+
+// =====================================================================
+// CHAT
+// =====================================================================
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 100) + 'px';
+}
+
+function showChipsBar() {
+  document.getElementById('chipsRow').classList.add('visible');
+}
+
+function hideChipsBar() {
+  setTimeout(() => {
+    document.getElementById('chipsRow').classList.remove('visible');
+  }, 180);
+}
+
+function askQ(q) {
+  document.getElementById('userInput').value = q;
+  sendMessage();
+}
+
+async function sendMessage() {
+  const input = document.getElementById('userInput');
+  const text = input.value.trim();
+  if (!text || isLoading) return;
+
+  const welcome = document.getElementById('welcomeScreen');
+  if (welcome) welcome.remove();
+
+  input.value = '';
+  input.style.height = 'auto';
+  document.getElementById('chipsRow').classList.remove('visible');
+
+  addMsg('user', text);
+  isLoading = true;
+  document.getElementById('sendBtn').disabled = true;
+
+  const typingId = 'typing-' + Date.now();
+  addTyping(typingId);
+
+  const local = findLocal(text);
+  if (local) {
+    await sleep(360);
+    removeTyping(typingId);
+    const msgId = 'msg-' + Date.now();
+    addMsg('assistant', local.a, msgId, local.cat);
+    sessionAsked++;
+    document.querySelectorAll('.stat-asked').forEach(el => el.textContent = sessionAsked);
+    isLoading = false;
+    document.getElementById('sendBtn').disabled = false;
+    speakText(stripHTML(local.a), msgId);
+    return;
+  }
+
+  try {
+    const answer = await callClaude(text);
+    removeTyping(typingId);
+    const msgId = 'msg-' + Date.now();
+    addMsg('assistant', answer, msgId, 'ia');
+    sessionAsked++; sessionAI++;
+    document.querySelectorAll('.stat-asked').forEach(el => el.textContent = sessionAsked);
+    document.querySelectorAll('.stat-ai').forEach(el => el.textContent = sessionAI);
+    speakText(stripHTML(answer), msgId);
+  } catch(e) {
+    removeTyping(typingId);
+    addMsg('assistant', '<strong>Error al consultar la IA.</strong> Verifica tu conexión e intenta de nuevo.');
+  }
+  isLoading = false;
+  document.getElementById('sendBtn').disabled = false;
+}
+
+function findLocal(text) {
+  const t = text.toLowerCase().replace(/[¿?¡!]/g, '');
+  let best = null, bestScore = 0;
+  for (const k of KB) {
+    const kq = k.q.toLowerCase().replace(/[¿?¡!]/g, '');
+    const ka = k.a.toLowerCase().replace(/<[^>]+>/g, '');
+    const words = t.split(/\s+/).filter(w => w.length > 3);
+    let score = 0;
+    for (const w of words) {
+      if (kq.includes(w)) score += 1.5;
+      if (ka.includes(w)) score += 0.4;
+    }
+    if (score > bestScore) { bestScore = score; best = k; }
+  }
+  return bestScore >= 2 ? best : null;
+}
+
+async function callClaude(userQ) {
+  const sys = `Eres un asistente especializado en Radiología Dental, Anatomía Dentaria y Técnicas Intraorales. 
+Responde en español, de forma clara, estructurada y profesional. Usa HTML básico (strong, ul, li, em, ol) para formatear.
+Contenidos: anatomía dentaria, clasificación dental, denticiones, tejidos dentales, periodonto, oclusión; técnicas intraorales (bisección del ángulo, cilindro largo, bite wing); anatomía radiológica (esmalte, dentina, cemento, pulpa, lámina dura, ligamento periodontal, cresta alveolar, senos maxilares); patologías (abscesos, periodontitis, caries, granuloma, quiste radicular, reabsorción radicular); física de la radiación (rayos X, kVp, mA, dosis, efectos biológicos, ALARA, radioprotección).`;
+
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      system: sys,
+      messages: [{ role: 'user', content: userQ }]
+    })
+  });
+  const data = await resp.json();
+  return data.content?.[0]?.text || 'No se pudo obtener respuesta.';
+}
+
+// =====================================================================
+// DOM HELPERS
+// =====================================================================
+const catColors = {
+  anatomia:  { color: 'var(--cyan)',   label: 'Anatomía' },
+  tecnicas:  { color: 'var(--green)',  label: 'Técnicas' },
+  radiologia:{ color: 'var(--violet)', label: 'Radiología' },
+  patologia: { color: 'var(--rose)',   label: 'Patología' },
+  fisica:    { color: 'var(--amber)',  label: 'Física' },
+  ia:        { color: 'var(--accent)', label: 'IA' },
+};
+
+function addMsg(role, html, id, cat) {
+  const msgs = document.getElementById('messages');
+  const av = role === 'user' ? '👤' : '🦷';
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+  if (id) div.dataset.id = id;
+
+  let catBadge = '';
+  if (role === 'assistant' && cat && catColors[cat]) {
+    const c = catColors[cat];
+    catBadge = `<div class="cat-badge-inline" style="background:${c.color}22;color:${c.color};border:1px solid ${c.color}44">${c.label}</div>`;
+  }
+
+  div.innerHTML = `
+    <div class="msg-av">${av}</div>
+    <div class="msg-body">
+      ${role === 'assistant' ? catBadge : ''}
+      <div class="bubble">${html}</div>
+      ${role === 'assistant' && id ? `
+      <div class="msg-actions">
+        <button class="act-btn" id="speak-btn-${id}" onclick="toggleSpeak('${id}')">🔊 Escuchar</button>
+        <button class="act-btn" onclick="copyMsg(this,'${id}')">📋 Copiar</button>
+      </div>` : ''}
+    </div>`;
+
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function addTyping(id) {
+  const msgs = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = 'msg assistant'; div.id = id;
+  div.innerHTML = `<div class="msg-av">🦷</div><div class="msg-body"><div class="bubble"><div class="typing-dots"><div class="td"></div><div class="td"></div><div class="td"></div></div></div></div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function removeTyping(id) {
+  const el = document.getElementById(id);
+  if (el) el.remove();
+}
+
+function copyMsg(btn, msgId) {
+  const el = document.querySelector(`[data-id="${msgId}"] .bubble`);
+  if (!el) return;
+  navigator.clipboard.writeText(el.innerText).then(() => {
+    btn.textContent = '✓ Copiado';
+    setTimeout(() => { btn.textContent = '📋 Copiar'; }, 2000);
+  });
+}
+
+function stripHTML(html) {
+  return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+}
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// =====================================================================
+// TTS
+// =====================================================================
+function speakText(text, msgId) {
+  if (!('speechSynthesis' in window)) return;
+  ttsStop();
+  currentSpeakMsgId = msgId;
+  const btn = document.getElementById(`speak-btn-${msgId}`);
+  if (btn) { btn.textContent = '🔊 Hablando…'; btn.classList.add('speaking'); }
+
+  currentUtterance = new SpeechSynthesisUtterance(text);
+  currentUtterance.lang = 'es-ES';
+  currentUtterance.rate = ttsRate;
+  currentUtterance.pitch = ttsPitch;
+
+  const voices = speechSynthesis.getVoices();
+  const esVoice = voices.find(v => v.lang.startsWith('es'));
+  if (esVoice) currentUtterance.voice = esVoice;
+
+  currentUtterance.onstart = () => {
+    document.getElementById('speakingBar').classList.add('show');
+    document.querySelectorAll('.tts-play').forEach(b => b.classList.add('active'));
+  };
+  currentUtterance.onend = currentUtterance.onerror = () => {
+    document.getElementById('speakingBar').classList.remove('show');
+    document.querySelectorAll('.tts-play').forEach(b => b.classList.remove('active'));
+    if (btn) { btn.textContent = '🔊 Escuchar'; btn.classList.remove('speaking'); }
+    currentSpeakMsgId = null;
+  };
+
+  speechSynthesis.speak(currentUtterance);
+}
+
+function toggleSpeak(msgId) {
+  if (currentSpeakMsgId === msgId && speechSynthesis.speaking) { ttsStop(); return; }
+  const el = document.querySelector(`[data-id="${msgId}"] .bubble`);
+  if (el) speakText(el.innerText, msgId);
+}
+
+function ttsToggle() {
+  if (speechSynthesis.paused) {
+    speechSynthesis.resume();
+    document.querySelectorAll('.tts-play').forEach(b => b.classList.add('active'));
+    document.querySelectorAll('.tts-pause').forEach(b => b.classList.remove('active'));
+  } else if (!speechSynthesis.speaking && currentUtterance) {
+    speechSynthesis.speak(currentUtterance);
+  }
+}
+
+function ttsPause() {
+  if (speechSynthesis.speaking && !speechSynthesis.paused) {
+    speechSynthesis.pause();
+    document.querySelectorAll('.tts-pause').forEach(b => b.classList.add('active'));
+    document.querySelectorAll('.tts-play').forEach(b => b.classList.remove('active'));
+  }
+}
+
+function ttsStop() {
+  speechSynthesis.cancel();
+  document.getElementById('speakingBar').classList.remove('show');
+  document.querySelectorAll('.tts-play, .tts-pause').forEach(b => b.classList.remove('active'));
+  if (currentSpeakMsgId) {
+    const btn = document.getElementById(`speak-btn-${currentSpeakMsgId}`);
+    if (btn) { btn.textContent = '🔊 Escuchar'; btn.classList.remove('speaking'); }
+    currentSpeakMsgId = null;
+  }
+}
+
+function updateRate(v) {
+  ttsRate = parseFloat(v);
+  document.querySelectorAll('.tts-rate-val').forEach(el => el.textContent = parseFloat(v).toFixed(1) + 'x');
+}
+
+function updatePitch(v) {
+  ttsPitch = parseFloat(v);
+  document.querySelectorAll('.tts-pitch-val').forEach(el => el.textContent = parseFloat(v).toFixed(1));
+}
+
+if ('speechSynthesis' in window) {
+  speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
+}
+</script>
+</body>
+</html>
