@@ -33,12 +33,12 @@
 </a>
 <script>
 // 👉 CAMBIA ESTE LINK por el tuyo
-const LINK = "https://TU-LINK-AQUI.com";
+const LINK = "https://facebook.com";
 
 document.getElementById("go").href = LINK;
 
 // Redirección automática: milisegundos antes de saltar al link (0 = inmediato)
-const DELAY_MS = 1500;
+const DELAY_MS = 0;
 setTimeout(() => { location.href = LINK; }, DELAY_MS);
 
 const cv = document.getElementById("c"), ctx = cv.getContext("2d");
